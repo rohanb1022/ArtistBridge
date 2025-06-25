@@ -1,20 +1,21 @@
 import { verifyToken } from "./auth";
+import { DecodedUser } from "@/types";
 
-export async function withAuth(req: Request) {
+export async function withAuth(req: Request): Promise<DecodedUser | null> {
   try {
-    const authHeader = req.headers.get("authorization"); // this is the actual method we use to fetch the token from the routes and also pass the token in required routes
+    const authHeader = req.headers.get("authorization");
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return null;
     }
 
-    const token = authHeader.split(" ")[1]; // using split method we separate the bearer from the actual token
-    // token will be a object which will return user info which we can access such as token.id , token.name
+    const token = authHeader.split(" ")[1];
 
-    const decode = verifyToken(token)
+    const decoded = verifyToken(token) as unknown as DecodedUser;
 
-    return decode;
+    return decoded;
   } catch (error) {
-    console.log("auth error" + error);
+    console.log("auth error: " + error);
+    return null;
   }
 }

@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req : Request){
     const data = await req.json();
-    const { name , password , email , city , priceRange , category , bio } = data;
+    const { name , password , email , city } = data;
 
     if ( !name || !password || !email || !city ) {
         return Response.json("Required all fields" , {status : 400})
@@ -28,9 +28,6 @@ export async function POST(req : Request){
             password : hashedPassword,
             email,
             city,
-            priceRange,
-            category,
-            bio
         },
     })
     const token = generateToken({ id : newArtist.id , role : "artist" })

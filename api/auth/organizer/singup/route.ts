@@ -7,9 +7,9 @@ const prisma = new PrismaClient();
 
 export async function POST(req : Request){ 
     const data = await req.json();
-    const { name , email , password , city  } = data
+    const { name , email , password} = data
 
-    if ( !name || !email || !password || !city  ) {
+    if ( !name || !email || !password  ) {
         return new Response(" Please mention all details" , {status : 400})
     }
 
@@ -25,7 +25,6 @@ export async function POST(req : Request){
             name,
             email,
             password : hashedPassword,
-            city
         },
     })
 

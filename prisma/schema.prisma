@@ -15,55 +15,53 @@ datasource db {
 }
 
 model Artist {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
-  name       String
-  category       String
-  priceRange     String
-  city           String
-  bio            String
-  BookedDates String[]
-  bookings Booking[] 
-  created_at     DateTime @default(now())
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  name        String
+  category    String?
+  priceRange  String?
+  city        String?
+  bio         String?
+  bookings    Booking[]
+  created_at  DateTime  @default(now())
 }
 
 model Organizer {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  name String
-  city           String
-  booking Booking[]
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  name           String
+  city           String?
+  booking        Booking[]
   artistRequests ArtistRequest[]
 }
 
 model Booking {
-  id        Int      @id @default(autoincrement())
-  artistId  Int
+  id          Int           @id @default(autoincrement())
+  artistId    Int
   organizerId Int
-  date      DateTime
-  status    BookingStatus @default(PENDING)
-  city      String
-  price     Int 
-  artist    Artist @relation(fields: [artistId], references: [id])
-  organizer Organizer @relation(fields: [organizerId], references: [id])
+  date        DateTime
+  time        String
+  status      BookingStatus @default(PENDING)
+  city        String
+  price       Int
+  artist      Artist        @relation(fields: [artistId], references: [id])
+  organizer   Organizer     @relation(fields: [organizerId], references: [id])
 }
-
 
 model ArtistRequest {
-  id         Int      @id @default(autoincrement())
-  organizerId Int  
-  email      String
-  name       String
-  city       String
-  category   String
-  maxBudget  Int
-  eventDate  DateTime
-  status     RequestStatus @default(PENDING)
-  createdAt  DateTime @default(now())
+  id          Int           @id @default(autoincrement())
+  organizerId Int
+  email       String
+  name        String
+  city        String
+  category    String
+  maxBudget   Int
+  eventDate   DateTime
+  status      RequestStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
 
-  organizer Organizer @relation(fields: [organizerId] , references: [id])
+  organizer Organizer @relation(fields: [organizerId], references: [id])
 }
-
 
 enum BookingStatus {
   PENDING

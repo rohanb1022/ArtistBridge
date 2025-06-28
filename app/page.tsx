@@ -1,15 +1,15 @@
-import CTA from "@/components/CTA";
-import Category from "@/sections/Category";
-import Hero from "@/sections/Hero";
+import ArtistDemo from "@/section/ArtistDemo";
+import Footer from "@/section/Footer";
+import Hero from "@/section/Hero";
+import OrgDemo from "@/section/OrgDemo";
 
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
-      <div>
-        <Hero/>
-        <CTA/>
-        <Category/> 
-      </div>
+      <Hero/>
+      <ArtistDemo/>
+      <OrgDemo/>
+      <Footer/>
     </div>
   );
 }

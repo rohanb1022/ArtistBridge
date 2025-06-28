@@ -8,7 +8,7 @@
 
 /* Add your own base styles if needed */
 body {
-  @apply bg-black text-white;
+  @apply bg-white text-black;
 }
 
 
@@ -133,24 +133,19 @@ body {
 }
 
 @layer components {
-  .cta-section {
-    @apply flex flex-row gap-8 justify-evenly items-center text-white w-[95vw] h-screen focus:border-gray-100 rounded-3xl m-4
-  }
-
-  .home-section {
-    @apply flex flex-col md:flex-row justify-evenly items-center px-6 py-12 w-full;
-  }
-
-  .hero-section-text {
-    @apply font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center md:text-left space-y-2;
-  }
-
-  .book-now-button {
-    @apply bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold py-2 px-6 rounded-lg hover:from-pink-500 hover:to-yellow-500 transition-all duration-500;
-  }
-
-  .category-section {
-    @apply flex flex-row justify-between items-center w-screen h-screen
+  .bg-color {
+    background-color: rgb(252, 218, 239)
   }
 }
 
+.finger-paint {
+  font-family: "Finger Paint", sans-serif;
+}
+/* Hide scrollbars for all horizontal scrolls */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

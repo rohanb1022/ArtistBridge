@@ -1,4 +1,4 @@
-import { verifyToken } from "./auth";
+import { verifyToken } from "./auth/auth";
 import { DecodedUser } from "@/types";
 
 export async function withAuth(req: Request): Promise<DecodedUser | null> {

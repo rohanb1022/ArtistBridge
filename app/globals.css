@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 
 /* src/app/globals.css or styles/globals.css */
-@tailwind base;
 @tailwind utilities;
 @tailwind utilities;
 

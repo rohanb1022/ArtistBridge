@@ -4,10 +4,16 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// generator client {
+//   provider = "prisma-client-js"
+//   output   = "../lib/generated/prisma"
+// }
+
 generator client {
   provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
+  // REMOVE the `output` line if it's there
 }
+
 
 datasource db {
   provider = "postgresql"
@@ -23,6 +29,7 @@ model Artist {
   city        String?
   bio         String?
   bookings    Booking[]
+  password    String
   created_at  DateTime  @default(now())
 }
 
@@ -30,7 +37,7 @@ model Organizer {
   id             Int             @id @default(autoincrement())
   email          String          @unique
   name           String
-  city           String?
+  password       String
   bookings        Booking[]
   artistRequests ArtistRequest[]
 }

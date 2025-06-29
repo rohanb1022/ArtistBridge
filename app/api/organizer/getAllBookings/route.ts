@@ -1,7 +1,5 @@
 import { withAuth } from "@/lib/middleware";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient(); // Always use new PrismaClient()
+import prisma from "@/lib/prisma";
 
 export async function GET(req: Request) {
   const client = await withAuth(req);

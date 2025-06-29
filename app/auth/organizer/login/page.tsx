@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,14 +13,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import { useState } from "react"
+
 
 const CardDemo = () => {
-
-  const [eamil , setEmail] = useState("")
-  const [password , setpassword] = useState("")
-
-  
 
   return (
     <Card className="w-full max-w-sm">
@@ -28,7 +25,9 @@ const CardDemo = () => {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link">Sign Up</Button>
+         <Link href={"/auth/organizer/signup"} >
+          <Button variant="link">signup</Button>
+          </Link>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -56,7 +55,7 @@ const CardDemo = () => {
         <Button type="submit" className="w-full">
           Login
         </Button>
-        <Link href={"/auth/arist/login"} >
+        <Link href={"/auth/artist/login"} >
         <Button variant="outline" className="w-[360px]">
           login as Artist
         </Button>

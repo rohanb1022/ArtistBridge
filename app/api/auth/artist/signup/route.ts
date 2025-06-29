@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { generateToken } from "@/lib/auth"
-
-const prisma = new PrismaClient();
-
+import { generateToken } from "@/lib/auth/auth"
+import { setAuthCookie } from "@/lib/auth/cookie";
 
 export async function POST(req : Request){
     const data = await req.json();
     const { name , password , email , city } = data;
 
-    if ( !name || !password || !email || !city ) {
+    if ( !name || !password || !email || !city) {
         return Response.json("Required all fields" , {status : 400})
     }
     
-    const existtingArtist = await prisma.Artist.findUnique({ where : { email } })
+    const existtingArtist = await prisma.artist.findUnique({ where : { email } })
     if(existtingArtist) {
         return Response.json("Artist already exist , please try to login" , { status : 400 })
     }
@@ -31,6 +29,9 @@ export async function POST(req : Request){
         },
     })
     const token = generateToken({ id : newArtist.id , role : "artist" })
+
+    setAuthCookie(token);
+
     const { password: _ , ...artistWithoutPassword } = newArtist;
-    return Response.json({token , artistWithoutPassword})
+    return Response.json({message : "Signup Successfull" , artistWithoutPassword})
 }

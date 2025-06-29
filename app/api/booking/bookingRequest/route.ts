@@ -1,7 +1,5 @@
 import { withAuth } from "@/lib/middleware";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = PrismaClient();
+import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
   const client = await withAuth(req);

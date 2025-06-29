@@ -1,7 +1,5 @@
 import { withAuth } from "@/lib/middleware";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient(); //  Proper instantiation
+import prisma from "@/lib/prisma"; //  Proper instantiation
 
 export async function GET(req: Request) {
   const user = await withAuth(req);

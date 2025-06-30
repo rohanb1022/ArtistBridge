@@ -20,7 +20,7 @@ export async function GET(req: Request) {
       city: artist.city,
       category: artist.category,
       bio: artist.bio,
-      priceRange: artist.priceRange,
+      price: artist.price,
     };
 
     return Response.json({ data });

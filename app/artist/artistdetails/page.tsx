@@ -64,6 +64,10 @@ const ArtistDetailsForm = () => {
 
   return (
     <section className="min-h-[80%] bg-white px-4 py-6 flex flex-col items-center justify-start">
+      <div className='flex justify-center items-center mx-2 ' >
+            <h2 className='text-4xl text-pink-400 font-light mt-4 mb-4' >ArtistBridge</h2>
+        </div>
+        <hr className='mb-2' />
       <h1 className="text-4xl font-bold text-pink-500 mb-6">Complete Your Artist Profile</h1>
 
       <div className="bg-pink-50 shadow-xl rounded-2xl p-4 w-full max-w-3xl space-y-4">

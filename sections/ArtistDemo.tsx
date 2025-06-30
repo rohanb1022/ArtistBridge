@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
-import { demoArtists } from "@/constants/artistList";
+import { demoArtists } from "@/constants/artist";
 import Image from "next/image";
 
 const ArtistDemo = () => {

@@ -7,12 +7,13 @@ export async function PUT(req : Request) {
 
     // Checking whether the user is authorized or not
     const user = await withAuth(req);
+    console.log("user" , user)
     if (!user || user.role !== "artist") return Response.json({message : "Unauthorized"} , {status : 401})
 
     const data = await req.json();
-    const { category , bio , city , priceRange } = data;
+    const { category , bio , price } = data;
 
-    if ( !category || !bio || !city || !priceRange ){ 
+    if ( !category || !bio || !price ){ 
         return Response.json({message : "Please provide all the fields once"} , {status : 400})
     }
 
@@ -22,8 +23,7 @@ export async function PUT(req : Request) {
             data : {
                 category,
                 bio,
-                city,
-                priceRange,
+                price,
             },
         });
 

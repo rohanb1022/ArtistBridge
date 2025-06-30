@@ -41,7 +41,7 @@ const Signup = () => {
       const response = await api.post("/auth/artist/signup", formData);
       console.log("Signup Success:", response.data);
       // Force navigation only after DOM updates
-      router.push("/");
+      router.push("/artistdetails");
     } catch (err: any) {
       const errorMessage = err.response?.data || "Something went wrong";
       setError(errorMessage);

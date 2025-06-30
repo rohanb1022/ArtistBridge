@@ -1,21 +1,16 @@
-import { verifyToken } from "./auth/auth";
+import { cookies } from "next/headers";
+import { verifyToken } from "@/lib/auth/auth";
 import { DecodedUser } from "@/types";
 
-export async function withAuth(req: Request): Promise<DecodedUser | null> {
+export async function withAuth(): Promise<DecodedUser | null> {
   try {
-    const authHeader = req.headers.get("authorization");
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return null;
-    }
-
-    const token = authHeader.split(" ")[1];
+    const token = (await cookies()).get("token")?.value;
+    if (!token) return null;
 
     const decoded = verifyToken(token) as unknown as DecodedUser;
-
     return decoded;
-  } catch (error) {
-    console.log("auth error: " + error);
+  } catch (err) {
+    console.error("Authentication error:", err);
     return null;
   }
 }

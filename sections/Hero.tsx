@@ -1,8 +1,11 @@
+import { Navbar } from '@/components/Navbar'
 import Image from 'next/image'
 import React from 'react'
 
 const Hero = () => {
   return (
+    <>
+    <Navbar/>
     <section className="flex flex-col-reverse md:flex-row justify-around items-center min-h-[90vh] px-4 py-8 gap-8">
       {/* Left Text Content */}
       <div className="finger-paint text-center md:text-left text-4xl sm:text-5xl md:text-7xl font-extrabold space-y-1">
@@ -23,6 +26,7 @@ const Hero = () => {
         />
       </div>
     </section>
+    </>
   )
 }
 

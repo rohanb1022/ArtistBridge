@@ -1,7 +1,7 @@
-import ArtistDemo from "@/section/ArtistDemo";
-import Footer from "@/section/Footer";
-import Hero from "@/section/Hero";
-import OrgDemo from "@/section/OrgDemo";
+import ArtistDemo from "@/sections/ArtistDemo";
+import Footer from "@/sections/Footer";
+import Hero from "@/sections/Hero";
+import OrgDemo from "@/sections/OrgDemo";
 
 export default function Home() {
   return (

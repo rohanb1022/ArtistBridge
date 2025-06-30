@@ -24,12 +24,12 @@ model Artist {
   id          Int       @id @default(autoincrement())
   email       String    @unique
   name        String
-  category    String?
-  priceRange  String?
   city        String?
+  password    String
+  category    ArtistCategory[]
+  price       Int?
   bio         String?
   bookings    Booking[]
-  password    String
   created_at  DateTime  @default(now())
 }
 
@@ -38,7 +38,7 @@ model Organizer {
   email          String          @unique
   name           String
   password       String
-  bookings        Booking[]
+  bookings       Booking[]
   artistRequests ArtistRequest[]
 }
 
@@ -83,4 +83,22 @@ enum RequestStatus {
   PENDING
   MATCHED
   NOTIFIED
+}
+
+enum ArtistCategory {
+  SINGER
+  DANCER
+  MAGICIAN
+  COMEDIAN
+  DJ
+  INSTRUMENTALIST
+  MIME
+  THEATRE
+  BEATBOXER
+  SPEAKER
+  PAINTER
+  POET
+  PHOTOGRAPHER
+  MODEL
+  CIRCUS
 }

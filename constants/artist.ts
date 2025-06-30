@@ -110,3 +110,21 @@ export const artistType : ArtistCategory[] = [
     available: 25,
   },
 ]
+
+export const artistCategories = [
+  "SINGER",
+  "DANCER",
+  "MAGICIAN",
+  "COMEDIAN",
+  "DJ",
+  "INSTRUMENTALIST",
+  "MIME",
+  "THEATRE",
+  "BEATBOXER",
+  "SPEAKER",
+  "PAINTER",
+  "POET",
+  "PHOTOGRAPHER",
+  "MODEL",
+  "CIRCUS",
+];

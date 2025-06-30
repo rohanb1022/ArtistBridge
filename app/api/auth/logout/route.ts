@@ -1,12 +1,10 @@
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function POST() {
-  // Delete the cookie
-  (await
-        // Delete the cookie
-        cookies()).delete("auth_token");
+  (await cookies()).delete("token");
 
-  return Response.json({
+  return NextResponse.json({
     message: "Logout successful",
   });
 }

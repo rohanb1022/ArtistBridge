@@ -12,19 +12,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import api from "@/lib/axios";
+import { IoLogOutOutline } from "react-icons/io5";
 
 export const Navbar = () => {
+
+  const handleLogout = async () => {
+    try {
+      const response = await api.post("/auth/logout")
+
+      if (response.status === 200) {
+        console.log("Logout successful");
+        window.location.href = "/";
+      } else {
+        console.error("Logout failed");
+      }
+      // Redirect to home page after logout
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  }
+
   return (
     <>
     <nav className="flex flex-row justify-around items-center gap-4 mt-2 mb-4 min-h-[10vh]">
       <div className="font-light text-3xl text-pink-600">ArtistBridge</div>
       <div className="flex flex-row justify-evenly items-center gap-6 ">
-        <Button
-          variant={"ghost"}
-          className="border border-transparent hover:border-2 hover:border-pink-600 hover:scale-[1.04] "
-        >
-          <Link href={"/"} className="text-[20px]" >Home</Link>
-        </Button>
         <Button
           variant={"ghost"}
           className="border border-transparent hover:border-2 hover:border-pink-600 hover:scale-[1.04] "
@@ -39,6 +52,13 @@ export const Navbar = () => {
         </Button>
         <Dropdown />
         <Button className="bg-pink-500 text-white rounded-md hover:bg-pink-700 " >Profile</Button>
+        <Button
+          variant={"ghost"}
+          className="border border-transparent hover:border-2 hover:border-pink-600 hover:scale-[1.04]"
+          onClick={handleLogout}
+        >
+          <Link href={"/"} className="scale-[1.6]" ><IoLogOutOutline /></Link>
+        </Button>
       </div>
     </nav>
     <hr />

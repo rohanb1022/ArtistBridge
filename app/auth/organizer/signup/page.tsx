@@ -40,7 +40,7 @@ const Signup = () => {
       const response = await api.post("/auth/organizer/signup", formData);
       console.log("Signup Success:", response.data);
       // Force navigation only after DOM updates
-      router.push("/")
+      router.push("/home")
     } catch (err: any) {
       const errorMessage = err.response?.data || "Something went wrong";
       setError(errorMessage);

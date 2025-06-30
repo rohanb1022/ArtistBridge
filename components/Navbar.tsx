@@ -17,13 +17,14 @@ import { IoLogOutOutline } from "react-icons/io5";
 
 export const Navbar = () => {
 
+  const router = useRouter();
   const handleLogout = async () => {
     try {
       const response = await api.post("/auth/logout")
 
       if (response.status === 200) {
-        console.log("Logout successful");
-        window.location.href = "/";
+        console.log("Logout successful")
+        router.push("/")  // navigate the user to landing page after logout
       } else {
         console.error("Logout failed");
       }

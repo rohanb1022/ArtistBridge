@@ -39,6 +39,7 @@ const Signup = () => {
     try {
       const response = await api.post("/auth/organizer/signup", formData);
       console.log("Signup Success:", response.data);
+      router.refresh();
       // Force navigation only after DOM updates
       router.push("/home")
     } catch (err: any) {

@@ -40,6 +40,7 @@ const Signup = () => {
     try {
       const response = await api.post("/auth/artist/signup", formData);
       console.log("Signup Success:", response.data);
+      router.refresh();
       // Force navigation only after DOM updates
       router.push("/artistdetails");
     } catch (err: any) {

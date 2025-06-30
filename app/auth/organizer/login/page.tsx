@@ -40,6 +40,7 @@ const Login = () => {
     try {
       const res = await api.post("/auth/organizer/login", formData);
       console.log("login successs", res.data);
+      router.refresh();
       router.push("/home")
     } catch (error: any) {
       const errorMessage = error.response?.data || "Something went wrong";

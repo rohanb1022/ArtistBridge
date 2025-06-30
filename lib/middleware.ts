@@ -5,7 +5,8 @@ import { DecodedUser } from "@/types";
 
 export async function withAuth(req: Request): Promise<DecodedUser | null> {
   try {
-    const token = (await cookies()).get("token")?.value;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
     if (!token) return null;
 
     const decoded = verifyToken(token) as unknown as DecodedUser;

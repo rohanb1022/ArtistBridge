@@ -48,3 +48,47 @@ export const demoOrganizers = [
       "Engaging, interactive, and energetic — exactly what our audience needed."
   }
 ];
+
+export const demoOrganizerList = [
+  {
+    id: 1,
+    name: "VibeNation",
+    description: "Known for organizing mega-events across major cities with top artist lineups.",
+    city: "Mumbai",
+    events: ["Music Festivals", "Corporate Events", "Private Parties"]
+  },
+  {
+    id: 2,
+    name: "EchoLights",
+    description: "Specializes in immersive light and sound experiences for concerts and festivals.",
+    city: "Delhi",
+    events: ["Concerts", "Themed Parties", "Cultural Festivals"]
+  },
+  {
+    id: 3,
+    name: "BeatBuzz",
+    description: "Focuses on underground music scenes, promoting local talent and unique events.",
+    city: "Bengaluru",
+    events: ["Indie Music Nights", "Open Mic Events", "Art Collaborations"]
+  },
+  {
+    id: 4,
+    name: "RhythmWave",
+    description: "Expert in organizing dance and music events with a focus on community engagement.",
+    city: "Chennai",
+    events: ["Dance Competitions", "Music Workshops", "Community Festivals"]
+  },
+  {
+    id: 5,
+    name: "Harmony Events",
+    description: "Combines traditional and modern elements to create unforgettable experiences.",
+    city: "Kolkata",
+    events: ["Cultural Shows", "Wedding Events", "Corporate Gatherings"]
+  },
+  {
+    id: 6,
+    name: "Pulse Productions",
+    description: "Known for high-energy events that keep the audience engaged and entertained.",
+    city: "Hyderabad",
+    events: ["Live Concerts", "DJ Nights", "Themed Parties"]
+  },]

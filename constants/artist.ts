@@ -128,3 +128,17 @@ export const artistCategories = [
   "MODEL",
   "CIRCUS",
 ];
+
+export const artistList = [
+        { name: "DJ Rexo", genre: "Electronic", city: "Mumbai" },
+        { name: "Sufi Soul", genre: "Sufi", city: "Delhi" },
+        { name: "Rock Throttle", genre: "Rock", city: "Bangalore" },
+        { name: "JazzBeats", genre: "Jazz", city: "Chennai" },  
+        { name: "HipHop Vibes", genre: "Hip-Hop", city: "Hyderabad" },
+        { name: "Classical Echo", genre: "Classical", city: "Kolkata" },
+        { name: "Fusion Beats", genre: "Fusion", city: "Pune" },
+        { name: "Indie Groove", genre: "Indie", city: "Ahmedabad" },        
+        { name: "Pop Star", genre: "Pop", city: "Jaipur" },
+        { name: "Metal Mayhem", genre: "Metal", city: "Lucknow" },
+        { name: "Folk Fusion", genre: "Folk", city: "Bhopal" },
+        { name: "Reggae Rhythms", genre: "Reggae", city: "Nagpur" }]

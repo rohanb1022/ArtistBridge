@@ -9,16 +9,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import api from "@/lib/axios";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { artistCategories } from "@/constants/artist";
-import { useState } from "react";
-import api from "@/lib/axios";
 import {useRouter} from "next/navigation"
+import { useProtectedRoute } from "@/hooks/useProtectedRoute";
 
 
 const ArtistDetailsForm = () => {
+  useProtectedRoute();
   const [formData , setFormData] = useState({ 
       category  : [] as string[] ,
       price : 0,

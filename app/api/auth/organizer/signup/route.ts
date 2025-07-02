@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     },
   });
 
-  const token = generateToken({ id: newOrg.id, role: "organizer" });
+  const token = generateToken({ id: newOrg.id.toString(), role: "organizer" });
 
   const response = NextResponse.json({
     message: "Signup successful",

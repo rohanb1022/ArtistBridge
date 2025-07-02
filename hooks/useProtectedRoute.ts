@@ -12,12 +12,13 @@ export function useProtectedRoute(){
     const router = useRouter();
 
     useEffect(() => {
-        const token = getCookie("auth_token");
-        const protectedRoute = ["/home" , "/profile" , "/bookings"].some((path) => {
+        const token = getCookie("token");
+        console.log(token)
+        const protectedRoute = ["/artist/home" , "/profile" , "/bookings"].some((path) => {
             pathname.startsWith(path)})
 
         if (!token && protectedRoute) {
-            router.replace("/auht/artist/login"); // Redirect to login if no token found and trying to access protected route
+            router.replace("/auth/artist/login"); // Redirect to login if no token found and trying to access protected route
         }
     } , [pathname] )
 }

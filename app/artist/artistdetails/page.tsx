@@ -50,9 +50,9 @@ const ArtistDetailsForm = () => {
       setError("")
     try {
       const response = await api.put("/artist/completeProfile" , formData)
-      const data = response.data();
+      const data = response.data;
       console.log(data)
-      router.push("/home")
+      router.push("/artist/home")
 
     } catch (error) {
       if (error instanceof Error) {

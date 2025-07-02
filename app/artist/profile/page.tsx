@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useProtectedRoute } from "@/hooks/useProtectedRoute";
+import { useRouter } from "next/navigation";
 
 type ArtistProfile = {
   name: string;
@@ -21,6 +22,9 @@ type ArtistProfile = {
 };
 
 const ArtistProfilePage = () => {
+
+  const router = useRouter();
+
   useProtectedRoute();
   const [profile, setProfile] = useState<ArtistProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,9 +61,19 @@ const ArtistProfilePage = () => {
     );
   }
 
+  const handleLogout = async () => {
+    try {
+      const response = await api.post("/auth/logout");
+      console.log(response.data);
+      router.push("/auth/artist/login");
+    } catch (error) {
+      setError("Failed to logout.");
+    }
+  }
+
   return (
     <main>
-      div
+      <button onClick={handleLogout} >Logout</button>
     </main>
   );
 };

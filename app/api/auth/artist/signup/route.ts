@@ -38,7 +38,7 @@ export async function POST(req: Request) {
   });
 
   // Step 5: Generate JWT and set cookie
-  const token = generateToken({ id: newArtist.id, role: "artist" });
+  const token = generateToken({ id: newArtist.id.toString(), role: "artist" });
 
   const response = NextResponse.json({
     message: "Signup successful",

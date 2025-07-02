@@ -40,8 +40,7 @@ const Login = () => {
     try {
       const res = await api.post("/auth/artist/login", formData);
       console.log("login successs", res.data);
-      router.refresh();
-      router.push("/home")
+      router.replace("/artist/home"); // ✅ avoid history issues
     } catch (error: any) {
       const errorMessage = error.response?.data || "Something went wrong";
       setError(errorMessage);

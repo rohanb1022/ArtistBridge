@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 import { generateToken } from "@/lib/auth/auth";
-import { cookies } from "next/headers";
+import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
+
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -11,6 +10,7 @@ export async function POST(req: Request) {
 
   // Step 1: Validate inputs
   if (!email || !password) {
+    console.error("Login Error: All fields are required"); // Add server-side logging
     return NextResponse.json("All fields are required", { status: 400 });
   }
 
@@ -20,17 +20,20 @@ export async function POST(req: Request) {
   });
 
   if (!artist) {
+    console.error("Login Error: Artist not found for email:", email); // Add server-side logging
     return NextResponse.json("artist not found", { status: 404 });
   }
 
   // Step 3: Compare password
   const isPasswordCorrect = await bcrypt.compare(password, artist.password);
   if (!isPasswordCorrect) {
+    console.error("Login Error: Invalid credentials for email:", email); // Add server-side logging
     return NextResponse.json("Invalid credentials", { status: 401 });
   }
 
   // Step 4: Generate JWT Token
-  const token = generateToken({ id: artist.id, role: "artist" });
+  const token = generateToken({ id: artist.id.toString(), role: "artist" });
+  console.log("Login Success: Token generated for artist:", artist.email); // Add server-side logging
 
   // Step 5: Set Cookie using NextResponse
   const response = NextResponse.json(
@@ -39,7 +42,7 @@ export async function POST(req: Request) {
       user: {
         id: artist.id,
         email: artist.email,
-        name: artist.name,
+        name: artist.name, // Ensure 'name' exists on artist object
       },
     },
     { status: 200 }
@@ -52,5 +55,6 @@ export async function POST(req: Request) {
     path: "/",
   });
 
-  return response;
+  console.log("Login Success: Sending response with cookie."); // Add server-side logging
+  return response; // <--- ENSURE THIS RETURN IS REACHED AND EXECUTED
 }

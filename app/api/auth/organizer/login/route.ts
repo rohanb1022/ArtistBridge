@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     return NextResponse.json("Email or password does not match", { status: 401 });
   }
 
-  const token = generateToken({ id: organizer.id, role: "organizer" });
+  const token = generateToken({ id: organizer.id.toString(), role: "organizer" });
 
   const response = NextResponse.json({
     message: "Login successful",

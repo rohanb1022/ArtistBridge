@@ -5,10 +5,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  const { name, email, password } = data;
+  const { name, email, password , city} = data;
 
   // Step 1: Validate inputs
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !city) {
     return NextResponse.json("All fields are required", { status: 400 });
   }
 
@@ -34,6 +34,7 @@ export async function POST(req: Request) {
       name,
       email,
       password: hashedPassword,
+      city,
     },
   });
 
@@ -46,6 +47,7 @@ export async function POST(req: Request) {
       id: newArtist.id,
       name: newArtist.name,
       email: newArtist.email,
+      city: newArtist.city,
     },
   });
 

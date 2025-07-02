@@ -12,7 +12,10 @@ const secret = new TextEncoder().encode("rohanbhangale101022");
 export async function verifyToken(token: string) {
   try {
     const { payload } = await jwtVerify(token, secret);
-    return payload as { id: string; role: string };
+    return {
+      id: Number(payload.id) ,  
+      role: payload.role as string
+    }
   } catch (err) {
     console.error("JOSE token verification failed:", err);
     throw new Error("Invalid token");

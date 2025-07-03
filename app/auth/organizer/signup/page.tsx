@@ -41,7 +41,7 @@ const Signup = () => {
       console.log("Signup Success:", response.data);
       router.refresh();
       // Force navigation only after DOM updates
-      router.push("/home")
+      router.push("/organizer/home")
     } catch (err: any) {
       const errorMessage = err.response?.data || "Something went wrong";
       setError(errorMessage);

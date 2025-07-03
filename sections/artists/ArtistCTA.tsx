@@ -21,46 +21,46 @@ const ArtistCTA = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
         {/* Card 1 - Confirmed Bookings */}
-        <div className="bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
+        <div className="hover:scale-102 transition-transform  bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
           <h3 className="text-xl font-semibold mb-2">🎉 Ready to Perform?</h3>
           <p className="text-sm text-gray-300 mb-4">
             View all your confirmed bookings and upcoming performances.
           </p>
           <Link href="/artist/booking">
-            <Button className="w-full">View Bookings →</Button>
+            <Button className="w-full hover:scale-110 transition-transform">View Bookings →</Button>
           </Link>
         </div>
 
         {/* Card 2 - Pending Confirmations */}
-        <div className="bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
+        <div className="hover:scale-102 transition-transform  bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
           <h3 className="text-xl font-semibold mb-2">⏳ Bookings Awaiting Your Response</h3>
           <p className="text-sm text-gray-300 mb-4">
             You have pending booking requests waiting for your acceptance.
           </p>
           <Link href="/artist/pending">
-            <Button className="w-full">Review Pending →</Button>
+            <Button className="w-full hover:scale-110 transition-transform">Review Pending →</Button>
           </Link>
         </div>
 
         {/* Card 3 - Update Profile */}
-        <div className="bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
+        <div className="hover:scale-102 transition-transform  bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
           <h3 className="text-xl font-semibold mb-2">📭 Not Getting Bookings?</h3>
           <p className="text-sm text-gray-300 mb-4">
             Update your genres, pricing, and city to attract more organizers.
           </p>
           <Link href="/artist/profile/edit">
-            <Button className="w-full">Update Profile →</Button>
+            <Button className="w-full hover:scale-110 transition-transform">Update Profile →</Button>
           </Link>
         </div>
 
         {/* Card 4 - Organizer Requests */}
-        <div className="bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
+        <div className="hover:scale-102 transition-transform  bg-white/10 border border-white/20 backdrop-blur-md p-6 rounded-2xl shadow-lg">
           <h3 className="text-xl font-semibold mb-2">📢 Organizers Are Looking For You</h3>
           <p className="text-sm text-gray-300 mb-4">
             Organizers couldn&apos;t find artists — reply to their open requests and grab the gig.
           </p>
           <Link href="/artist/requests">
-            <Button className="w-full">View Organizer Requests →</Button>
+            <Button className="w-full hover:scale-110 transition-transform">View Organizer Requests →</Button>
           </Link>
         </div>
       </div>

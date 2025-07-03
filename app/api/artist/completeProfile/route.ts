@@ -11,9 +11,9 @@ export async function PUT(req : Request) {
     if (!user || user.role !== "artist") return Response.json({message : "Unauthorized"} , {status : 401})
 
     const data = await req.json();
-    const { category , bio , price } = data;
+    const { category , bio , price ,bestEvent } = data;
 
-    if ( !category || !bio || !price ){ 
+    if ( !category || !bio || !price || !bestEvent){ 
         return Response.json({message : "Please provide all the fields once"} , {status : 400})
     }
 
@@ -24,6 +24,7 @@ export async function PUT(req : Request) {
                 category,
                 bio,
                 price,
+                bestEvent,
             },
         });
 
@@ -31,8 +32,8 @@ export async function PUT(req : Request) {
         return Response.json({ message: "Profile updated", artist: cleanData }, { status: 200 });
 
     } catch (error) {
-        return Response.json({message : "Some error occurred"} , { status : 500 })
         console.log("error occured" + error)
+        return Response.json({message : "Some error occurred"} , { status : 500 })
     }
     
 }

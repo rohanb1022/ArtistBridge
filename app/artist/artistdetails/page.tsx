@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { artistCategories } from "@/constants/artist";
 import {useRouter} from "next/navigation"
 import { useProtectedRoute } from "@/hooks/useProtectedRoute";
+import { be } from "date-fns/locale";
 
 
 const ArtistDetailsForm = () => {
@@ -24,7 +25,8 @@ const ArtistDetailsForm = () => {
   const [formData , setFormData] = useState({ 
       category  : [] as string[] ,
       price : 0,
-      bio : ""
+      bio : "",
+      bestEvent : ""
   })
   const [error , setError] = useState("")
   const router = useRouter();
@@ -126,6 +128,15 @@ const ArtistDetailsForm = () => {
           onChange={handleInputChange} 
           name="bio"
           value={formData.bio}
+          className="w-full border-pink-300 min-h-[120px]" />
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Your best Event </h3>
+          <Textarea 
+          placeholder="Tell us about best event you have performed in..." 
+          onChange={handleInputChange} 
+          name="bestEvent"
+          value={formData.bestEvent}
           className="w-full border-pink-300 min-h-[120px]" />
         </div>
 

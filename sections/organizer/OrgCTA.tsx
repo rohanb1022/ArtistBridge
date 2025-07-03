@@ -56,7 +56,7 @@ const OrganizerCTA = () => {
         ].map((card, i) => (
           <div
             key={i}
-            className="group border border-white/20 bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl hover:border-pink-500 transition"
+            className="group border-2 border-white/20 bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl hover:border-pink-500 transition"
           >
             <div className="mb-4 flex justify-center">{card.icon}</div>
             <h3 className="text-xl font-semibold mb-2 text-white">

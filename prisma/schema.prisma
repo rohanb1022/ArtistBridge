@@ -14,23 +14,23 @@ generator client {
   // REMOVE the `output` line if it's there
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Artist {
-  id          Int       @id @default(autoincrement())
-  email       String    @unique
-  name        String
-  city        String?
-  password    String
-  category    ArtistCategory[]
-  price       Int?
-  bio         String?
-  bookings    Booking[]
-  created_at  DateTime  @default(now())
+  id         Int              @id @default(autoincrement())
+  email      String           @unique
+  name       String
+  city       String?
+  password   String
+  category   ArtistCategory[]
+  bestEvent String?
+  price      Int?
+  bio        String?
+  bookings   Booking[]
+  created_at DateTime         @default(now())
 }
 
 model Organizer {
@@ -46,7 +46,7 @@ model Booking {
   id          Int           @id @default(autoincrement())
   artistId    Int
   organizerId Int
-  date        DateTime
+  date        String
   time        String
   status      BookingStatus @default(PENDING)
   city        String
@@ -64,7 +64,7 @@ model ArtistRequest {
   city        String
   category    String
   maxBudget   Int
-  eventDate   DateTime
+  date        String
   timing      String
   status      RequestStatus @default(PENDING)
   createdAt   DateTime      @default(now())

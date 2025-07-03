@@ -3,49 +3,82 @@ import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
   const client = await withAuth(req);
+
+  //Check if user is authenticated and has correct role
   if (!client || client.role !== "organizer") {
     return Response.json(
-      { message: "User not found , Please try to login" },
+      { message: "User not found, please try to login" },
       { status: 401 }
-    ); // for unauthorized access it should be 401
+    );
   }
 
+  //  Get data from body
   const data = await req.json();
-  const {artistId , city, category, price, eventDate, timing } = data;
-  if (!artistId || !city || !category || !price || !eventDate || !timing) {
+  const { artistId, city, price, date, time } = data;
+
+  //  Check all required fields
+  if (!artistId || !city || !price || !date || !time) {
     return Response.json(
       { message: "All fields are required" },
       { status: 400 }
     );
   }
 
+  //  Validate artistId
+  const parsedArtistId = Number(artistId);
+  if (isNaN(parsedArtistId)) {
+    return Response.json(
+      { message: "Invalid artist ID" },
+      { status: 400 }
+    );
+  }
+
   try {
-    const org = await prisma.organizer.findUnique({ where: { id: client.id } });
+    //  Get organizer info from DB
+    const org = await prisma.organizer.findUnique({
+      where: { id: client.id },
+    });
+
     if (!org) {
-      return Response.json({ message: "User not found" }, { status: 401 });
+      return Response.json({ message: "Organizer not found" }, { status: 401 });
     }
 
+    //  Find artist by ID
+    const artist = await prisma.artist.findUnique({
+      where: { id: parsedArtistId },
+    });
+
+    if (!artist) {
+      return Response.json({ message: "Artist not found" }, { status: 404 });
+    }
+
+    // Create new booking
     const newBookingRequest = await prisma.booking.create({
       data: {
-        artistId,
+        artistId: parsedArtistId,  //  INT not STRING
         organizerId: org.id,
         city,
-        category,
         price,
-        eventDate,
-        timing,
+        date,
+        time,
+        category: Array.isArray(artist.category)
+          ? artist.category.join(", ")
+          : String(artist.category),
       },
     });
 
     return Response.json(
       {
-        message: "request created successfully",
+        message: "Request created successfully",
         newBookingRequest,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.log("Error occurred", error);
-    return Response.json({ message: "Some Internal Error" }, { status: 500 });
+    console.error("Error occurred:", error);
+    return Response.json(
+      { message: "Something went wrong", error },
+      { status: 500 }
+    );
   }
 }

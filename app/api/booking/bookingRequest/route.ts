@@ -14,10 +14,10 @@ export async function POST(req: Request) {
 
   //  Get data from body
   const data = await req.json();
-  const { artistId, city, price, date, time } = data;
+  const { artistId, city, price, date, time , eventName } = data;
 
   //  Check all required fields
-  if (!artistId || !city || !price || !date || !time) {
+  if (!artistId || !city || !price || !date || !time || !eventName) {
     return Response.json(
       { message: "All fields are required" },
       { status: 400 }
@@ -64,6 +64,7 @@ export async function POST(req: Request) {
         category: Array.isArray(artist.category)
           ? artist.category.join(", ")
           : String(artist.category),
+        eventName,
       },
     });
 

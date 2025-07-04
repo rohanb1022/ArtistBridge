@@ -17,6 +17,7 @@ const ArtistProfile = () => {
   const [city, setCity] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [eventName, setEventName] = useState("");
 
   useEffect(() => {
     const fetchArtist = async () => {
@@ -33,7 +34,7 @@ const ArtistProfile = () => {
 
   const handleBooking = async () => {
     try {
-      if (!artistData || !city || !date || !time) {
+      if (!artistData || !city || !date || !time || !eventName) {
         console.error("All fields are required for booking.");
         return;
       }
@@ -43,6 +44,7 @@ const ArtistProfile = () => {
         price: artistData.price,
         date,
         time,
+        eventName,
       });
       console.log("Booking successful:", response.data);
       // Optionally, you can redirect or show a success message
@@ -106,6 +108,20 @@ const ArtistProfile = () => {
                     Booking Details
                   </h3>
                   <div className="grid gap-4">
+                    <div>
+                      <label className="text-sm text-white">
+                       name of the event
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="text-white" size={20} />
+                        <Input
+                          placeholder="Enter event name"
+                          className="bg-white/10 text-white"
+                          value={eventName}
+                          onChange={(e) => setEventName(e.target.value)}
+                        />
+                      </div>
+                    </div>
                     <div>
                       <label className="text-sm text-white">
                         Date (DD/MM/YYYY)

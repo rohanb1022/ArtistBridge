@@ -26,7 +26,7 @@ const ArtistCTA = () => {
           <p className="text-sm text-gray-300 mb-4">
             View all your confirmed bookings and upcoming performances.
           </p>
-          <Link href="/artist/booking">
+          <Link href="/artist/bookings">
             <Button className="w-full hover:scale-110 transition-transform">View Bookings →</Button>
           </Link>
         </div>

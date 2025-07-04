@@ -1,8 +1,30 @@
+"use client";
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React from "react";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import api from "@/lib/axios";
 
 const Footer = () => {
+
+  const router = useRouter();
+  const [error, setError] = useState("");
+
+    const handleLogout = async () => {
+    try {
+      const response = await api.post("/auth/logout");
+      console.log(response.data);
+      router.push("/auth/organizer/login");
+    } catch (error: unknown) {
+      setError("Failed to logout.");
+    }
+  };
+
   return (
     <footer className="bg-zinc-900 text-gray-300 py-12 px-6 mt-10 border-t border-zinc-700">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -44,6 +66,16 @@ const Footer = () => {
             <Link href="#"><Twitter className="w-5 h-5 hover:text-pink-500" /></Link>
             <Link href="#"><Linkedin className="w-5 h-5 hover:text-pink-500" /></Link>
           </div>
+        </div>
+
+        <div>
+          <Button
+            variant="outline"
+            className="mt-4 w-fit border-pink-600 text-pink-500 hover:bg-pink-800"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
         </div>
       </div>
 

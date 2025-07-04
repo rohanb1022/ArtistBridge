@@ -7,15 +7,19 @@ export async function PUT(req: Request) {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    const { bookingId } = await req.json();
+  try { 
+    const { requestId , updatedStatus } = await req.json();
 
-    if (!bookingId) {
+    if (!requestId) {
       return Response.json({ message: "Booking ID is required" }, { status: 400 });
     }
 
+    if (updatedStatus && updatedStatus !== "CANCELLED") {
+      return Response.json({ message: "Invalid status update" }, { status: 400 });
+    }
+
     const booking = await prisma.booking.findUnique({
-      where: { id: bookingId },
+      where: { id: requestId },
     });
 
     if (!booking) {
@@ -27,15 +31,15 @@ export async function PUT(req: Request) {
     }
 
     if (booking.status !== "PENDING") {
-      return Response.json({ message: "Only pending bookings can be rejected" }, { status: 400 });
+      return Response.json({ message: "Only pending bookings can be CANCELLED" }, { status: 400 });
     }
 
-    const rejectedBooking = await prisma.booking.update({
-      where: { id: bookingId },
-      data: { status: "REJECTED" },
+    const CANCELLEDBooking = await prisma.booking.update({
+      where: { id: requestId },
+      data: { status: updatedStatus || "CANCELLED" },
     });
 
-    return Response.json({ message: "Booking rejected successfully", booking: rejectedBooking }, { status: 200 });
+    return Response.json({ message: "Booking CANCELLED successfully", booking: CANCELLEDBooking }, { status: 200 });
 
   } catch (error) {
     console.error("Error rejecting booking:", error);

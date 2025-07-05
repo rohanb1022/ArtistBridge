@@ -81,7 +81,7 @@ const PopularArtists = () => {
         </div>
 
         <div className="flex justify-center mt-12">
-          <Link href="/artist/explore">
+          <Link href="/organizer/explore">
             <Button className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 text-lg rounded-full">
               Explore All Artists →
             </Button>

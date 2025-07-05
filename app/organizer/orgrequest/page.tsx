@@ -1,110 +1,97 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { artistCategories } from "@/constants/artist";
+import api from '@/lib/axios';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 
-const OrgRequestForm = () => {
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
+const RequestForm = () => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    city: "",
+    category: "",
+    maxBudget: "",
+    date: "",
+    timing: "",
+  });
 
-  React.useEffect(() => {
-    setDate(new Date());
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const res = await api.post("/organizer/sendRequest", {
+        ...form,
+        maxBudget: parseInt(form.maxBudget),
+      });
+      setMessage("Request sent successfully!");
+      setForm({
+        name: "",
+        email: "",
+        city: "",
+        category: "",
+        maxBudget: "",
+        date: "",
+        timing: "",
+      });
+    } catch (error) {
+      console.error("Failed to send request:", error);
+      setMessage("Failed to send request. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <section className="min-h-screen bg-white px-4 py-10 flex flex-col items-center justify-start">
-      <h1 className="text-4xl font-bold text-pink-500 mb-10">
-        Request an Artist for Your Event
-      </h1>
+    <div className="min-h-screen p-8 bg-white text-black">
+      <motion.div
+        className="max-w-2xl mx-auto bg-pink-100/20 border border-pink-400 p-6 rounded-xl shadow-xl"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h2 className="text-3xl text-center font-bold text-pink-600 mb-6">
+          Send a Request to Artist
+        </h2>
 
-      <div className="bg-pink-50 shadow-xl rounded-2xl p-6 w-full max-w-3xl space-y-8">
-        {/* City */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            Event City
-          </h3>
-          <Input
-            type="text"
-            placeholder="Enter your city"
-            className="w-full border-pink-300"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {Object.entries(form).map(([key, value]) => (
+            <div key={key}>
+              <label className="block mb-1 font-medium capitalize">
+                {key === "maxBudget" ? "Max Budget (₹)" : key}
+              </label>
+              <input
+                type={key === "date" ? "date" : key === "maxBudget" ? "number" : "text"}
+                value={value}
+                onChange={(e) =>
+                  setForm({ ...form, [key]: e.target.value })
+                }
+                className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+          ))}
 
-        {/* Category */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            Select Category
-          </h3>
-          <Select>
-            <SelectTrigger className="w-full bg-white border-pink-300">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {artistCategories.map((item) => (
-                <SelectItem value={item} key={item}>
-                  {item}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+          <button
+            type="submit"
+            className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 rounded-md transition"
+          >
+            {loading ? "Sending..." : "Send Request"}
+          </button>
+        </form>
 
-        {/* Budget */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            Maximum Budget ($)
-          </h3>
-          <Input
-            type="number"
-            placeholder="Enter max budget"
-            className="w-full border-pink-300"
-          />
-        </div>
-
-        {/* Event Date */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            Event Date
-          </h3>
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            required
-            className="rounded-md border border-pink-300"
-          />
-        </div>
-
-        {/* Timing */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            Event Timing
-          </h3>
-          <Input
-            type="text"
-            placeholder="e.g. 6 PM to 10 PM"
-            className="w-full border-pink-300"
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-center">
-          <Button className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-2 rounded-full shadow-md">
-            Send Request
-          </Button>
-        </div>
-      </div>
-    </section>
+        {message && (
+          <p className="mt-4 text-center text-pink-700 font-medium">
+            {message}
+          </p>
+        )}
+      </motion.div>
+    </div>
   );
 };
 
-export default OrgRequestForm;
+export default RequestForm;

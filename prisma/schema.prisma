@@ -75,6 +75,7 @@ model ArtistRequest {
   organizer Organizer @relation(fields: [organizerId], references: [id])
 }
 
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -85,7 +86,6 @@ enum BookingStatus {
 enum RequestStatus {
   PENDING
   MATCHED
-  NOTIFIED
 }
 
 enum ArtistCategory {

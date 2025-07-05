@@ -44,7 +44,7 @@ const OrganizerCTA = () => {
             title: "View Artist Profiles",
             description:
               "Go through detailed artist profiles, ratings, bios, and past performances.",
-            link: "/organizer/artists",
+            link: "/organizer/get-request",
           },
           {
             icon: <Settings className="w-8 h-8 text-pink-500" />,

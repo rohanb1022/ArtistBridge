@@ -15,9 +15,8 @@ export async function GET(req: Request) {
       where: { organizerId: user.id },
       orderBy: { createdAt: "desc" }, // recent first (optional)
     });
-
     // 3. Send response
-    return Response.json({ requests }, { status: 200 });
+    return Response.json({data : requests }, { status: 200 });
 
   } catch (error) {
     console.error("Error fetching organizer's requests:", error);

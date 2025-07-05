@@ -48,7 +48,7 @@ const ArtistCTA = () => {
           <p className="text-sm text-gray-300 mb-4">
             Update your genres, pricing, and city to attract more organizers.
           </p>
-          <Link href="/artist/profile/edit">
+          <Link href="/artist/artistdetails">
             <Button className="w-full hover:scale-110 transition-transform">Update Profile →</Button>
           </Link>
         </div>

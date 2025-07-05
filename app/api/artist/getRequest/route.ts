@@ -22,11 +22,11 @@ export async function GET(req: Request) {
     const matchingRequests = await prisma.artistRequest.findMany({
       where: {
         category: { in: artist.category },
-        status: "PENDING", // Optional: Only fetch new requests
+        status: "PENDING", 
       },
     });
 
-    return Response.json({ requests: matchingRequests }, { status: 200 });
+    return Response.json({data : matchingRequests }, { status: 200 });
   } catch (error) {
     console.error("Error in getRequest for artist:", error);
     return Response.json(

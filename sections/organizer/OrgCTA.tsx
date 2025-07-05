@@ -37,7 +37,7 @@ const OrganizerCTA = () => {
             title: "Manage Bookings",
             description:
               "Keep track of all your bookings, from initial requests to final confirmations.",
-            link: "/organizer/bookings",
+            link: "/organizer/manage-bookings",
           },
           {
             icon: <Users className="w-8 h-8 text-pink-500" />,
@@ -51,7 +51,7 @@ const OrganizerCTA = () => {
             title: "Customize Your Needs",
             description:
               "Set event preferences and we'll match artists based on your specific needs.",
-            link: "/organizer/preferences",
+            link: "/organizer/searchfilters",
           },
         ].map((card, i) => (
           <div

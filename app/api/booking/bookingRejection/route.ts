@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 
 export async function PUT(req: Request) {
   const user = await withAuth(req);
-  if (!user || user.role !== "artist") {
+  if (!user) {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 
@@ -24,14 +24,6 @@ export async function PUT(req: Request) {
 
     if (!booking) {
       return Response.json({ message: "Booking not found" }, { status: 404 });
-    }
-
-    if (booking.artistId !== user.id) {
-      return Response.json({ message: "You are not allowed to reject this booking" }, { status: 403 });
-    }
-
-    if (booking.status !== "PENDING") {
-      return Response.json({ message: "Only pending bookings can be CANCELLED" }, { status: 400 });
     }
 
     const CANCELLEDBooking = await prisma.booking.update({

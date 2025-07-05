@@ -25,7 +25,7 @@ model Artist {
   name       String
   city       String?
   password   String
-  category   ArtistCategory[]
+  category   String[]
   bestEvent  String?
   price      Int?
   bio        String?
@@ -43,18 +43,20 @@ model Organizer {
 }
 
 model Booking {
-  id          Int           @id @default(autoincrement())
-  artistId    Int
-  organizerId Int
-  eventName   String
-  date        String
-  time        String
-  status      BookingStatus @default(PENDING)
-  city        String
-  price       Int
-  category    String
-  artist      Artist        @relation(fields: [artistId], references: [id])
-  organizer   Organizer     @relation(fields: [organizerId], references: [id])
+  id            Int           @id @default(autoincrement())
+  artistId      Int
+  organizerId   Int
+  artistName    String
+  organizerName String
+  eventName     String
+  date          String
+  time          String
+  status        BookingStatus @default(PENDING)
+  city          String
+  price         Int
+  category      String
+  artist        Artist        @relation(fields: [artistId], references: [id])
+  organizer     Organizer     @relation(fields: [organizerId], references: [id])
 }
 
 model ArtistRequest {

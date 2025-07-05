@@ -18,19 +18,15 @@ export async function GET(req: Request) {
     if (!organizer) {
       return Response.json({ message: "Organizer not found" }, { status: 400 });
     }
-
     //  Group by status
     const pending = organizer.bookings.filter((b: { status: string; }) => b.status === "PENDING");
     const confirmed = organizer.bookings.filter((b: { status: string; }) => b.status === "CONFIRMED");
     const cancelled = organizer.bookings.filter((b: { status: string; }) => b.status === "CANCELLED");
-    const rejected = organizer.bookings.filter((b: { status: string; }) => b.status === "REJECTED");
-
 
     const data = {
       pending,
       confirmed,
       cancelled,
-      rejected
     };
 
     return Response.json({ data }, { status: 200 });

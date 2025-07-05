@@ -21,7 +21,7 @@ export async function GET(req: Request) {
 
     const matchingRequests = await prisma.artistRequest.findMany({
       where: {
-        category: artist.category,
+        category: { in: artist.category },
         status: "PENDING", // Optional: Only fetch new requests
       },
     });

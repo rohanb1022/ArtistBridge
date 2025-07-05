@@ -57,6 +57,8 @@ export async function POST(req: Request) {
       data: {
         artistId: parsedArtistId,  //  INT not STRING
         organizerId: org.id,
+        organizerName: org.name,
+        artistName: artist.name,
         city,
         price,
         date,

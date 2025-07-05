@@ -11,7 +11,7 @@ type Booking = {
   date: string;
   status: string;
   city: string;
-  
+  orgName: string;
 };
 
 type BookingsState = {
@@ -103,7 +103,8 @@ const cardVariants = {
           whileHover={{ scale: 1.03 }}
           className="backdrop-blur-md bg-green-100/30 border border-green-400/40 rounded-2xl shadow-xl p-5 text-green-900 transition-all duration-300"
         >
-          <h3 className="text-lg font-bold">{booking.eventName}</h3>
+            <h3 className="text-lg font-semibold">{booking.orgName}</h3>
+          <h4 className="text-lg font-bold">{booking.eventName}</h4>
           <p className="text-sm">{booking.date}</p>
           <p className="font-medium mt-2">Status: {booking.status}</p>
         </motion.div>
@@ -127,7 +128,9 @@ const cardVariants = {
           className="backdrop-blur-md bg-gray-100/60 border border-gray-400/40 rounded-2xl shadow-lg p-5 text-gray-800"
         >
           <div className="flex flex-col gap-1">
-            <h3 className="text-lg font-semibold">{booking.eventName}</h3>
+            
+            <h3 className="text-lg font-semibold">{booking.orgName}</h3>
+            <h4 className="text-lg font-semibold">{booking.eventName}</h4>
             <p className="text-sm">{booking.date}</p>
             <p className="text-sm">Status: {booking.status}</p>
             <p className="text-sm">City: {booking.city}</p>
@@ -166,7 +169,8 @@ const cardVariants = {
           whileHover={{ scale: 1.03 }}
           className="backdrop-blur-md bg-red-100/30 border border-red-400/40 rounded-2xl shadow-xl p-5 text-red-900 transition-all duration-300"
         >
-          <h3 className="text-lg font-bold">{booking.eventName}</h3>
+          <h3 className="text-lg font-semibold">{booking.orgName}</h3>
+          <h4 className="text-lg font-bold">{booking.eventName}</h4>
           <p className="text-sm">{booking.date}</p>
           <p className="font-medium mt-2">Status: {booking.status}</p>
         </motion.div>

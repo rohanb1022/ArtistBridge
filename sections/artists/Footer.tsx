@@ -16,8 +16,8 @@ const Footer = () => {
         </p>  
         <Link href="/artist/register">
           <Button 
-          className="bg-pink-600 hover:bg-pink-700 rounded-full h-28 w-54 text-white px-6 py-2 text-xl ">
-            Register Now <ArrowRight className="ml-2 h-5 w-5" />
+          className="bg-pink-600 hover:bg-pink-700 rounded-full h-28 w-[35vw] text-white px-6 py-2 text-xl ">
+            Make Yourself Available , Update your Profile <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </Link>
       </div>

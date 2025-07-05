@@ -1,145 +1,128 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { Card, CardContent, CardHeader, CardTitle , CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/lib/axios";
-import Link from "next/link";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
+import api from "@/lib/axios";
 
 const Signup = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
-    name: "",
-    city : ""
+    city: "",
   });
   const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-
     try {
-      const response = await api.post("/auth/artist/signup", formData);
-      console.log("Signup Success:", response.data);
-      router.refresh();
-      // Force navigation only after DOM updates
+      const res = await api.post("/auth/artist/signup", formData);
+      console.log("Signup success", res.data);
       router.push("/artist/artistdetails");
-    } catch (err: any) {
-      const errorMessage = err.response?.data || "Something went wrong";
+    } catch (err) {
+      let errorMessage = "Something went wrong";
+      if (err && typeof err === "object" && "response" in err && err.response && typeof err.response === "object" && "data" in err.response) {
+        // @ts-expect-error: err.response.data may not be typed
+        errorMessage = err.response.data;
+      }
       setError(errorMessage);
     }
   };
 
   return (
-    <div className="min-h-[80vh] px-4">
-      <div className="text-md">Artist</div>
-      <form
+    <main className="min-h-screen bg-black flex items-center justify-center px-4">
+      <motion.form
         onSubmit={handleSubmit}
-        className="sm:w-[90%] min-md:w-[35vw] min-lg:w-[35vw] space-y-6"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full lg:min-w-sm sm:min-w-sm md:min-w-md max-w-md mx-auto"
       >
-        <Card className="w-full shadow-xl">
-          <div className="flex flex-row justify-between">
-            <CardHeader className="text-center w-1/2">
-              <CardTitle className="text-2xl font-semibold">
-                Create an account
-              </CardTitle>
-            </CardHeader>
-            <Link href="/auth/organizer/login">
-              <Button variant="link" className="text-sm">
-                Already have an account?
-              </Button>
-            </Link>
-          </div>
-
+        <Card className="bg-white/10 backdrop-blur-md shadow-2xl border border-pink-400">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-extrabold bg-gradient-to-r from-pink-400 to-fuchsia-600 text-transparent bg-clip-text">
+              Artist Signup
+            </CardTitle>
+          </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
+            <div>
+              <Label htmlFor="name" className="text-gray-200">Name</Label>
               <Input
                 id="name"
                 type="text"
                 name="name"
+                placeholder="John Doe"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="John Doe"
                 required
               />
             </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+            <div>
+              <Label htmlFor="email" className="text-gray-200">Email</Label>
               <Input
                 id="email"
                 type="email"
                 name="email"
+                placeholder="m@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="m@example.com"
                 required
               />
             </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+            <div>
+              <Label htmlFor="password" className="text-gray-200">Password</Label>
               <Input
                 id="password"
                 type="password"
                 name="password"
+                placeholder="********"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="********"
                 required
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="city">City</Label>
+            <div>
+              <Label htmlFor="city" className="text-gray-200">City</Label>
               <Input
                 id="city"
                 type="text"
                 name="city"
+                placeholder="Mumbai"
                 value={formData.city}
                 onChange={handleChange}
-                placeholder="SF"
                 required
               />
             </div>
-
-            {error && (
-              <p className="text-sm text-red-500 text-center pt-2">{error}</p>
-            )}
+            {error && <p className="text-sm text-red-500">{error}</p>}
           </CardContent>
-
-          <CardFooter className="flex flex-col gap-2">
-            <Button type="submit" className="w-full">
+          <CardFooter className="flex flex-col gap-3">
+            <Button type="submit" className="w-full bg-pink-600 hover:bg-pink-700">
               Sign Up
             </Button>
-            <Link href={"/auth/organizer/signup"}>
-              <Button variant="outline" className="w-full">
-                Signup as Organizer
+            <Link href="/auth/organizer/signup" className="w-full">
+              <Button variant="outline" className="w-full border-pink-600 text-pink-600">
+                Sign Up as Organizer
               </Button>
+            </Link>
+            <Link href="/auth/artist/login" className="text-sm text-pink-400 hover:underline">
+              Already have an account? login
             </Link>
           </CardFooter>
         </Card>
-      </form>
-    </div>
+      </motion.form>
+    </main>
   );
 };
 

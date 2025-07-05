@@ -18,6 +18,7 @@ import api from "@/lib/axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ const Login = () => {
       const res = await api.post("/auth/organizer/login", formData);
       console.log("login successs", res.data);
       router.refresh();
-      router.push("/organizer/home")
+      router.push("/organizer/home");
     } catch (error: any) {
       const errorMessage = error.response?.data || "Something went wrong";
       setError(errorMessage);
@@ -49,21 +50,25 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-          <CardAction>
-            <Link href={"/auth/organizer/signup"}>
-              <Button variant="link">signup</Button>
-            </Link>
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-6">
+    <main className="min-h-screen bg-gradient-to-br from-black to-gray-900 px-4 py-10 flex items-center justify-center">
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="w-full lg:min-w-sm sm:min-w-sm md:min-w-md max-w-md mx-auto"
+      >
+        <Card className="w-full bg-black bg-opacity-40 backdrop-blur-md text-white border-pink-500">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-pink-600 to-purple-500">
+              Organizer Login
+            </CardTitle>
+            <CardDescription className="text-sm mt-1">
+              Enter your credentials to continue
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -76,31 +81,37 @@ const Login = () => {
               />
             </div>
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
-                required
                 name="password"
+                placeholder="********"
+                required
                 onChange={handleChange}
               />
             </div>
-          </div>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-          <Link href={"/auth/artist/login"}>
-            <Button variant="outline" className="w-[360px]">
-              login as Artist
+            {error && (
+              <p className="text-sm text-red-500 text-center pt-2">{error}</p>
+            )}
+          </CardContent>
+
+          <CardFooter className="flex flex-col gap-3 px-6 pb-6">
+            <Button type="submit" className="w-full bg-pink-600 hover:bg-pink-700">
+              Login
             </Button>
-          </Link>
-        </CardFooter>
-      </Card>
-    </form>
+            <Link href="/auth/artist/login" className="w-full">
+              <Button variant="outline" className="w-full border-pink-600 text-pink-500">
+                Login as Artist
+              </Button>
+            </Link>
+            <Link href="/auth/organizer/signup" className="text-sm text-pink-400 text-center">
+              Don’t have an account? Signup
+            </Link>
+          </CardFooter>
+        </Card>
+      </motion.form>
+    </main>
   );
 };
 

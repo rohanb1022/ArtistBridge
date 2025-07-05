@@ -7,7 +7,7 @@
 
 /* Add your own base styles if needed */
 body {
-  @apply bg-white text-black;
+  @apply bg-black text-white;
 }
 
 

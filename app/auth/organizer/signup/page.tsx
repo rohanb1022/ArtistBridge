@@ -15,6 +15,7 @@ import api from "@/lib/axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 const Signup = () => {
   const router = useRouter();
@@ -40,8 +41,7 @@ const Signup = () => {
       const response = await api.post("/auth/organizer/signup", formData);
       console.log("Signup Success:", response.data);
       router.refresh();
-      // Force navigation only after DOM updates
-      router.push("/organizer/home")
+      router.push("/organizer/home");
     } catch (err: any) {
       const errorMessage = err.response?.data || "Something went wrong";
       setError(errorMessage);
@@ -49,25 +49,20 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-[80vh] px-4">
-      <div className="text-md">Organizer</div>
-      <form
+    <main className="min-h-screen bg-gradient-to-br from-black to-gray-900 px-4 py-10 flex items-center justify-center">
+      <motion.form
         onSubmit={handleSubmit}
-        className="sm:w-[90%] min-md:w-[35vw] min-lg:w-[35vw] space-y-6"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="w-full lg:min-w-sm sm:min-w-sm md:min-w-md max-w-md mx-auto"
       >
-        <Card className="w-full shadow-xl">
-          <div className="flex flex-row justify-between">
-            <CardHeader className="text-center w-1/2">
-              <CardTitle className="text-2xl font-semibold">
-                Create an account
-              </CardTitle>
-            </CardHeader>
-            <Link href="/auth/organizer/login">
-              <Button variant="link" className="text-sm">
-                Already have an account?
-              </Button>
-            </Link>
-          </div>
+        <Card className="w-full bg-black bg-opacity-40 backdrop-blur-md text-white border-pink-500">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-pink-600 to-purple-500">
+              Organizer Signup
+            </CardTitle>
+          </CardHeader>
 
           <CardContent className="space-y-4">
             <div className="grid gap-2">
@@ -76,57 +71,54 @@ const Signup = () => {
                 id="name"
                 type="text"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
                 placeholder="John Doe"
                 required
+                onChange={handleChange}
               />
             </div>
-
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
                 placeholder="m@example.com"
                 required
+                onChange={handleChange}
               />
             </div>
-
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
                 placeholder="********"
                 required
+                onChange={handleChange}
               />
             </div>
-
             {error && (
               <p className="text-sm text-red-500 text-center pt-2">{error}</p>
             )}
           </CardContent>
 
-          <CardFooter className="flex flex-col gap-2">
-            <Button type="submit" className="w-full">
+          <CardFooter className="flex flex-col gap-3 px-6 pb-6">
+            <Button type="submit" className="w-full bg-pink-600 hover:bg-pink-700">
               Sign Up
             </Button>
-            <Link href={"/auth/artist/signup"}>
-              <Button variant="outline" className="w-full">
+            <Link href="/auth/artist/signup" className="w-full">
+              <Button variant="outline" className="w-full border-pink-600 text-pink-500">
                 Signup as Artist
               </Button>
             </Link>
+            <Link href="/auth/organizer/login" className="text-sm text-pink-400 text-center">
+              Already have an account? Login
+            </Link>
           </CardFooter>
         </Card>
-      </form>
-    </div>
+      </motion.form>
+    </main>
   );
 };
 

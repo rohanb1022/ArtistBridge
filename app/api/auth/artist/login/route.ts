@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { generateToken } from "@/lib/auth/auth";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-
+export const runtime = "nodejs"; 
 
 export async function POST(req: Request) {
   const data = await req.json();

@@ -5,24 +5,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-export const artistCategories = [
-  "SINGER",
-  "DANCER",
-  "MAGICIAN",
-  "COMEDIAN",
-  "DJ",
-  "INSTRUMENTALIST",
-  "MIME",
-  "THEATRE",
-  "BEATBOXER",
-  "SPEAKER",
-  "PAINTER",
-  "POET",
-  "PHOTOGRAPHER",
-  "MODEL",
-  "CIRCUS",
-];
-
 type Request = {
   id: number;
   name: string;
@@ -43,11 +25,11 @@ const OrganizerRequests = () => {
     setLoading(true);
     try {
       const res = await api.get("/artist/getRequest");
-      console.log("Fetched requests:", res.data.data);
       const data = res.data?.data;
       setRequests(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Failed to fetch requests", error);
+      setRequests([]);
     } finally {
       setLoading(false);
     }

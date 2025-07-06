@@ -54,7 +54,6 @@ export async function POST(req: Request) {
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
   });
-
-  console.log("Login Success: Sending response with cookie."); // Add server-side logging
+// Add server-side logging
   return response; // <--- ENSURE THIS RETURN IS REACHED AND EXECUTED
 }

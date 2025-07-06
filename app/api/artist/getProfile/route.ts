@@ -9,7 +9,6 @@ export async function GET(req: Request) {
     }
 
     const artist = await prisma.artist.findUnique({ where: { id: user.id } });
-    console.log(artist)
     if (!artist) {
       return Response.json({ message: "Artist not found" }, { status: 400 });
     }

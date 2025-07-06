@@ -72,6 +72,7 @@ const Login = () => {
                 placeholder="m@example.com"
                 required
                 onChange={handleChange}
+                className="text-white"
               />
             </div>
             <div>
@@ -82,6 +83,7 @@ const Login = () => {
                 name="password"
                 required
                 onChange={handleChange}
+                className="text-white"
               />
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}

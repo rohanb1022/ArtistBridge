@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Calendar, Search, Settings, Users } from "lucide-react";
+import { Calendar, Search, Settings, FileUser } from "lucide-react";
 
 const OrganizerCTA = () => {
   return (
@@ -40,10 +40,10 @@ const OrganizerCTA = () => {
             link: "/organizer/manage-bookings",
           },
           {
-            icon: <Users className="w-8 h-8 text-pink-500" />,
-            title: "View Artist Profiles",
+            icon: <FileUser className="w-8 h-8 text-pink-500" />,
+            title: "View Your Sent Requests",
             description:
-              "Go through detailed artist profiles, ratings, bios, and past performances.",
+              "Go through your request history and see which artists you've reached out to.",
             link: "/organizer/get-request",
           },
           {

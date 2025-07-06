@@ -78,6 +78,7 @@ const Login = () => {
                 placeholder="m@example.com"
                 required
                 onChange={handleChange}
+                className="text-white"
               />
             </div>
             <div className="grid gap-2">
@@ -89,6 +90,7 @@ const Login = () => {
                 placeholder="********"
                 required
                 onChange={handleChange}
+                className="text-white"
               />
             </div>
             {error && (

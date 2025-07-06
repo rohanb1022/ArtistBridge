@@ -67,6 +67,7 @@ const Signup = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                className="text-white"
               />
             </div>
             <div>
@@ -79,6 +80,7 @@ const Signup = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                className="text-white"
               />
             </div>
             <div>
@@ -91,6 +93,7 @@ const Signup = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                className="text-white"
               />
             </div>
             <div>

@@ -74,6 +74,7 @@ const Signup = () => {
                 placeholder="John Doe"
                 required
                 onChange={handleChange}
+                className="text-white"
               />
             </div>
             <div className="grid gap-2">
@@ -85,6 +86,7 @@ const Signup = () => {
                 placeholder="m@example.com"
                 required
                 onChange={handleChange}
+                className="text-white"
               />
             </div>
             <div className="grid gap-2">
@@ -96,6 +98,7 @@ const Signup = () => {
                 placeholder="********"
                 required
                 onChange={handleChange}
+                className="text-white"
               />
             </div>
             {error && (

@@ -1,17 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// generator client {
-//   provider = "prisma-client-js"
-//   output   = "../lib/generated/prisma"
-// }
-
 generator client {
   provider = "prisma-client-js"
-  // REMOVE the `output` line if it's there
 }
 
 datasource db {
@@ -20,8 +8,8 @@ datasource db {
 }
 
 model Artist {
-  id         Int              @id @default(autoincrement())
-  email      String           @unique
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
   name       String
   city       String?
   password   String
@@ -29,8 +17,8 @@ model Artist {
   bestEvent  String?
   price      Int?
   bio        String?
+  created_at DateTime  @default(now())
   bookings   Booking[]
-  created_at DateTime         @default(now())
 }
 
 model Organizer {
@@ -38,8 +26,8 @@ model Organizer {
   email          String          @unique
   name           String
   password       String
-  bookings       Booking[]
   artistRequests ArtistRequest[]
+  bookings       Booking[]
 }
 
 model Booking {
@@ -71,10 +59,8 @@ model ArtistRequest {
   timing      String
   status      RequestStatus @default(PENDING)
   createdAt   DateTime      @default(now())
-
-  organizer Organizer @relation(fields: [organizerId], references: [id])
+  organizer   Organizer     @relation(fields: [organizerId], references: [id])
 }
-
 
 enum BookingStatus {
   PENDING

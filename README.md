@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 ArtistBridge
 
-## Getting Started
+ArtistBridge is a full-stack web application that connects **event organizers** with talented **artists** across India. Organizers can discover, request, and book artists for events, while artists can manage requests, maintain profiles, and build visibility.
 
-First, run the development server:
+![image](https://github.com/user-attachments/assets/67dc881e-d994-4beb-93c8-37c4b3bdd5a8)
+
+## 🚀 Features
+
+### For Artists
+- Secure signup/login with JWT authentication
+- Profile creation with genre, bio, and category
+- Manage incoming requests from organizers
+- Accept/reject booking requests
+- View confirmed bookings
+
+### For Organizers
+- Signup/login with secure authentication
+- Browse artists based on category and genre
+- Send booking requests to artists
+- View status of sent requests
+
+### Shared
+- Protected routes for artists and organizers
+- Interactive landing page with animations (GSAP/Framer Motion)
+- Mobile responsive UI (fully optimized)
+- Cookie-based JWT token handling with middleware protection
+
+---
+
+## 🛠 Tech Stack
+
+| Frontend       | Backend           | Database     | Tools & Libraries     |
+|----------------|-------------------|--------------|------------------------|
+| Next.js (App Router) | Node.js, Express.js | PostgreSQL via Prisma ORM | Tailwind CSS, Framer Motion, GSAP |
+| TypeScript     | REST APIs         | Prisma ORM   | Axios, Lucide React Icons |
+
+---
+
+## ⚙️ Setup Instructions
+
+1. **Clone the repo**
+```bash
+git clone https://github.com/rohanb1022/ArtistBridge.git
+cd ArtistBridge
+````
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Setup `.env`**
+
+```env
+DATABASE_URL=your_postgres_db_url
+JWT_SECRET=your_jwt_secret
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+4. **Prisma Setup**
+
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+
+5. **Run the development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Folder Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+/app
+  └── api/
+  └── artist/
+  └── organizer/
+  └── components/
+  └── lib/
+      └── axios.ts
+      └── auth.ts
+      └── withAuth.ts
+/middleware.ts
+/sections
+  └── artist/
+  └── organizer/
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🧠 Future Enhancements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* ✅ Real-time booking status updates using **Supabase or WebSockets**
+* ✅ Notifications via email or in-app
+* ✅ Artist rating & reviews
+* ✅ Payment integration for advance booking
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📸 Screenshots
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### View Bookings
+![image](https://github.com/user-attachments/assets/4366f89e-b050-42d9-a1c0-2ecffe172d86)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+### Pending Request
+![image](https://github.com/user-attachments/assets/917b0be3-9030-411c-a14e-f7cabd705739)
+
+---
+
+### Home page of Artist
+![image](https://github.com/user-attachments/assets/14ffaebf-fb62-4b84-9632-ca6d87fed632)
+
+
+
+
+---
+
+## 🧑‍💻 Developed By
+
+Rohan Bhangale
+VESIT, Mumbai
+📧 [rohanbhangale25@gmail.com](mailto:rohanbhangale25@gmail.com)
+
+---
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).

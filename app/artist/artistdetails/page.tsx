@@ -15,11 +15,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { artistCategories } from "@/constants/artist";
 import { useRouter } from "next/navigation";
-import { useProtectedRoute } from "@/hooks/useProtectedRoute";
 import { motion } from "framer-motion";
 
 const ArtistDetailsForm = () => {
-  useProtectedRoute();
   const [formData, setFormData] = useState({
     category: [] as string[],
     price: 0,

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, X } from "lucide-react";
-import { useProtectedRoute } from "@/hooks/useProtectedRoute";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +36,6 @@ interface HistoryItem {
 
 const ArtistProfilePage = () => {
   const router = useRouter();
-  useProtectedRoute();
 
   const [profile, setProfile] = useState<ArtistProfile | null>(null);
   const [loading, setLoading] = useState(true);

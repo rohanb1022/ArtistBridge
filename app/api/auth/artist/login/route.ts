@@ -18,6 +18,7 @@ export async function POST(req: Request) {
   const artist = await prisma.artist.findUnique({
     where: { email },
   });
+  console.log("Database URL: ", process.env.DATABASE_URL);
 
   if (!artist) {
     console.error("Login Error: Artist not found for email:", email); // Add server-side logging

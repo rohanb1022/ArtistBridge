@@ -33,7 +33,7 @@ const Hero = () => {
           and corporate functions.
         </p>
 
-        <Link href="/explore">
+        <Link href="/organizer/explore">
           <Button className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-full text-lg shadow-lg transition-all duration-300">
             Explore Artists
           </Button>

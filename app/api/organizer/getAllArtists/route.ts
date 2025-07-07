@@ -9,6 +9,7 @@ export async function GET(req : Request){
     }
     try {
         const artists = await prisma.artist.findMany({});
+        console.log(artists)
         if (!artists || artists.length === 0) {
             return NextResponse.json({ message: "No artists found" }, { status: 404 });
         }

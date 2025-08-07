@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -10,6 +11,9 @@ import { Input } from "@/components/ui/input";
 import { CalendarDays } from "lucide-react";
 import Image from "next/image";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const ArtistProfile = () => {
   const { artistId } = useParams();
@@ -25,8 +29,29 @@ const ArtistProfile = () => {
         const response = await api.get(`/organizer/artist-profile/${artistId}`);
         console.log(response.data);
         setArtistData(response.data);
-      } catch (error) {
+        toast.success("🤩 Artist Booked!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
+      } catch (error: any) {
         console.error("Error fetching artist:", error);
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       }
     };
     fetchArtist();
@@ -46,7 +71,7 @@ const ArtistProfile = () => {
         time,
         eventName,
       });
-      console.log("Booking successful:", response.data);
+
       // Optionally, you can redirect or show a success message
     } catch (error) {
       console.error("Error booking artist:", error);
@@ -55,6 +80,19 @@ const ArtistProfile = () => {
 
   return (
     <main className="relative min-h-screen text-white px-6 py-12">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <div className="fixed inset-0 -z-10">
         <Image
           src="/images/artistProfilebg.png" //
@@ -110,7 +148,7 @@ const ArtistProfile = () => {
                   <div className="grid gap-4">
                     <div>
                       <label className="text-sm text-white">
-                       name of the event
+                        name of the event
                       </label>
                       <div className="flex items-center gap-2">
                         <CalendarDays className="text-white" size={20} />

@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { ImSpinner3 } from "react-icons/im";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,9 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -38,14 +41,19 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
     try {
+      console.time("loginRequest");
       const res = await api.post("/auth/organizer/login", formData);
       console.log("login successs", res.data);
-      router.refresh();
+      //router.refresh();
       router.push("/organizer/home");
+      console.timeEnd("loginRequest");
     } catch (error: any) {
       const errorMessage = error.response?.data || "Something went wrong";
       setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,9 +107,16 @@ const Login = () => {
           </CardContent>
 
           <CardFooter className="flex flex-col gap-3 px-6 pb-6">
-            <Button type="submit" className="w-full bg-pink-600 hover:bg-pink-700">
-              Login
-            </Button>
+            {isLoading ? (
+              <Button disabled className="w-full bg-pink-600">
+                <ImSpinner3 className="animate-spin mr-2" />
+                Logging in...
+              </Button>
+            ) : (
+              <Button type="submit" className="w-full bg-pink-600">
+                Login
+              </Button>
+            )}
             <Link href="/auth/artist/login" className="w-full">
               <Button variant="outline" className="w-full border-pink-600 text-pink-500">
                 Login as Artist

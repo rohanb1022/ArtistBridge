@@ -34,8 +34,7 @@ export async function POST(req: Request) {
 
   // Step 4: Generate JWT Token
   const token = generateToken({ id: artist.id.toString(), role: "artist" });
-  console.log("Login Success: Token generated for artist:", artist.email); // Add server-side logging
-
+  console.log("Login request received at:", Date.now());
   // Step 5: Set Cookie using NextResponse
   const response = NextResponse.json(
     {

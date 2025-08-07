@@ -7,7 +7,7 @@ import { reviews } from "@/constants/organizationlist";
 const InfiniteScroller = ({ reverse }: { reverse?: boolean }) => {
   const duplicated = [...reviews, ...reviews].map((review, index) => ({
     ...review,
-    _uid: `${review.id}-${index}`, // ✅ ensures unique key
+    _uid: `${review.id}-${index}`, // ensures unique key
   }));
 
   return (

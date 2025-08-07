@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { ImSpinner3 } from "react-icons/im";
 
 const Signup = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const Signup = () => {
     name: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -36,7 +38,7 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
+    setIsLoading(true);
     try {
       const response = await api.post("/auth/organizer/signup", formData);
       console.log("Signup Success:", response.data);
@@ -45,6 +47,8 @@ const Signup = () => {
     } catch (err: any) {
       const errorMessage = err.response?.data || "Something went wrong";
       setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,9 +111,16 @@ const Signup = () => {
           </CardContent>
 
           <CardFooter className="flex flex-col gap-3 px-6 pb-6">
-            <Button type="submit" className="w-full bg-pink-600 hover:bg-pink-700">
-              Sign Up
-            </Button>
+            {isLoading ? (
+              <Button disabled className="w-full bg-pink-600">
+                <ImSpinner3 className="animate-spin mr-2" />
+                Signing up...
+              </Button>
+            ) : (
+              <Button type="submit" className="w-full bg-pink-600">
+                Signup
+              </Button>
+            )}
             <Link href="/auth/artist/signup" className="w-full">
               <Button variant="outline" className="w-full border-pink-600 text-pink-500">
                 Signup as Artist

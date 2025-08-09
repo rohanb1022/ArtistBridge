@@ -65,7 +65,7 @@ const ManageBookings = () => {
           {bookings.pending.map((booking) => (
             <div
               key={booking.id}
-              className="backdrop-blur-md bg-gray-100/70 border border-gray-400/40 rounded-2xl shadow-md p-4 text-gray-800"
+              className="backdrop-blur-sm border border-gray-400/40 rounded-2xl shadow-md p-4 text-gray-800"
             >
               <p className="text-sm">Event Name: <span className="font-medium">{booking.eventName}</span></p>
               <p className="text-sm">Artist: <span className="font-semibold">{booking.artistName}</span></p>
@@ -83,7 +83,7 @@ const ManageBookings = () => {
           {bookings.confirmed.map((booking) => (
             <div
               key={booking.id}
-              className="backdrop-blur-md bg-green-100/30 border border-green-400/40 rounded-2xl shadow-lg p-4 text-green-900"
+              className="backdrop-blur-sm border border-green-400/40 rounded-2xl shadow-lg p-4 text-green-700"
             >
               <p className="text-sm">Event Name: <span className="font-medium">{booking.eventName}</span></p>
               <p className="text-sm">Artist: <span className="font-semibold">{booking.artistName}</span></p>
@@ -107,7 +107,7 @@ const ManageBookings = () => {
           {bookings.cancelled.map((booking) => (
             <div
               key={booking.id}
-              className="backdrop-blur-md bg-red-100/30 border border-red-400/40 rounded-2xl shadow-lg p-4 text-red-900"
+              className="backdrop-blur-sm border border-red-400/40 rounded-2xl shadow-lg p-4 text-red-900"
             >
               <p className="text-sm">Event Name: <span className="font-medium">{booking.eventName}</span></p>
               <p className="text-sm">Artist: <span className="font-semibold">{booking.artistName}</span></p>

@@ -37,7 +37,7 @@ const OrganizerRequests = () => {
 
   const handleAccept = async (requestId: number) => {
     try {
-      await api.put(`/organizer/acceptRequest`, {
+      await api.put(`/artist/acceptRequest`, {
         requestId,
         updatedStatus: "MATCHED",
       });

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "react-toastify";
 
 interface ArtistProfile {
   name: string;
@@ -65,6 +66,7 @@ const ArtistProfilePage = () => {
     try {
       const response = await api.post("/auth/logout");
       console.log(response.data);
+      toast.success("Logout successful");
       router.push("/auth/artist/login");
     } catch (error) {
       setError("Failed to logout.");

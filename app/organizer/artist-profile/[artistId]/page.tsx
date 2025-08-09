@@ -29,17 +29,6 @@ const ArtistProfile = () => {
         const response = await api.get(`/organizer/artist-profile/${artistId}`);
         console.log(response.data);
         setArtistData(response.data);
-        toast.success("🤩 Artist Booked!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        });
       } catch (error: any) {
         console.error("Error fetching artist:", error);
         toast.error(error.message, {
@@ -71,7 +60,17 @@ const ArtistProfile = () => {
         time,
         eventName,
       });
-
+      toast.success("Booking request sent!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
       // Optionally, you can redirect or show a success message
     } catch (error) {
       console.error("Error booking artist:", error);

@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/middleware";
 
-export async function PATCH(req: Request) {
+export async function PUT(req: Request) {
   const user = await withAuth(req);
 
   if (!user || user.role !== "artist") {

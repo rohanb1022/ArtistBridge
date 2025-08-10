@@ -4,6 +4,7 @@ import api from '@/lib/axios';
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { LoaderCircle } from 'lucide-react';
 
 // Define the artist type
 type Artist = {
@@ -19,15 +20,19 @@ const ExploreArtist = () => {
   const [artists, setArtists] = React.useState<Artist[]>([]);
   const [filteredArtists, setFilteredArtists] = React.useState<Artist[]>([]);
   const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const fetchArtists = async () => {
+      setIsLoading(true)
       try {
         const response = await api.get('/organizer/getAllArtists');
         setArtists(response.data);
         setFilteredArtists(response.data);
       } catch (error) {
         console.error('Error fetching artists:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchArtists();
@@ -64,7 +69,16 @@ const ExploreArtist = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
+        {
+          isLoading && (
+            <div className="text-center text-gray-400 mt-20">
+              <p className="text-xl">
+                <span className="animate-spin mr-2"><LoaderCircle/></span>
+                Loading...
+              </p>
+            </div>
+          )
+        }
         {filteredArtists.length === 0 ? (
           <div className="text-center text-gray-400 mt-20">
             <p className="text-xl">No artists are currently available. Please check back later.</p>

@@ -41,7 +41,7 @@ const OrganizerCTA = () => {
           },
           {
             icon: <FileUser className="w-8 h-8 text-pink-500" />,
-            title: "View Your Sent Requests",
+            title: "View Sent Requests",
             description:
               "Go through your request history and see which artists you've reached out to.",
             link: "/organizer/get-request",

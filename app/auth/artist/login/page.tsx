@@ -18,6 +18,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { ImSpinner3 } from "react-icons/im";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -36,6 +37,17 @@ const Login = () => {
     try {
       const res = await api.post("/auth/artist/login", formData);
       console.log("Login success", res.data);
+      toast.success("Booking request sent!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
       router.replace("/artist/home");
     } catch (err) {
       let errorMessage = "Something went wrong";
@@ -44,6 +56,16 @@ const Login = () => {
         errorMessage = err.response.data;
       }
       setError(errorMessage);
+       toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
     }finally{
       setIsLoading(false);
     }
@@ -51,6 +73,19 @@ const Login = () => {
 
   return (
     <main className="min-h-[90vh] bg-black flex items-center justify-center px-4">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 30 }}

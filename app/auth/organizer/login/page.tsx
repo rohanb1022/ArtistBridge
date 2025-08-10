@@ -20,6 +20,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ImSpinner3 } from "react-icons/im";
+import { Bounce, ToastContainer , toast } from "react-toastify";
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -46,12 +48,33 @@ const Login = () => {
       console.time("loginRequest");
       const res = await api.post("/auth/organizer/login", formData);
       console.log("login successs", res.data);
+      toast.success("Booking request sent!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
       //router.refresh();
       router.push("/organizer/home");
       console.timeEnd("loginRequest");
     } catch (error: any) {
       const errorMessage = error.response?.data || "Something went wrong";
       setError(errorMessage);
+       toast.error(error.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
     } finally {
       setIsLoading(false);
     }
@@ -59,6 +82,19 @@ const Login = () => {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-black to-gray-900 px-4 py-10 flex items-center justify-center">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, scale: 0.95 }}

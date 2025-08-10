@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ImSpinner3 } from "react-icons/im";
+import { ToastContainer, toast,  Bounce } from "react-toastify";
 
 const Signup = () => {
   const router = useRouter();
@@ -43,10 +44,31 @@ const Signup = () => {
       const response = await api.post("/auth/organizer/signup", formData);
       console.log("Signup Success:", response.data);
       router.refresh();
+      toast.success("Booking request sent!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
       router.push("/organizer/home");
     } catch (err: any) {
       const errorMessage = err.response?.data || "Something went wrong";
       setError(errorMessage);
+       toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
     } finally {
       setIsLoading(false);
     }
@@ -54,6 +76,19 @@ const Signup = () => {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-black to-gray-900 px-4 py-10 flex items-center justify-center">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, scale: 0.95 }}

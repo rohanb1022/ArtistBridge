@@ -1,6 +1,9 @@
 import prisma from "@/lib/prisma";
 import { ArtistCategory } from "@prisma/client";
 
+export const runtime = "nodejs";
+
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 export const runtime = "nodejs"; 
 
+
 export async function POST(req: Request) {
   const data = await req.json();
   const { email, password } = data;

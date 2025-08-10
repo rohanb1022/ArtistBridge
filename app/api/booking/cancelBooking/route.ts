@@ -1,6 +1,9 @@
 import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
 
+export const runtime = "nodejs";
+
+
 export async function PUT(req: Request) {
   const user = await withAuth(req);
   if (!user || (user.role !== "artist" && user.role !== "organizer")) {

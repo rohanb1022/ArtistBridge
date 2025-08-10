@@ -1,6 +1,9 @@
 import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma"; //  Proper instantiation
 
+export const runtime = "nodejs";
+
+
 export async function GET(req: Request) {
   const user = await withAuth(req);
   if (!user || user.role !== "artist") {

@@ -2,6 +2,9 @@ import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
+
 export async function GET(req : Request){
     const org = withAuth(req);
     if (!org) {

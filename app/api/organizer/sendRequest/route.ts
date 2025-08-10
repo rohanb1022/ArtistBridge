@@ -1,6 +1,9 @@
 import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/middleware"; // Ensures only logged-in users can send requests
 
+export const runtime = "nodejs";
+
+
 export async function POST(req: Request) {
   const user = await withAuth(req);
 

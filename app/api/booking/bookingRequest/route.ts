@@ -1,6 +1,9 @@
 import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
 
+export const runtime = "nodejs";
+
+
 export async function POST(req: Request) {
   const client = await withAuth(req);
 

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
+export const runtime = "nodejs";
+
 
 
 export async function PUT(req : Request) {

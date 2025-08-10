@@ -1,6 +1,9 @@
 import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
 
+export const runtime = "nodejs";
+
+
 export async function GET(req: Request) {
   const client = await withAuth(req);
   if (!client || client.role !== "organizer") {

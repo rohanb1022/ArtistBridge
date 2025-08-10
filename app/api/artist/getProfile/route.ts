@@ -1,5 +1,7 @@
 import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
+export const runtime = "nodejs";
+
 
 export async function GET(req: Request) {
   try {

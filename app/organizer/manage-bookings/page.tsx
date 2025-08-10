@@ -60,12 +60,12 @@ const ManageBookings = () => {
     <main className="p-6 space-y-10">
       {/* Pending Bookings */}
       <section>
-        <h2 className="text-2xl font-bold text-gray-700 mb-4">Pending Bookings</h2>
+        <h2 className="text-2xl font-bold text-gray-400 mb-4">Pending Bookings</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookings.pending.map((booking) => (
             <div
               key={booking.id}
-              className="backdrop-blur-sm border border-gray-400/40 rounded-2xl shadow-md p-4 text-gray-800"
+              className="backdrop-blur-sm border border-gray-400/40 rounded-2xl shadow-md p-4 text-gray-400"
             >
               <p className="text-sm">Event Name: <span className="font-medium">{booking.eventName}</span></p>
               <p className="text-sm">Artist: <span className="font-semibold">{booking.artistName}</span></p>

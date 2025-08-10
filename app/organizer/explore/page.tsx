@@ -4,7 +4,7 @@ import api from '@/lib/axios';
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { LoaderCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 // Define the artist type
 type Artist = {
@@ -70,16 +70,12 @@ const ExploreArtist = () => {
           />
         </div>
         {
-          isLoading && (
-            <div className="text-center text-gray-400 mt-20">
-              <p className="text-xl">
-                <span className="animate-spin mr-2"><LoaderCircle/></span>
-                Loading...
-              </p>
-            </div>
-          )
-        }
-        {filteredArtists.length === 0 ? (
+          isLoading == true ? (
+            <div className="flex justify-center items-center h-40">
+            <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+          </div>
+          ) :
+        filteredArtists.length === 0 ? (
           <div className="text-center text-gray-400 mt-20">
             <p className="text-xl">No artists are currently available. Please check back later.</p>
           </div>

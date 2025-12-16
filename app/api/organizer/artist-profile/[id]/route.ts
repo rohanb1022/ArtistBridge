@@ -1,22 +1,25 @@
-import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
+import { NextRequest } from "next/server";
 
 export const runtime = "nodejs";
 
-export async function GET(req: Request) {
-  const user = await withAuth(req);
+export async function GET(req: NextRequest) {
+  const artistId = req.nextUrl.pathname.split("/").pop();
+  const id = Number(artistId);
 
-  if (!user || user.role !== "artist") {
-    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  if (isNaN(id)) {
+    return Response.json(
+      { message: "Invalid artist ID" },
+      { status: 400 }
+    );
   }
 
   try {
     const artist = await prisma.artist.findUnique({
-      where: { id: user.id },
+      where: { id },
       select: {
         id: true,
         name: true,
-        email: true,
         city: true,
         category: true,
         bio: true,
@@ -27,12 +30,15 @@ export async function GET(req: Request) {
     });
 
     if (!artist) {
-      return Response.json({ message: "Artist not found" }, { status: 404 });
+      return Response.json(
+        { message: "Artist not found" },
+        { status: 404 }
+      );
     }
 
     return Response.json({ data: artist }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching artist profile:", error);
+    console.error("Error fetching artist:", error);
     return Response.json(
       { message: "Internal Server Error" },
       { status: 500 }

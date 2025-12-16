@@ -1,123 +1,102 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// "use client";
-
-// import React from "react";
-// import { Button } from "@/components/ui/button";
-// import Link from "next/link";
-// import { ArrowRight } from "lucide-react";
-// import Image from "next/image";
-
-// const Hero = () => {
-//   return (
-//     <main className="relative w-full min-h-screen overflow-hidden text-white">
-//       {/* Background Image */}
-//       <div className="absolute inset-0 -z-10 w-full h-full">
-//         <Image
-//           src="/images/artistHome.jpg"
-//           alt="Artist Home Background"
-//           fill
-//           priority
-//           className="object-cover w-full h-full brightness-[0.4]"
-//         />
-//       </div>
-
-//       {/* Content */}
-//       <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
-//         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-pink-500">
-//           Welcome Back, Artist
-//         </h1>
-//         <p className="text-lg sm:text-xl md:text-2xl max-w-xl mb-6">
-//           Manage your bookings, profile and connect with top organizers across India.
-//         </p>
-//         <Link href="/artist/profile">
-//           <Button className="bg-pink-600 hover:bg-pink-700 rounded-full text-white px-6 py-2 text-base sm:text-lg">
-//             View Your Profile <ArrowRight className="ml-2 h-5 w-5" />
-//           </Button>
-//         </Link>
-//       </section>
-//     </main>
-//   );
-// };
-
-// export default Hero;
-
-
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Menu } from "lucide-react";
-import Image from "next/image";
-import { toast } from "react-toastify";
-import api from "@/lib/axios"; // adjust to your API instance path
 
 const Hero = () => {
   const router = useRouter();
-  const [error, setError] = useState("");
-
-  const handleLogout = async () => {
-    try {
-      const response = await api.post("/auth/logout");
-      console.log(response.data);
-      toast.success("Logout successful");
-      router.push("/auth/artist/login");
-    } catch (error) {
-      setError("Failed to logout." );
-      toast.error("Failed to logout");
-    }
-  };
 
   return (
-    <main className="relative w-full min-h-screen overflow-hidden text-white">
-      {/* Background Image */}
-      <div className="absolute inset-0 -z-10 w-full h-full">
-        <Image
-          src="/images/artistHome.jpg"
-          alt="Artist Home Background"
-          fill
-          priority
-          className="object-cover w-full h-full brightness-[0.4]"
-        />
-      </div>
+    <main className="relative w-full min-h-screen text-white flex flex-col">
+      
+      {/* ================= TOP BAR ================= */}
+      <header className="absolute top-0 left-0 w-full z-20">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+          
+          {/* Redesigned Logo */}
+          <div className="flex flex-col leading-none">
+            <span className="text-2xl font-extrabold tracking-tight text-white">
+              Artist
+              <span className="text-pink-500">Bridge</span>
+            </span>
+            <span className="text-[11px] tracking-widest text-gray-400 uppercase">
+              Where artists meet stages
+            </span>
+          </div>
 
-      {/* Hamburger Menu */}
-      <div className="absolute top-6 right-6 h-12 w-12 ">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          {/* Hamburger Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full border border-white/20 bg-white/5 hover:bg-white/10"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="end"
+              className="bg-black/90 backdrop-blur-xl border border-white/10 text-white rounded-xl"
+            >
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/terms-and-conditions">
+                  Terms & Conditions
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/privacy-policy">
+                  Privacy Policy
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </header>
+
+      {/* ================= HERO CONTENT ================= */}
+      <section className="flex-1 flex items-center justify-center text-center px-6">
+        <div className="max-w-3xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
+            Welcome Back,
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">
+              Artist
+            </span>
+          </h1>
+
+          <p className="mt-6 text-lg sm:text-xl text-gray-300">
+            Manage bookings, respond to organizers, and perform on stages that
+            actually matter.
+          </p>
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              variant="ghost"
-              size="icon"
-              className="text-white bg-white/10 rounded-full h-10 w-10"
+              className="px-8 py-6 text-lg bg-pink-600 hover:bg-pink-700"
+              onClick={() => router.push("/artist/profile")}
             >
-              <Menu className="h-10 w-10" strokeWidth={3} />
-
+              Go to Dashboard
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white text-black rounded-md shadow-lg">
-            <DropdownMenuItem asChild>
-              <Link href="/artist/profile">Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="cursor-pointer text-red-600"
-            >
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
 
-      {/* Content */}
-      <section className="min-h-screen flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-pink-500">
-          Welcome Back, Artist
-        </h1>
-        <p className="text-lg sm:text-xl md:text-2xl max-w-xl mb-6">
-          Manage your bookings, profile and connect with top organizers across India.
-        </p>
+            <Button
+              variant="outline"
+              className="px-8 py-6 text-lg border-white/30"
+              onClick={() => router.push("/artist/requests")}
+            >
+              View Requests
+            </Button>
+          </div>
+        </div>
       </section>
     </main>
   );

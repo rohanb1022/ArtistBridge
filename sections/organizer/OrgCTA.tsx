@@ -51,7 +51,7 @@ const OrganizerCTA = () => {
             title: "Customize Your Needs",
             description:
               "Set event preferences and we'll match artists based on your specific needs.",
-            link: "/organizer/orgrequest",
+            link: "/organizer/org-request",
           },
         ].map((card, i) => (
           <div

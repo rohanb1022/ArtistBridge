@@ -7,11 +7,8 @@ const ArtistCTA = () => {
     <main>
        <section
       className="min-h-screen w-full bg-black bg-cover bg-center bg-no-repeat text-white px-6 py-12 flex flex-col items-center justify-center"
-      style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1533106418989-88406c7cc8e1?auto=format&fit=crop&w=1950&q=80')", // 👈 change this URL if needed
-      }}
     >
+
       <div className="text-center mb-10">
         <h2 className="text-4xl md:text-5xl font-bold mb-4">Stay on Top of Your Gigs</h2>
         <p className="text-lg max-w-xl mx-auto text-gray-300">

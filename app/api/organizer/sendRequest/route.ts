@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   const user = await withAuth(req);
-
+  
   if (!user || user.role !== "organizer") {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
   }

@@ -34,7 +34,7 @@ const Signup = () => {
     try {
       const res = await api.post("/auth/artist/signup", formData);
       console.log("Signup success", res.data);
-      toast.success("Booking request sent!", {
+      toast.success("Congratulations on signing up!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -42,7 +42,10 @@ const Signup = () => {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          style : {
+            color : "white",
+            background : "black"
+          },
           transition: Bounce,
         });
       router.push("/artist/artistdetails");
@@ -54,14 +57,18 @@ const Signup = () => {
       }
       setError(errorMessage);
        toast.error(errorMessage, {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          style : {
+            color : "red",
+            background : "black"
+          },
+          transition: Bounce,
         });
     } finally {
       setIsLoading(false);
@@ -146,6 +153,7 @@ const Signup = () => {
                 value={formData.city}
                 onChange={handleChange}
                 required
+                className="text-white"
               />
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}

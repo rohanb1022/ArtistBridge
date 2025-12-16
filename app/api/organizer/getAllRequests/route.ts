@@ -11,7 +11,6 @@ export async function GET(req: Request) {
   if (!user || user.role !== "organizer") {
     return Response.json({ message: "Unauthorized access" }, { status: 401 });
   }
-
   try {
     // 2. Fetch all requests by this organizer
     const requests = await prisma.artistRequest.findMany({

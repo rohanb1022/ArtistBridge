@@ -1,107 +1,10 @@
-// generator client {
-//   provider = "prisma-client-js"
-// }
-
-// datasource db {
-//   provider  = "postgresql"
-//   url       = env("DATABASE_URL")
-//   directUrl = env("DIRECT_URL")
-// }
-        
-// model Artist {
-//   id         Int       @id @default(autoincrement())
-//   email      String    @unique
-//   name       String
-//   city       String?
-//   password   String
-//   category   String[]
-//   bestEvent  String?
-//   price      Int?
-//   bio        String?
-//   created_at DateTime  @default(now())
-//   bookings   Booking[]
-// }
-
-// model Organizer {
-//   id             Int             @id @default(autoincrement())
-//   email          String          @unique
-//   name           String
-//   password       String
-//   artistRequests ArtistRequest[]
-//   bookings       Booking[]
-// }
-
-// model Booking {
-//   id            Int           @id @default(autoincrement())
-//   artistId      Int
-//   organizerId   Int
-//   artistName    String
-//   organizerName String
-//   eventName     String
-//   date          String
-//   time          String
-//   status        BookingStatus @default(PENDING)
-//   city          String
-//   price         Int
-//   category      String
-//   artist        Artist        @relation(fields: [artistId], references: [id])
-//   organizer     Organizer     @relation(fields: [organizerId], references: [id])
-// }
-
-// model ArtistRequest {
-//   id          Int           @id @default(autoincrement())
-//   organizerId Int
-//   email       String
-//   name        String
-//   city        String
-//   category    String
-//   maxBudget   Int
-//   date        String
-//   timing      String
-//   status      RequestStatus @default(PENDING)
-//   createdAt   DateTime      @default(now())
-//   organizer   Organizer     @relation(fields: [organizerId], references: [id])
-// }
-
-// enum BookingStatus {
-//   PENDING
-//   CONFIRMED
-//   CANCELLED
-//   REJECTED
-// }
-
-// enum RequestStatus {
-//   PENDING
-//   MATCHED
-// }
-
-// enum ArtistCategory {
-//   SINGER
-//   DANCER
-//   MAGICIAN
-//   COMEDIAN
-//   DJ
-//   INSTRUMENTALIST
-//   MIME
-//   THEATRE
-//   BEATBOXER
-//   SPEAKER
-//   PAINTER
-//   POET
-//   PHOTOGRAPHER
-//   MODEL
-//   CIRCUS
-// }
-
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Artist {
@@ -115,10 +18,7 @@ model Artist {
   price          Int?
   bio            String?
 
-  // 🔹 Social & Media Links
-  youtubeUrl     String?
-  instagramUrl   String?
-  introVideoUrl  String?
+  // Social & Media Links REMOVED
 
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt

@@ -1,22 +1,30 @@
- 
 /* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "ArtistBridge",
-  description: "Helping real Artists to show real!",
+  title: "ArtistBridge — Connect Artists & Organizers",
+  description: "The premium marketplace to discover, book, and manage top-tier artists for unforgettable events across India.",
+  openGraph: {
+    title: "ArtistBridge",
+    description: "Book world-class artists for your next event.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -25,18 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        {/* ✅ Google Font (Finger Paint) for hero section */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* App content with Navbar logic */}
+    <html lang="en" className={`${sora.variable} ${jakarta.variable}`}>
+      <body className="antialiased">
         {children}
       </body>
     </html>

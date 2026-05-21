@@ -7,12 +7,12 @@ import Footer from '@/sections/organizer/Footer'
 
 const Home = () => {
   return (
-    <div>
-      <Hero/>
-      <OrgCTA/>
-      <ArtistDemo/>
-      <Testimonials/>
-      <Footer/>
+    <div style={{ backgroundColor: "#020817", minHeight: "100vh" }}>
+      <Hero />
+      <OrgCTA />
+      <ArtistDemo />
+      <Testimonials />
+      <Footer />
     </div>
   )
 }

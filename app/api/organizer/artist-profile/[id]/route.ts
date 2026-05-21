@@ -5,9 +5,9 @@ export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   const artistId = req.nextUrl.pathname.split("/").pop();
-  const id = Number(artistId);
+  const id = artistId as string;
 
-  if (isNaN(id)) {
+  if (!id) {
     return Response.json(
       { message: "Invalid artist ID" },
       { status: 400 }

@@ -28,8 +28,8 @@ export async function POST(req: Request) {
   }
 
   //  Validate artistId
-  const parsedArtistId = Number(artistId);
-  if (isNaN(parsedArtistId)) {
+  const parsedArtistId = artistId as string;
+  if (!parsedArtistId) {
     return Response.json(
       { message: "Invalid artist ID" },
       { status: 400 }
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     // Create new booking
     const newBookingRequest = await prisma.booking.create({
       data: {
-        artistId: parsedArtistId,  //  INT not STRING
+        artistId: parsedArtistId,
         organizerId: org.id,
         organizerName: org.name,
         artistName: artist.name,

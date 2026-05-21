@@ -13,7 +13,7 @@ export async function verifyToken(token: string) {
   try {
     const { payload } = await jwtVerify(token, secret);
     return {
-      id: Number(payload.id) ,  
+      id: payload.id as string,  
       role: payload.role as string
     }
   } catch (err) {

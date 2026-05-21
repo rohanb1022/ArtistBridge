@@ -39,7 +39,7 @@ export default function BookSpecificArtistPage() {
     try {
       // Structure matches backend requirements exactly
       const payload = {
-        artistId: Number(artistId), // Backend expects Number
+        artistId: artistId as string,
         eventName: form.eventName,
         city: form.city,
         price: parseInt(form.price), // Backend expects Number

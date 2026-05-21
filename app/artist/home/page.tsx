@@ -1,160 +1,201 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { artistList } from "@/constants/artist";
-import { demoOrganizerList } from "@/constants/organizationlist";
-import { Menu } from "lucide-react";
-import Footer from "@/sections/artists/Footer";
-import Hero from "@/sections/artists/Hero";
+import { motion } from "framer-motion";
+import { Mic2, Calendar, Clock, Briefcase, Star, ArrowRight, LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
+import api from "@/lib/axios";
+
+const ctaCards = [
+  {
+    icon: <Calendar size={20} />,
+    title: "My Bookings",
+    desc: "View all confirmed shows and upcoming performances.",
+    href: "/artist/bookings",
+    color: "#10B981",
+    colorBg: "rgba(16,185,129,0.1)",
+    colorBorder: "rgba(16,185,129,0.2)",
+  },
+  {
+    icon: <Clock size={20} />,
+    title: "Pending Requests",
+    desc: "Organizers are waiting — respond to new requests.",
+    href: "/artist/bookings",
+    color: "#F59E0B",
+    colorBg: "rgba(245,158,11,0.1)",
+    colorBorder: "rgba(245,158,11,0.2)",
+  },
+  {
+    icon: <Briefcase size={20} />,
+    title: "Open Requests",
+    desc: "Browse public event requests matching your profile.",
+    href: "/artist/requests",
+    color: "#7C3AED",
+    colorBg: "rgba(124,58,237,0.1)",
+    colorBorder: "rgba(124,58,237,0.2)",
+  },
+  {
+    icon: <Star size={20} />,
+    title: "My Profile",
+    desc: "Update your bio, pricing, and categories to attract more gigs.",
+    href: "/artist/profile",
+    color: "#0EA5E9",
+    colorBg: "rgba(14,165,233,0.1)",
+    colorBorder: "rgba(14,165,233,0.2)",
+  },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
 
 export default function ArtistHomePage() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout");
+      router.push("/");
+    } catch {
+      router.push("/");
+    }
+  };
+
   return (
-    <main className="relative text-white antialiased overflow-hidden">
+    <main className="min-h-screen relative overflow-hidden" style={{ backgroundColor: "#020817" }}>
 
-      {/* ================= ONE GLOBAL BACKGROUND ================= */}
-      <div className="fixed inset-0 -z-10">
-        {/* base */}
-        <div className="absolute inset-0 bg-[#070707]" />
+      {/* Ambient Blobs */}
+      <div className="ambient-blob w-[600px] h-[600px] top-[-150px] left-[-150px]"
+        style={{ background: "radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%)" }} />
+      <div className="ambient-blob w-[500px] h-[500px] top-[30%] right-[-100px]"
+        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)", animationDelay: "4s" }} />
 
-        {/* animated gradients */}
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-pink-500/20 rounded-full blur-[160px] animate-pulse" />
-        <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-purple-500/20 rounded-full blur-[180px] animate-pulse delay-1000" />
-        <div className="absolute bottom-0 left-1/3 w-[500px] h-[500px] bg-cyan-400/20 rounded-full blur-[160px] animate-pulse delay-2000" />
+      {/* Grid Overlay */}
+      <div className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }} />
 
-        {/* grain */}
-        <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(#ffffff_1px,transparent_1px)] bg-[size:20px_20px]" />
-      </div>
+      {/* Navbar */}
+      <nav className="relative z-50 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto border-b"
+        style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center gap-2"
+        >
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, #D97706, #F59E0B)" }}>
+            <Mic2 size={16} className="text-black" />
+          </div>
+          <span className="text-lg font-bold" style={{ fontFamily: "var(--font-sora)" }}>
+            Artist<span style={{ color: "#F59E0B" }}>Bridge</span>
+          </span>
+        </motion.div>
 
-      {/* ================= NAV ================= */}
-      <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl tracking-widest  font-bold text-pink-500">ArtistBridge</h1>
-          <Button variant="ghost" size="icon">
-            <Menu />
-          </Button>
-        </div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-4">
+          <Link href="/artist/artistdetails">
+            <button className="text-sm text-slate-400 hover:text-white transition-colors">Update Profile</button>
+          </Link>
+          <button onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+            style={{ border: "1px solid rgba(239,68,68,0.2)", color: "#F87171", background: "rgba(239,68,68,0.05)" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(239,68,68,0.1)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "rgba(239,68,68,0.05)")}>
+            <LogOut size={15} />
+            Logout
+          </button>
+        </motion.div>
       </nav>
 
-      {/* ================= HERO (your old hero logic, redesigned) ================= */}
-      <section className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-32">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6">
-          Welcome Back,{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-            Artist
-          </span>
-        </h1>
-
-        <p className="text-lg md:text-xl max-w-2xl text-gray-300 mb-10">
-          Manage bookings, connect with organizers, and perform on bigger stages
-          across India.
-        </p>
-
-        <div className="flex gap-4">
-          <Link href="/artist/profile">
-            <Button className="px-8 py-6 text-lg bg-pink-600 hover:bg-pink-700">
-              Go to profile
-            </Button>
-          </Link>
-          <Link href="/artist/requests">
-            <Button variant="outline" className="px-8 py-6 text-lg text-black">
-              View Requests
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-
-      {/* ================= CTA GRID (based on your ArtistCTA) ================= */}
-      <section className="py-28 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-        {[
-          {
-            title: "🎉 Ready to Perform?",
-            text: "View all your confirmed bookings and upcoming shows.",
-            link: "/artist/bookings",
-            btn: "View Bookings →",
-          },
-          {
-            title: "⏳ Pending Requests",
-            text: "You have organizers waiting for your response.",
-            link: "/artist/pending",
-            btn: "Review Pending →",
-          },
-          {
-            title: "📭 Not Getting Bookings?",
-            text: "Update your profile to attract better gigs.",
-            link: "/artist/artistdetails",
-            btn: "Update Profile →",
-          },
-          {
-            title: "📢 Open Organizer Requests",
-            text: "Respond to open requests and grab opportunities.",
-            link: "/artist/requests",
-            btn: "View Requests →",
-          },
-        ].map((item, i) => (
-          <div
-            key={i}
-            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 hover:-translate-y-1 transition"
-          >
-            <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
-            <p className="text-gray-300 mb-6">{item.text}</p>
-            <Link href={item.link}>
-              <Button className="w-full">{item.btn}</Button>
-            </Link>
+      {/* Hero */}
+      <section className="relative z-10 pt-20 pb-12 px-6 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4 uppercase tracking-widest"
+            style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", color: "#F59E0B" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            Artist Dashboard
           </div>
-        ))}
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4" style={{ fontFamily: "var(--font-sora)" }}>
+            Welcome Back,{" "}
+            <span className="text-gold">Artist</span>
+          </h1>
+          <p className="text-slate-400 text-lg max-w-xl">
+            Manage your bookings, respond to organizer requests, and grow your presence across India.
+          </p>
+        </motion.div>
       </section>
 
-      {/* ================= ARTISTS (your FamousArtist, redesigned) ================= */}
-      <section className="py-28 px-6 max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12">
-          Artists Already Onboard
-        </h2>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          {artistList.map((artist) => (
-            <div
-              key={artist.name}
-              className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:scale-105 transition"
-            >
-              <h4 className="font-semibold text-lg">{artist.name}</h4>
-              <span className="inline-block mt-3 px-3 py-1 text-xs rounded-full bg-pink-500/20 text-pink-400">
-                {artist.genre}
-              </span>
-            </div>
+      {/* CTA Cards */}
+      <section className="relative z-10 px-6 pb-20 max-w-7xl mx-auto">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-5"
+        >
+          {ctaCards.map((card) => (
+            <motion.div key={card.title} variants={itemVariants}>
+              <Link href={card.href}>
+                <div className="glass-card p-6 group cursor-pointer h-full"
+                  style={{ borderColor: card.colorBorder }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.background = card.colorBg;
+                    (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 40px ${card.color}20`;
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(20, 27, 46, 0.7)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                  }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-colors"
+                    style={{ background: card.colorBg, color: card.color, border: `1px solid ${card.colorBorder}` }}>
+                    {card.icon}
+                  </div>
+                  <h3 className="font-semibold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>{card.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed mb-4">{card.desc}</p>
+                  <div className="flex items-center gap-1 text-xs font-semibold" style={{ color: card.color }}>
+                    Open <ArrowRight size={14} />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
-      {/* ================= ORGANIZERS (your OrgDemo, redesigned) ================= */}
-      <section className="py-28 px-6 max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12">
-          Top Event Organizers
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {demoOrganizerList.map((org) => (
-            <div
-              key={org.id}
-              className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 hover:-translate-y-1 transition"
-            >
-              <h3 className="text-xl font-semibold text-pink-400">
-                {org.name}
-              </h3>
-              <p className="mt-4 text-gray-300 text-sm">
-                {org.description}
-              </p>
-              <p className="mt-4 text-xs text-gray-400">
-                {org.city} • {org.events.join(", ")}
-              </p>
-            </div>
-          ))}
-        </div>
+      {/* Complete Profile Banner */}
+      <section className="relative z-10 px-6 pb-20 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6"
+          style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.06), rgba(124,58,237,0.06))", border: "1px solid rgba(245,158,11,0.12)" }}
+        >
+          <div>
+            <h3 className="text-xl font-bold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>
+              💡 Not getting enough bookings?
+            </h3>
+            <p className="text-slate-400">A complete profile with your bio, pricing, and category gets 5x more requests.</p>
+          </div>
+          <Link href="/artist/artistdetails">
+            <button className="btn-gold px-6 py-3 rounded-xl text-sm whitespace-nowrap flex items-center gap-2">
+              Complete Profile <ArrowRight size={16} />
+            </button>
+          </Link>
+        </motion.div>
       </section>
-
-      {/* ================= FOOTER (cleaned but same content) ================= */}
-      <Footer/>
     </main>
   );
 }

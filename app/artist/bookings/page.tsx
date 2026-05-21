@@ -1,10 +1,10 @@
 "use client";
 
-import api from '@/lib/axios';
-import { useState, useEffect, ReactNode } from 'react';
-import { Button } from '@/components/ui/button';
+import api from "@/lib/axios";
+import { useState, useEffect, ReactNode } from "react";
 import { motion } from "framer-motion";
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import { CheckCircle2, Clock, XCircle, MapPin, Calendar, Clock3, User, Loader2 } from "lucide-react";
 
 type Booking = {
   [x: string]: ReactNode;
@@ -13,9 +13,8 @@ type Booking = {
   date: string;
   status: string;
   city: string;
-  orgName: string;
   time: string;
-  organizerName: string
+  organizerName: string;
 };
 
 type BookingsState = {
@@ -24,199 +23,189 @@ type BookingsState = {
   cancelled: Booking[];
 };
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.07 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+};
+
 const Bookings = () => {
-  const [bookings, setBookings] = useState<BookingsState>({
-    pending: [],
-    confirmed: [],
-    cancelled: [],
-  });
+  const [bookings, setBookings] = useState<BookingsState>({ pending: [], confirmed: [], cancelled: [] });
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"pending" | "confirmed" | "cancelled">("pending");
+
+  const fetchBookings = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/artist/getAllBookings");
+      setBookings(response.data.data);
+    } catch {
+      toast.error("Failed to load bookings.", { theme: "dark" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAccept = async (bookingId: string | number) => {
     try {
-      const response = await api.put("/booking/bookingAccept", {
-        requestId: bookingId,
-        updatedStatus: "CONFIRMED",
-      });
-      console.log(response.data.message);
-      fetchBookings(); // Refresh bookings after acceptance
-      toast.success("Booking accepted successfully!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-      });
-      // Optionally, update the state
-    } catch (error) {
-      console.error("Error accepting booking:", error);
+      await api.put("/booking/bookingAccept", { requestId: bookingId, updatedStatus: "CONFIRMED" });
+      toast.success("Booking accepted!", { theme: "dark", transition: Bounce, position: "top-center" });
+      fetchBookings();
+    } catch {
+      toast.error("Failed to accept booking.", { theme: "dark" });
     }
   };
 
   const handleReject = async (bookingId: string | number) => {
     try {
-      const response = await api.put("/booking/bookingRejection", {
-        requestId: bookingId,
-        updatedStatus: "CANCELLED",
-      });
-      console.log(response.data);
-      fetchBookings(); // Refresh bookings after rejection
-      toast.success(" ❌ Booking Rejected successfully!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-      });
-      // Optionally, update the state
-    } catch (error) {
-      console.error("Error rejecting booking:", error);
+      await api.put("/booking/bookingRejection", { requestId: bookingId, updatedStatus: "CANCELLED" });
+      toast.success("Booking rejected.", { theme: "dark", transition: Bounce, position: "top-center" });
+      fetchBookings();
+    } catch {
+      toast.error("Failed to reject booking.", { theme: "dark" });
     }
   };
 
-  const fetchBookings = async () => {
-    try {
-      const response = await api.get("/artist/getAllBookings");
-      console.log(response.data);
-      setBookings(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchBookings();
-  }, []);
+  useEffect(() => { fetchBookings(); }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-    },
-  };
+  const tabs = [
+    { key: "pending" as const, label: "Pending", icon: <Clock size={14} />, color: "#F59E0B", count: bookings.pending.length },
+    { key: "confirmed" as const, label: "Confirmed", icon: <CheckCircle2 size={14} />, color: "#10B981", count: bookings.confirmed.length },
+    { key: "cancelled" as const, label: "Rejected", icon: <XCircle size={14} />, color: "#F87171", count: bookings.cancelled.length },
+  ];
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "spring" as const, stiffness: 100 },
-    },
-  };
+  const activeColor = tabs.find((t) => t.key === activeTab)?.color || "#F59E0B";
+  const activeBookings = bookings[activeTab];
 
   return (
-    <main className="p-6 min-h-screen bg-black text-white space-y-16">
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        closeOnClick={false}
-        pauseOnHover
-        draggable
-        theme="dark"
-        transition={Bounce}
-      />
-      {/* Confirmed Bookings */}
-      <motion.section
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-green-400">Confirmed Bookings</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookings.confirmed.map((booking) => (
-            <motion.div
-              key={booking.id}
-              variants={cardVariants}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white/10 backdrop-blur-lg border border-green-400/40 rounded-2xl shadow-sm p-6 text-green-200 hover:shadow-green-600/50 transition-all duration-300"
-            >
-              <h3 className="text-lg font-semibold">{booking.organizerName}</h3>
-              <h4 className="text-xl font-bold">Event Name : {booking.eventName}</h4>
-              <p className="text-sm">City : {booking.city}</p>
-              <p className="text-sm mt-1">{booking.date}</p>
-              <p className="text-sm mt-1">Time: {booking.time}</p>
-              <p className="mt-2 font-medium">Status: {booking.status}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+    <div className="min-h-screen relative" style={{ backgroundColor: "#020817" }}>
+      <ToastContainer />
 
-      {/* Pending Bookings */}
-      <motion.section
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-gray-300">Pending Requests</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookings.pending.map((booking) => (
-            <motion.div
-              key={booking.id}
-              variants={cardVariants}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white/10 backdrop-blur-lg border border-gray-400/30 rounded-2xl shadow-sm p-6 text-gray-200 hover:shadow-gray-500/50 transition-all duration-300"
-            >
-              <div className="flex flex-col gap-1">
-                <h3 className="text-lg font-semibold">{booking.organizerName}</h3>
-              <h4 className="text-xl font-bold">Event Name : {booking.eventName}</h4>
-              <p className="text-sm">City : {booking.city}</p>
-              <p className="text-sm mt-1">{booking.date}</p>
-              <p className="text-sm mt-1">Time: {booking.time}</p>
-              <p className="mt-2 font-medium">Status: {booking.status}</p>
-              </div>
-              <div className="flex gap-2 mt-4">
-                <Button
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition"
-                  onClick={() => handleAccept(booking.id)}
-                >
-                  Accept
-                </Button>
-                <Button
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition"
-                  onClick={() => handleReject(booking.id)}
-                >
-                  Reject
-                </Button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+      <div className="ambient-blob w-[600px] h-[600px] top-[-100px] right-[-150px]"
+        style={{ background: "radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)" }} />
+      <div className="ambient-blob w-[500px] h-[500px] bottom-0 left-[-100px]"
+        style={{ background: "radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)", animationDelay: "5s" }} />
 
-      {/* Cancelled Bookings */}
-      <motion.section
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-red-400">Rejected Bookings</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookings.cancelled.map((booking) => (
-            <motion.div
-              key={booking.id}
-              variants={cardVariants}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white/10 backdrop-blur-lg border border-red-400/40 rounded-2xl shadow-sm p-6 text-red-200 hover:shadow-red-500/50 transition-all duration-300"
-            >
-             <h3 className="text-lg font-semibold">{booking.organizerName}</h3>
-              <h4 className="text-xl font-bold">Event Name : {booking.eventName}</h4>
-              <p className="text-sm">City : {booking.city}</p>
-              <p className="text-sm mt-1">{booking.date}</p>
-              <p className="text-sm mt-1">Time: {booking.time}</p>
-              <p className="mt-2 font-medium">Status: {booking.status}</p>
-            </motion.div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4 uppercase tracking-widest"
+            style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", color: "#F59E0B" }}>
+            <Calendar size={12} />
+            My Bookings
+          </div>
+          <h1 className="text-4xl font-bold text-white" style={{ fontFamily: "var(--font-sora)" }}>Booking Dashboard</h1>
+          <p className="text-slate-400 mt-2">Manage all your incoming performance requests and confirmed bookings.</p>
+        </motion.div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 mb-8 p-1 rounded-xl w-fit"
+          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          {tabs.map((tab) => (
+            <button key={tab.key} onClick={() => setActiveTab(tab.key)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
+              style={
+                activeTab === tab.key
+                  ? { background: `${tab.color}18`, color: tab.color, border: `1px solid ${tab.color}30` }
+                  : { color: "#64748B", background: "transparent", border: "1px solid transparent" }
+              }>
+              {tab.icon}
+              {tab.label}
+              <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs"
+                style={{ background: activeTab === tab.key ? `${tab.color}20` : "rgba(255,255,255,0.05)", color: activeTab === tab.key ? tab.color : "#64748B" }}>
+                {tab.count}
+              </span>
+            </button>
           ))}
         </div>
-      </motion.section>
-    </main>
+
+        {/* Loading */}
+        {loading && (
+          <div className="flex items-center justify-center py-24 gap-3">
+            <Loader2 size={28} className="animate-spin" style={{ color: activeColor }} />
+            <span className="text-slate-400">Loading...</span>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && activeBookings.length === 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
+              style={{ background: `${activeColor}10`, border: `1px solid ${activeColor}20` }}>
+              {tabs.find((t) => t.key === activeTab)?.icon}
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>No {activeTab} bookings</h3>
+            <p className="text-slate-500 text-sm">Bookings will appear here once organizers send requests.</p>
+          </motion.div>
+        )}
+
+        {/* Grid */}
+        {!loading && activeBookings.length > 0 && (
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {activeBookings.map((booking) => (
+              <motion.div key={String(booking.id)} variants={itemVariants}>
+                <div className="glass-card p-6 h-full"
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = `${activeColor}30`;
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                  }}>
+
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="font-semibold text-white" style={{ fontFamily: "var(--font-sora)" }}>{booking.eventName}</h3>
+                      <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                        <User size={11} />
+                        {booking.organizerName}
+                      </div>
+                    </div>
+                    <span className={`badge-${booking.status.toLowerCase() === "cancelled" ? "cancelled" : booking.status.toLowerCase() === "confirmed" ? "confirmed" : "pending"}`}>
+                      {booking.status}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 text-sm text-slate-400">
+                    <div className="flex items-center gap-2"><Calendar size={13} style={{ color: activeColor }} />{booking.date}</div>
+                    <div className="flex items-center gap-2"><Clock3 size={13} style={{ color: activeColor }} />{booking.time}</div>
+                    <div className="flex items-center gap-2"><MapPin size={13} style={{ color: activeColor }} />{booking.city}</div>
+                  </div>
+
+                  {activeTab === "pending" && (
+                    <div className="flex gap-2 mt-5">
+                      <button
+                        onClick={() => handleAccept(booking.id)}
+                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                        style={{ background: "rgba(16,185,129,0.12)", color: "#34D399", border: "1px solid rgba(16,185,129,0.25)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(16,185,129,0.2)")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "rgba(16,185,129,0.12)")}
+                      >
+                        ✓ Accept
+                      </button>
+                      <button
+                        onClick={() => handleReject(booking.id)}
+                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                        style={{ background: "rgba(239,68,68,0.1)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(239,68,68,0.18)")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "rgba(239,68,68,0.1)")}
+                      >
+                        ✕ Reject
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </div>
+    </div>
   );
 };
 

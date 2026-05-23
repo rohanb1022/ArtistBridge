@@ -27,11 +27,11 @@ async function handleArtistFallback(artistId: string) {
     },
   });
 
-  let reply = "👋 I'm currently running in **Resilient Search Mode** (bypass API rate limit).\n\n";
+  let reply = "";
   if (bookings.length > 0) {
-    reply += `I retrieved your pending bookings directly from the database. Here is what needs your response:`;
+    reply += `I've checked your schedule. You have the following pending booking requests to review:`;
   } else {
-    reply += "Great news! You have no pending booking requests to review right now.";
+    reply += "Great news! I checked your schedule and you have no pending booking requests to review right now.";
   }
 
   return { reply, bookings };

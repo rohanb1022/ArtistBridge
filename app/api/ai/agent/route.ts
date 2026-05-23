@@ -70,11 +70,11 @@ async function handleOrganizerFallback(messages: any[]) {
     take: 3,
   });
 
-  let reply = "👋 I'm currently running in **Resilient Search Mode** (bypass API rate limit).\n\n";
+  let reply = "";
   if (artists.length > 0) {
-    reply += `I directly queried the database and found matching artists ${matchedCategory ? `(${matchedCategory}s)` : ""} ${matchedCity ? `in ${matchedCity}` : ""} ${maxPrice ? `under ₹${maxPrice}` : ""}:`;
+    reply += `I searched the database and found some excellent ${matchedCategory ? `${matchedCategory.toLowerCase()}s` : "artists"} ${matchedCity ? `in ${matchedCity}` : ""} ${maxPrice ? `under ₹${maxPrice}` : ""} for you! Here are their profiles:`;
   } else {
-    reply += "I searched our records but couldn't find any direct matches. Try typing a generic category (e.g., 'Singer' or 'DJ') and city name (e.g., 'Mumbai').";
+    reply += "I searched our database but couldn't find an exact match for that request. Could you try adjusting the category (e.g., 'Singer' or 'DJ') or city?";
   }
 
   return { reply, artists };

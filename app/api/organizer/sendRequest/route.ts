@@ -27,6 +27,15 @@ export async function POST(req: Request) {
       return Response.json({ message: "All fields are required" }, { status: 400 });
     }
 
+    // Validate Date & Time (Must be in the future)
+    const eventDateTime = new Date(`${date}T${timing}`);
+    if (eventDateTime < new Date()) {
+      return Response.json(
+        { message: "Event date and time must be in the future" },
+        { status: 400 }
+      );
+    }
+
     //  Check if the organizer with this email exists
     const existingOrganizer = await prisma.organizer.findUnique({
       where: { email },

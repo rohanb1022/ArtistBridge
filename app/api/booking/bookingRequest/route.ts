@@ -27,6 +27,15 @@ export async function POST(req: Request) {
     );
   }
 
+  // Validate Date & Time (Must be in the future)
+  const eventDateTime = new Date(`${date}T${time}`);
+  if (eventDateTime < new Date()) {
+    return Response.json(
+      { message: "Event date and time must be in the future" },
+      { status: 400 }
+    );
+  }
+
   //  Validate artistId
   const parsedArtistId = artistId as string;
   if (!parsedArtistId) {

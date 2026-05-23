@@ -3,8 +3,9 @@
 import { Button } from "@/components/ui/button";
 import api from "@/lib/axios";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Loader2, CheckCircle2, Clock, XCircle, Trash2, LayoutDashboard } from "lucide-react";
+import { Loader2, CheckCircle2, Clock, XCircle, Trash2, LayoutDashboard, MessageCircle } from "lucide-react";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 
 type Booking = {
@@ -34,6 +35,7 @@ const itemVariants = {
 };
 
 const ManageBookings = () => {
+  const router = useRouter();
   const [bookings, setBookings] = useState<BookingsState>({
     pending: [],
     confirmed: [],
@@ -204,16 +206,28 @@ const ManageBookings = () => {
                   </div>
 
                   {activeTab === "confirmed" && (
-                    <Button
-                      className="mt-5 w-full flex items-center gap-2 text-sm font-medium"
-                      style={{ background: "rgba(239,68,68,0.1)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }}
-                      onClick={() => handleCancelBooking(booking.id)}
-                      onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.18)")}
-                      onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.1)")}
-                    >
-                      <Trash2 size={14} />
-                      Cancel Booking
-                    </Button>
+                    <div className="flex gap-2 mt-5">
+                      <button
+                        onClick={() => router.push(`/organizer/chat/${booking.id}`)}
+                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
+                        style={{ background: "rgba(245,158,11,0.12)", color: "#F59E0B", border: "1px solid rgba(245,158,11,0.25)" }}
+                        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(245,158,11,0.22)")}
+                        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "rgba(245,158,11,0.12)")}
+                      >
+                        <MessageCircle size={14} />
+                        Chat
+                      </button>
+                      <Button
+                        className="flex-1 flex items-center justify-center gap-2 text-sm font-medium py-2.5"
+                        style={{ background: "rgba(239,68,68,0.1)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }}
+                        onClick={() => handleCancelBooking(booking.id)}
+                        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.18)")}
+                        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.1)")}
+                      >
+                        <Trash2 size={14} />
+                        Cancel
+                      </Button>
+                    </div>
                   )}
                 </div>
               </motion.div>

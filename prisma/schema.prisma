@@ -50,6 +50,19 @@ model Booking {
   category      String
   artist        Artist        @relation(fields: [artistId], references: [id])
   organizer     Organizer     @relation(fields: [organizerId], references: [id])
+  messages      Message[]
+}
+
+model Message {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId  String   @db.ObjectId
+  senderId   String   @db.ObjectId
+  senderRole String
+  senderName String
+  content    String
+  createdAt  DateTime @default(now())
+
+  booking    Booking  @relation(fields: [bookingId], references: [id])
 }
 
 model ArtistRequest {

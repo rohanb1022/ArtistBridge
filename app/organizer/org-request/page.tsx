@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Ticket,
   MapPin,
@@ -11,9 +11,10 @@ import {
   Mail,
   Layers,
   Loader2,
+  ChevronDown
 } from "lucide-react";
-import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function BookingPage() {
   const router = useRouter();
@@ -34,48 +35,41 @@ export default function BookingPage() {
   });
 
   const ARTIST_CATEGORIES = [
-  "SINGER",
-  "DANCER",
-  "MAGICIAN",
-  "COMEDIAN",
-  "DJ",
-  "INSTRUMENTALIST",
-  "MIME",
-  "THEATRE",
-  "BEATBOXER",
-  "SPEAKER",
-  "PAINTER",
-  "POET",
-  "PHOTOGRAPHER",
-  "MODEL",
-  "CIRCUS",
-];
+    "SINGER", "DANCER", "MAGICIAN", "COMEDIAN", "DJ",
+    "INSTRUMENTALIST", "MIME", "THEATRE", "BEATBOXER",
+    "SPEAKER", "PAINTER", "POET", "PHOTOGRAPHER", "MODEL", "CIRCUS",
+  ];
 
-  // Handle Input Changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [minDate, setMinDate] = useState("");
+  useEffect(() => {
+    setMinDate(new Date().toISOString().split("T")[0]);
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle Form Submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side date & time validation
+    const eventDateTime = new Date(`${formData.date}T${formData.timing}`);
+    if (eventDateTime < new Date()) {
+      setMessage({ type: "error", text: "Event date and time must be in the future." });
+      return;
+    }
+
     setLoading(true);
     setMessage(null);
 
     try {
-      // NOTE: Adjust the endpoint if your route is strictly '/organizer/sendRequest' without '/api'
       const response = await fetch("/api/organizer/sendRequest", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          maxBudget: Number(formData.maxBudget), // Ensure budget is a number for the backend
+          maxBudget: Number(formData.maxBudget),
         }),
       });
 
@@ -85,9 +79,8 @@ export default function BookingPage() {
         throw new Error(data.message || "Something went wrong");
       }
 
-      setMessage({ type: "success", text: "Request sent successfully!" });
+      setMessage({ type: "success", text: "Request published successfully! Artists will be notified." });
 
-      //  Reset form or redirect after success
       setTimeout(() => router.push("/organizer/home"), 2000);
     } catch (error: any) {
       setMessage({ type: "error", text: error.message });
@@ -97,134 +90,107 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black text-white flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-pink-900/20 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen w-full bg-[#020817] text-white flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Studio Noir Background Glows */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#0EA5E9]/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#7C3AED]/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Main Card */}
-      <div className="w-full max-w-2xl bg-[#0a0a0a] border border-zinc-800/60 rounded-3xl p-8 shadow-2xl backdrop-blur-xl relative z-10">
-        {/* Header Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold mb-3">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600">
-              Confirm Booking
+      <motion.div
+        className="w-full max-w-3xl bg-[rgba(15,23,42,0.6)] border border-white/5 rounded-3xl p-8 md:p-10 shadow-2xl backdrop-blur-xl relative z-10"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">
+              Publish Open Request
             </span>
           </h1>
-          <p className="text-zinc-400 text-sm">
-            Fill in the details below to send a direct booking request.
+          <p className="text-zinc-400 text-lg">
+            Broadcast your event details. Interested artists will accept your invitation!
           </p>
         </div>
 
-        {/* Status Message */}
         {message && (
-          <div
-            className={`mb-6 p-4 rounded-xl text-sm font-medium border ${
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`mb-8 p-4 rounded-xl text-sm font-medium border ${
               message.type === "success"
-                ? "bg-green-500/10 border-green-500/20 text-green-400"
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                 : "bg-red-500/10 border-red-500/20 text-red-400"
             }`}
           >
             {message.text}
-          </div>
+          </motion.div>
         )}
 
-        {/* Form Section */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Row 1: Event Name & Category */}
+          {/* Row 1 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">
-                Event Name
-              </label>
+              <label className="text-sm font-medium text-zinc-300 ml-1">Event Name</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors">
-                  <Ticket size={20} />
-                </div>
+                <Ticket className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
                 <input
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   required
                   type="text"
-                  placeholder="e.g. Summer Festival"
-                  className="w-full bg-[#111] border border-zinc-800 text-zinc-100 rounded-xl py-3.5 pl-12 pr-4 outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600"
+                  placeholder="e.g. Corporate Gala 2026"
+                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">
-                Category
-              </label>
+              <label className="text-sm font-medium text-zinc-300 ml-1">Required Category</label>
               <div className="relative group">
-                {/* Left Icon (Layers) */}
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors z-10">
-                  <Layers size={20} />
-                </div>
-
-                {/* The Select Dropdown */}
+                <Layers className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors z-10" />
                 <select
                   name="category"
                   value={formData.category}
-                  onChange={handleChange as any} // Cast if TS complains about event type mismatch
+                  onChange={handleChange}
                   required
-                  className="w-full bg-[#111] border border-zinc-800 text-zinc-100 rounded-xl py-3.5 pl-12 pr-10 outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600 appearance-none cursor-pointer"
+                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-10 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all appearance-none cursor-pointer shadow-inner"
                 >
-                  <option value="" disabled className="text-zinc-500 bg-[#111]">
-                    Select Category
-                  </option>
+                  <option value="" disabled className="text-zinc-500 bg-[#0F172A]">Select Category</option>
                   {ARTIST_CATEGORIES.map((cat) => (
-                    <option
-                      key={cat}
-                      value={cat}
-                      className="bg-[#111] text-zinc-100"
-                    >
-                      {cat.charAt(0) + cat.slice(1).toLowerCase()}{" "}
-                      {/* Formats "SINGER" to "Singer" */}
+                    <option key={cat} value={cat} className="bg-[#0F172A] text-white">
+                      {cat.charAt(0) + cat.slice(1).toLowerCase()}
                     </option>
                   ))}
                 </select>
-
-                {/* Right Icon (Custom Chevron) */}
-                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors">
-                  <ChevronDown size={20} />
-                </div>
+                <ChevronDown className="absolute right-4 top-3.5 w-5 h-5 text-zinc-500 pointer-events-none group-focus-within:text-[#0EA5E9] transition-colors" />
               </div>
             </div>
           </div>
 
-          {/* Row 2: Email (Required by Backend) */}
+          {/* Row 2 */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-zinc-300 ml-1">
-              Organizer Email
-            </label>
+            <label className="text-sm font-medium text-zinc-300 ml-1">Organizer Email</label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors">
-                <Mail size={20} />
-              </div>
+              <Mail className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
               <input
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
                 type="email"
-                placeholder="organizer@example.com"
-                className="w-full bg-[#111] border border-zinc-800 text-zinc-100 rounded-xl py-3.5 pl-12 pr-4 outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600"
+                placeholder="you@company.com"
+                className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
               />
             </div>
           </div>
 
-          {/* Row 3: Location & Price */}
+          {/* Row 3 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">
-                City / Location
-              </label>
+              <label className="text-sm font-medium text-zinc-300 ml-1">City / Location</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors">
-                  <MapPin size={20} />
-                </div>
+                <MapPin className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
                 <input
                   name="city"
                   value={formData.city}
@@ -232,92 +198,75 @@ export default function BookingPage() {
                   required
                   type="text"
                   placeholder="Mumbai, India"
-                  className="w-full bg-[#111] border border-zinc-800 text-zinc-100 rounded-xl py-3.5 pl-12 pr-4 outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600"
+                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">
-                Max Budget (₹)
-              </label>
+              <label className="text-sm font-medium text-zinc-300 ml-1">Maximum Budget (₹)</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors">
-                  <IndianRupee size={20} />
-                </div>
+                <IndianRupee className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
                 <input
                   name="maxBudget"
                   value={formData.maxBudget}
                   onChange={handleChange}
                   required
                   type="number"
-                  placeholder="25000"
-                  className="w-full bg-[#111] border border-zinc-800 text-zinc-100 rounded-xl py-3.5 pl-12 pr-4 outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600"
+                  min="1"
+                  placeholder="50000"
+                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
                 />
               </div>
             </div>
           </div>
 
-          {/* Row 4: Date & Time */}
+          {/* Row 4 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">
-                Event Date
-              </label>
+              <label className="text-sm font-medium text-zinc-300 ml-1">Event Date</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors">
-                  <Calendar size={20} />
-                </div>
+                <Calendar className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
                 <input
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
                   required
                   type="date"
-                  className="w-full bg-[#111] border border-zinc-800 text-zinc-100 rounded-xl py-3.5 pl-12 pr-4 outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600 [color-scheme:dark]"
+                  min={minDate}
+                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all [color-scheme:dark] shadow-inner cursor-pointer"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">
-                Start Time
-              </label>
+              <label className="text-sm font-medium text-zinc-300 ml-1">Start Time</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-pink-500 transition-colors">
-                  <Clock size={20} />
-                </div>
+                <Clock className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
                 <input
                   name="timing"
                   value={formData.timing}
                   onChange={handleChange}
                   required
                   type="time"
-                  className="w-full bg-[#111] border border-zinc-800 text-zinc-100 rounded-xl py-3.5 pl-12 pr-4 outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/50 transition-all placeholder:text-zinc-600 [color-scheme:dark]"
+                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all [color-scheme:dark] shadow-inner cursor-pointer"
                 />
               </div>
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="pt-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg shadow-pink-500/20 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 transform transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin" size={20} />
-                  Sending...
-                </>
-              ) : (
-                "Send Booking Request"
-              )}
-            </button>
-          </div>
+          {/* Submit */}
+          <motion.button
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            type="submit"
+            disabled={loading}
+            className="w-full mt-8 bg-gradient-to-r from-[#0EA5E9] to-[#7C3AED] hover:from-[#0284C7] hover:to-[#6D28D9] text-white font-bold py-4 rounded-xl shadow-[0_0_40px_rgba(14,165,233,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg flex items-center justify-center gap-2"
+          >
+            {loading ? <Loader2 className="animate-spin" size={24} /> : "Publish Open Request"}
+          </motion.button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 }

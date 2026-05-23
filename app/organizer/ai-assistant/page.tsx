@@ -37,10 +37,11 @@ export default function AIAssistantPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/ai/chat", {
+      const newMessages = [...messages, { role: "user", content: userMessage }];
+      const response = await fetch("/api/ai/agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ messages: newMessages }),
       });
       const data = await response.json();
       setMessages((prev) => [

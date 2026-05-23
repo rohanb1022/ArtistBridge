@@ -2,9 +2,10 @@
 
 import api from "@/lib/axios";
 import { useState, useEffect, ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { CheckCircle2, Clock, XCircle, MapPin, Calendar, Clock3, User, Loader2 } from "lucide-react";
+import { CheckCircle2, Clock, XCircle, MapPin, Calendar, Clock3, User, Loader2, MessageCircle } from "lucide-react";
 
 type Booking = {
   [x: string]: ReactNode;
@@ -34,6 +35,7 @@ const itemVariants = {
 };
 
 const Bookings = () => {
+  const router = useRouter();
   const [bookings, setBookings] = useState<BookingsState>({ pending: [], confirmed: [], cancelled: [] });
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"pending" | "confirmed" | "cancelled">("pending");
@@ -198,6 +200,19 @@ const Bookings = () => {
                         ✕ Reject
                       </button>
                     </div>
+                  )}
+
+                  {activeTab === "confirmed" && (
+                    <button
+                      onClick={() => router.push(`/artist/chat/${booking.id}`)}
+                      className="mt-5 w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
+                      style={{ background: "rgba(124,58,237,0.12)", color: "#A78BFA", border: "1px solid rgba(124,58,237,0.25)" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(124,58,237,0.22)")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "rgba(124,58,237,0.12)")}
+                    >
+                      <MessageCircle size={15} />
+                      Open Chat
+                    </button>
                   )}
                 </div>
               </motion.div>

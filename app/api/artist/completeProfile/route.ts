@@ -3,6 +3,7 @@ import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { HfInference } from "@huggingface/inference";
+import { moderateText } from "@/lib/ai/moderation";
 
 export const runtime = "nodejs";
 
@@ -24,6 +25,19 @@ export async function PUT(req : Request) {
     if ( !category || !bio || !price || !bestEvent){ 
         return Response.json({message : "Please provide all the fields once"} , {status : 400})
     }
+
+    // Moderate Bio
+    const bioModeration = await moderateText(bio);
+    if (bioModeration.isToxic) {
+        return Response.json({ message: "Profile update blocked: bio content violates community guidelines (flagged as toxic)." }, { status: 400 });
+    }
+
+    // Moderate Best Event
+    const eventModeration = await moderateText(bestEvent);
+    if (eventModeration.isToxic) {
+        return Response.json({ message: "Profile update blocked: best event content violates community guidelines (flagged as toxic)." }, { status: 400 });
+    }
+
 
     try {
         const updatedFields =  await prisma.artist.update({

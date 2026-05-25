@@ -1,5 +1,6 @@
 import { withAuth } from "@/lib/middleware";
 import prisma from "@/lib/prisma";
+import { moderateText } from "@/lib/ai/moderation";
 
 export const runtime = "nodejs";
 
@@ -17,6 +18,16 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
+
+  // Hugging Face Content Moderation
+  const moderation = await moderateText(content);
+  if (moderation.isToxic) {
+    return Response.json(
+      { message: "Message blocked: content violates community guidelines (flagged as toxic)." },
+      { status: 400 }
+    );
+  }
+
 
   try {
     // Verify the booking and that the sender is a participant

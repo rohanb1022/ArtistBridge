@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight, Mic2, Calendar, Star, Users, Zap, ChevronRight } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { ArrowRight, Mic2, Calendar, Star, Users, Zap, ChevronRight, Play } from "lucide-react";
 
 const stats = [
   { value: "2,000+", label: "Artists Listed" },
@@ -11,261 +12,283 @@ const stats = [
   { value: "4.9★", label: "Average Rating" },
 ];
 
-const categories = ["Singer", "Dancer", "DJ", "Magician", "Comedian", "Painter", "Poet", "Beatboxer"];
+const categories = ["Singer", "Dancer", "DJ", "Magician", "Comedian", "Painter", "Poet", "Beatboxer", "Instrumentalist", "Photographer"];
 
 const features = [
   {
-    icon: <Zap size={22} />,
+    icon: <Zap size={24} className="text-cyan-400" />,
     title: "AI-Powered Matching",
-    desc: "Our RAG-based AI engine instantly finds the best artists for your event budget and city.",
+    desc: "Our RAG-based AI engine instantly finds the best artists tailored to your exact event budget, vibe, and city.",
   },
   {
-    icon: <Calendar size={22} />,
+    icon: <Calendar size={24} className="text-pink-400" />,
     title: "Seamless Booking",
-    desc: "Request, negotiate, and confirm bookings in one streamlined workflow.",
+    desc: "Request, negotiate, and confirm bookings in one completely streamlined workflow with instant notifications.",
   },
   {
-    icon: <Star size={22} />,
+    icon: <Star size={24} className="text-purple-400" />,
     title: "Verified Talent",
-    desc: "Every artist on our platform is reviewed and verified for quality assurance.",
+    desc: "Every artist on our platform is hand-reviewed and verified for quality assurance and professionalism.",
   },
   {
-    icon: <Users size={22} />,
+    icon: <Users size={24} className="text-orange-400" />,
     title: "Dual Dashboard",
-    desc: "Dedicated portals for both artists and organizers with real-time status tracking.",
+    desc: "Dedicated, powerful portals for both artists and organizers with real-time status tracking.",
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-
 export default function HomePage() {
+  const containerRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  // Parallax transforms
+  const yHeroText = useTransform(scrollYProgress, [0, 1], [0, 400]);
+  const yHeroSub = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const yBlobs = useTransform(scrollYProgress, [0, 1], [0, 600]);
+  const scaleHero = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const opacityHero = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+
   return (
-    <main className="relative min-h-screen overflow-hidden" style={{ backgroundColor: "#020817" }}>
-
-      {/* ── AMBIENT BLOBS ── */}
-      <div className="ambient-blob w-[700px] h-[700px] top-[-200px] left-[-200px]"
-        style={{ background: "radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)" }} />
-      <div className="ambient-blob w-[600px] h-[600px] top-[20%] right-[-150px]"
-        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)", animationDelay: "4s" }} />
-      <div className="ambient-blob w-[500px] h-[500px] bottom-0 left-[30%]"
-        style={{ background: "radial-gradient(circle, rgba(14,165,233,0.08) 0%, transparent 70%)", animationDelay: "8s" }} />
-
-      {/* ── GRID OVERLAY ── */}
-      <div className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }} />
+    <main ref={containerRef} className="relative bg-black min-h-screen text-white font-sans selection:bg-pink-500/30 selection:text-pink-200">
+      
+      {/* ── PARALLAX AMBIENT BACKGROUND ── */}
+      <motion.div style={{ y: yBlobs }} className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-pink-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] bg-purple-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse" style={{ animationDuration: '10s', animationDelay: '1s' }} />
+        <div className="absolute bottom-[-10%] left-[20%] w-[60vw] h-[60vw] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '12s', animationDelay: '2s' }} />
+        
+        {/* Noise overlay for texture */}
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }}></div>
+      </motion.div>
 
       {/* ── NAVBAR ── */}
-      <nav className="relative z-50 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-2"
-        >
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #D97706, #F59E0B)" }}>
-            <Mic2 size={16} className="text-black" />
-          </div>
-          <span className="text-xl font-bold tracking-tight" style={{ fontFamily: "var(--font-sora)" }}>
-            Artist<span style={{ color: "#F59E0B" }}>Bridge</span>
-          </span>
-        </motion.div>
+      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-6 transition-all duration-300 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex items-center gap-3"
+          >
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 p-[1px]">
+              <div className="w-full h-full bg-black rounded-xl flex items-center justify-center">
+                <Mic2 size={20} className="text-white" />
+              </div>
+            </div>
+            <span className="text-2xl font-bold tracking-tight">
+              Artist<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">Bridge</span>
+            </span>
+          </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-3"
-        >
-          <Link href="/auth/artist/login">
-            <button className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors rounded-lg hover:bg-white/5">
-              Artist Login
-            </button>
-          </Link>
-          <Link href="/auth/organizer/login">
-            <button className="btn-gold px-5 py-2 rounded-lg text-sm">
-              Book Artists →
-            </button>
-          </Link>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex items-center gap-4"
+          >
+            <Link href="/auth/artist/login">
+              <button className="px-5 py-2.5 text-sm font-medium text-zinc-300 hover:text-white transition-colors">
+                Artist Login
+              </button>
+            </Link>
+            <Link href="/auth/organizer/login">
+              <button className="px-6 py-2.5 rounded-full text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                Book Artists
+              </button>
+            </Link>
+          </motion.div>
+        </div>
       </nav>
 
-      {/* ── HERO ── */}
-      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-16 pb-24 max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border text-xs font-medium tracking-widest uppercase"
-          style={{ borderColor: "rgba(245,158,11,0.3)", color: "#F59E0B", background: "rgba(245,158,11,0.06)" }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-          India&apos;s Premier Artist Marketplace
+      {/* ── HERO SECTION ── */}
+      <section className="relative z-10 flex flex-col items-center justify-center min-h-[100vh] px-6 text-center pt-20">
+        <motion.div style={{ y: yHeroText, scale: scaleHero, opacity: opacityHero }} className="max-w-5xl mx-auto flex flex-col items-center">
+          
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 px-5 py-2 mb-8 rounded-full border border-pink-500/30 bg-pink-500/10 backdrop-blur-md"
+          >
+            <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+            <span className="text-sm font-medium text-pink-200 tracking-wide">India&apos;s Premium Talent Network</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="text-6xl md:text-8xl lg:text-[7rem] font-black leading-[1.05] tracking-tighter mb-8"
+          >
+            Unforgettable <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400">Experiences.</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            style={{ y: yHeroSub }}
+            className="text-xl md:text-2xl text-zinc-400 max-w-3xl mb-12 font-light leading-relaxed"
+          >
+            Discover, book, and manage world-class artists for your events. Powered by intelligent AI matching.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="flex flex-col sm:flex-row gap-6"
+          >
+            <Link href="/auth/organizer/signup">
+              <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-lg flex items-center gap-3 overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(236,72,153,0.4)]">
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
+                <span className="relative z-10">Start Booking</span>
+                <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </Link>
+            
+            <Link href="/auth/artist/signup">
+              <button className="group px-8 py-4 rounded-full bg-white/5 border border-white/10 text-white font-semibold text-lg flex items-center gap-3 backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20 hover:scale-105 active:scale-95">
+                Join as Artist
+                <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-zinc-400" />
+              </button>
+            </Link>
+          </motion.div>
         </motion.div>
+      </section>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-6"
-          style={{ fontFamily: "var(--font-sora)" }}
+      {/* ── MARQUEE CATEGORIES ── */}
+      <section className="relative z-20 py-10 border-y border-white/5 bg-black/50 backdrop-blur-lg overflow-hidden flex whitespace-nowrap">
+        <motion.div 
+          animate={{ x: [0, -1000] }} 
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+          className="flex gap-4 px-4"
         >
-          Make Every Event<br />
-          <span className="text-brand">Truly Unforgettable</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="text-lg text-slate-400 max-w-2xl mb-10 leading-relaxed"
-        >
-          Discover and book world-class artists — singers, dancers, DJs, and more — for your events across India. Powered by AI-driven smart matching.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="flex flex-col sm:flex-row gap-4 mb-16"
-        >
-          <Link href="/auth/organizer/signup">
-            <button className="btn-gold px-8 py-4 rounded-xl text-base flex items-center gap-2">
-              Start Booking Artists <ArrowRight size={18} />
-            </button>
-          </Link>
-          <Link href="/auth/artist/signup">
-            <button className="px-8 py-4 rounded-xl text-base font-semibold transition-all duration-300 flex items-center gap-2"
-              style={{ border: "1px solid rgba(255,255,255,0.1)", color: "#94A3B8", background: "rgba(255,255,255,0.03)" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(245,158,11,0.3)"; e.currentTarget.style.color = "#F8FAFC"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#94A3B8"; }}
-            >
-              Join as Artist <ChevronRight size={18} />
-            </button>
-          </Link>
-        </motion.div>
-
-        {/* Stats Row */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-2 sm:grid-cols-4 gap-6 w-full max-w-3xl"
-        >
-          {stats.map((stat) => (
-            <motion.div key={stat.label} variants={itemVariants} className="text-center">
-              <div className="text-3xl font-bold text-gold" style={{ fontFamily: "var(--font-sora)" }}>{stat.value}</div>
-              <div className="text-sm text-slate-500 mt-1">{stat.label}</div>
-            </motion.div>
+          {[...categories, ...categories, ...categories].map((cat, i) => (
+            <div key={i} className="px-8 py-4 rounded-full bg-white/5 border border-white/10 text-lg font-medium text-zinc-300">
+              {cat}
+            </div>
           ))}
         </motion.div>
       </section>
 
-      {/* ── CATEGORY PILLS ── */}
-      <section className="relative z-10 py-12 overflow-hidden">
-        <div className="flex gap-3 justify-center flex-wrap px-6">
-          {categories.map((cat, i) => (
-            <motion.span
-              key={cat}
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 + i * 0.05 }}
-              className="px-5 py-2 rounded-full text-sm font-medium cursor-default"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "#94A3B8",
-              }}
+      {/* ── STATS SECTION ── */}
+      <section className="relative z-10 py-32 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+          {stats.map((stat, idx) => (
+            <motion.div 
+              key={stat.label}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: idx * 0.1 }}
+              className="flex flex-col items-center md:items-start border-l border-white/10 pl-6"
             >
-              {cat}
-            </motion.span>
+              <div className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500 mb-2">
+                {stat.value}
+              </div>
+              <div className="text-zinc-400 text-lg">{stat.label}</div>
+            </motion.div>
           ))}
         </div>
       </section>
 
-      <div className="section-line max-w-4xl mx-auto" />
+      {/* ── FEATURES GRID ── */}
+      <section className="relative z-10 py-32 px-6 bg-black">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mb-20 text-center md:text-left"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+              Engineered for the <br className="hidden md:block"/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Future of Events.</span>
+            </h2>
+            <p className="text-xl text-zinc-400 max-w-2xl">
+              Everything you need to discover talent, negotiate terms, and manage your entire event roster in one beautiful interface.
+            </p>
+          </motion.div>
 
-      {/* ── FEATURES ── */}
-      <section className="relative z-10 py-20 px-6 max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-14"
-        >
-          <h2 className="text-4xl font-bold mb-4" style={{ fontFamily: "var(--font-sora)" }}>
-            Built for the <span className="text-gold">Modern Event</span>
-          </h2>
-          <p className="text-slate-400 max-w-xl mx-auto">
-            Everything you need to discover talent, manage bookings, and create unforgettable experiences.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
-          {features.map((feature) => (
-            <motion.div key={feature.title} variants={itemVariants} className="glass-card p-6">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
-                style={{ background: "rgba(245,158,11,0.12)", color: "#F59E0B" }}>
-                {feature.icon}
-              </div>
-              <h3 className="font-semibold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>{feature.title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{feature.desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {features.map((feature, idx) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                className="group relative bg-zinc-900/40 backdrop-blur-xl border border-white/5 rounded-3xl p-10 overflow-hidden hover:border-white/20 transition-colors"
+              >
+                {/* Glow effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center mb-8 shadow-xl">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-2xl font-semibold text-white mb-4">{feature.title}</h3>
+                  <p className="text-zinc-400 leading-relaxed text-lg">{feature.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ── CTA SECTION ── */}
-      <section className="relative z-10 py-20 px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+      <section className="relative z-10 py-40 px-6 overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto text-center p-12 rounded-3xl relative overflow-hidden"
-          style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.08), rgba(124,58,237,0.08))", border: "1px solid rgba(245,158,11,0.15)" }}
+          transition={{ duration: 1 }}
+          className="max-w-5xl mx-auto bg-gradient-to-br from-zinc-900 to-black border border-white/10 rounded-[3rem] p-12 md:p-24 text-center relative shadow-2xl"
         >
-          <h2 className="text-4xl font-bold mb-4 text-white" style={{ fontFamily: "var(--font-sora)" }}>
-            Ready to Find Your Perfect Artist?
+          {/* Inner glows */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-pink-500 to-transparent opacity-50" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-purple-500/10 to-transparent blur-3xl pointer-events-none rounded-full" />
+          
+          <h2 className="relative z-10 text-5xl md:text-7xl font-bold tracking-tight mb-8">
+            Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-cyan-400">create magic?</span>
           </h2>
-          <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-            Join thousands of event organizers who trust ArtistBridge to power their events.
+          <p className="relative z-10 text-xl text-zinc-400 mb-12 max-w-2xl mx-auto">
+            Join thousands of premier event organizers and world-class artists who trust ArtistBridge to make their vision a reality.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          
+          <div className="relative z-10 flex flex-col sm:flex-row justify-center gap-6">
             <Link href="/auth/organizer/signup">
-              <button className="btn-gold px-8 py-4 rounded-xl text-base">Get Started Free →</button>
+              <button className="w-full sm:w-auto px-10 py-5 rounded-full bg-white text-black font-bold text-lg hover:bg-zinc-200 transition-transform hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                Get Started Free
+              </button>
             </Link>
             <Link href="/auth/artist/signup">
-              <button className="btn-violet px-8 py-4 rounded-xl text-base">Join as Artist</button>
+              <button className="w-full sm:w-auto px-10 py-5 rounded-full bg-zinc-900 border border-white/20 text-white font-bold text-lg hover:bg-zinc-800 transition-transform hover:scale-105 active:scale-95">
+                Apply as Artist
+              </button>
             </Link>
           </div>
         </motion.div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="relative z-10 border-t py-8 px-6 text-center"
-        style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-        <p className="text-slate-600 text-sm">
-          © 2026 ArtistBridge · Built with ❤️ by Rohan Bhangale · VESIT, Mumbai
-        </p>
+      <footer className="relative z-10 border-t border-white/10 bg-black pt-16 pb-8 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2 opacity-50">
+            <Mic2 size={16} />
+            <span className="font-semibold tracking-tight">ArtistBridge</span>
+          </div>
+          <p className="text-zinc-600 text-sm font-medium">
+            © 2026 ArtistBridge. Designed for the Future of Art.
+          </p>
+        </div>
       </footer>
     </main>
   );

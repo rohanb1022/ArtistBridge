@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import {
@@ -16,54 +16,68 @@ import api from "@/lib/axios";
 import { IoLogOutOutline } from "react-icons/io5";
 
 export const Navbar = () => {
-
   const router = useRouter();
+
   const handleLogout = async () => {
     try {
-      const response = await api.post("/auth/logout")
-
+      const response = await api.post("/auth/logout");
       if (response.status === 200) {
-        console.log("Logout successful")
-        router.push("/")  // navigate the user to landing page after logout
-      } else {
-        console.error("Logout failed");
+        router.push("/");
       }
-      // Redirect to home page after logout
     } catch (error) {
       console.error("Logout error:", error);
     }
-  }
+  };
 
   return (
-    <>
-    <nav className="flex flex-row justify-around items-center gap-4 mt-2 mb-4 min-h-[10vh]">
-      <div className="font-light text-3xl text-pink-600">ArtistBridge</div>
-      <div className="flex flex-row justify-evenly items-center gap-6 ">
-        <Button
-          variant={"ghost"}
-          className="border border-transparent hover:border-2 hover:border-pink-600 hover:scale-[1.04] "
-        >
-          <Link href={"/"} className="text-[20px]" >Bookings</Link>
-        </Button>
-        <Button
-          variant={"ghost"}
-          className="border border-transparent hover:border-2 hover:border-pink-600 hover:scale-[1.04] "
-        >
-          <Link href={"/"} className="text-[20px]" >Profile</Link>
-        </Button>
-        <Dropdown />
-        <Button className="bg-pink-500 text-white rounded-md hover:bg-pink-700 " >Profile</Button>
-        <Button
-          variant={"ghost"}
-          className="border border-transparent hover:border-2 hover:border-pink-600 hover:scale-[1.04]"
-          onClick={handleLogout}
-        >
-          <Link href={"/"} className="scale-[1.6]" ><IoLogOutOutline /></Link>
-        </Button>
+    <nav className="w-full bg-white border-b border-neutral-200">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-medium tracking-tight text-neutral-900">
+            Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
+          </span>
+        </div>
+
+        {/* Links & Auth */}
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Link href="/">
+            <Button
+              variant="ghost"
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 px-4 py-2"
+            >
+              Bookings
+            </Button>
+          </Link>
+          
+          <Link href="/">
+            <Button
+              variant="ghost"
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 px-4 py-2"
+            >
+              Profile
+            </Button>
+          </Link>
+
+          <Dropdown />
+
+          <Link href="/">
+            <Button className="bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-800 rounded-md px-4 py-2">
+              Profile Page
+            </Button>
+          </Link>
+
+          <Button
+            variant="ghost"
+            className="text-neutral-500 hover:text-red-600 hover:bg-red-50 p-2"
+            onClick={handleLogout}
+            title="Logout"
+          >
+            <IoLogOutOutline className="size-5" />
+          </Button>
+        </div>
       </div>
     </nav>
-    <hr />
-    </>
   );
 };
 
@@ -79,20 +93,9 @@ const Dropdown = () => {
   return (
     <Select onValueChange={handleChange}>
       <SelectTrigger
-        className="
-          w-[160px]
-          text-black
-          text-[20px]
-          font-semibold
-          border
-          border-transparent
-          hover:border-pink-600
-          hover:border-2
-          data-[state=open]:border-pink-600
-          [&>span]:text-black
-          transition-all duration-200"
+        className="w-[140px] text-sm font-medium text-neutral-700 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-md transition-all px-3 py-2"
       >
-        <SelectValue placeholder="Artist" />
+        <SelectValue placeholder="Artist Menu" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="search">Search Artist</SelectItem>

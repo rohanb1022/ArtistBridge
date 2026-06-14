@@ -7,7 +7,7 @@ import Footer from '@/sections/organizer/Footer'
 
 const Home = () => {
   return (
-    <div style={{ backgroundColor: "#020817", minHeight: "100vh" }}>
+    <div className="bg-white min-h-screen text-neutral-900">
       <Hero />
       <OrgCTA />
       <ArtistDemo />

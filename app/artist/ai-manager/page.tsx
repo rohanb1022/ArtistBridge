@@ -67,61 +67,45 @@ export default function ArtistAIManagerPage() {
   const isFirstMessage = messages.length === 1;
 
   return (
-    <div className="min-h-screen flex flex-col relative" style={{ backgroundColor: "#020817" }}>
-      {/* Ambient blobs */}
-      <div className="ambient-blob w-[600px] h-[600px] top-[-150px] left-[-150px]"
-        style={{ background: "radial-gradient(circle, rgba(16,185,129,0.10) 0%, transparent 70%)" }} />
-      <div className="ambient-blob w-[500px] h-[500px] bottom-0 right-[-100px]"
-        style={{ background: "radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)", animationDelay: "4s" }} />
-
+    <div className="min-h-screen flex flex-col bg-white text-neutral-900 relative">
+      
       {/* ── TOP NAV ── */}
-      <nav className="relative z-50 flex items-center justify-between px-6 py-4 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.06)", background: "rgba(2,8,23,0.8)", backdropFilter: "blur(16px)" }}>
+      <nav className="relative z-50 flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
         <div className="flex items-center gap-4">
           <Link href="/artist/home">
-            <button className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
-              <ArrowLeft size={16} />
+            <button className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+              <ArrowLeft size={15} />
               Back
             </button>
           </Link>
-          <div className="w-px h-5" style={{ background: "rgba(255,255,255,0.08)" }} />
+          <div className="w-px h-4 bg-neutral-200" />
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #10B981, #34D399)" }}>
-              <Sparkles size={14} className="text-black" />
+            <div className="w-7 h-7 rounded bg-neutral-900 flex items-center justify-center">
+              <Sparkles size={13} className="text-white" />
             </div>
-            <span className="font-semibold text-white">AI Career Manager</span>
+            <span className="font-heading font-medium text-neutral-950">AI Career Manager</span>
           </div>
         </div>
       </nav>
 
       {/* ── MAIN CHAT AREA ── */}
-      <div className="relative z-10 flex-1 overflow-y-auto px-4 py-8 scrollbar-hide">
+      <div className="relative z-10 flex-1 overflow-y-auto px-6 py-8 scrollbar-hide bg-neutral-50/30">
         <div className="max-w-3xl mx-auto space-y-6">
           <AnimatePresence>
             {isFirstMessage && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -8 }}
                 className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4"
               >
                 {suggestedPrompts.map((prompt) => (
                   <button
                     key={prompt}
                     onClick={() => sendMessage(prompt)}
-                    className="text-left px-4 py-3 rounded-xl text-sm transition-all duration-200"
-                    style={{ background: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.15)", color: "#94A3B8" }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.background = "rgba(16,185,129,0.1)";
-                      e.currentTarget.style.color = "#F8FAFC";
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.background = "rgba(16,185,129,0.05)";
-                      e.currentTarget.style.color = "#94A3B8";
-                    }}
+                    className="text-left px-4 py-3.5 rounded-md text-xs font-medium bg-white border border-neutral-200 text-neutral-600 hover:border-neutral-900 hover:text-neutral-900 hover:shadow-xs transition-all duration-200"
                   >
-                    <Zap size={12} className="inline mr-2" style={{ color: "#10B981" }} />
+                    <Zap size={11} className="inline mr-1.5 text-neutral-900" />
                     {prompt}
                   </button>
                 ))}
@@ -132,37 +116,42 @@ export default function ArtistAIManagerPage() {
           {messages.map((msg, index) => (
             <React.Fragment key={index}>
               <motion.div
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35 }}
-                className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                transition={{ duration: 0.4 }}
+                className={`flex gap-3.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 {msg.role === "assistant" && (
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-1"
-                    style={{ background: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(59,130,246,0.15))", border: "1px solid rgba(16,185,129,0.2)" }}>
-                    <Bot size={16} style={{ color: "#10B981" }} />
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border border-neutral-200 bg-white">
+                    <Bot size={15} className="text-neutral-655" />
                   </div>
                 )}
 
                 <div
-                  className="max-w-[78%] px-5 py-3.5 rounded-2xl text-sm leading-relaxed"
+                  className="max-w-[80%] px-5 py-3 rounded-lg text-sm leading-relaxed font-sans"
                   style={{
                     ...(msg.role === "user"
-                      ? { background: "linear-gradient(135deg, #10B981, #34D399)", color: "#020817", fontWeight: 500, borderRadius: "1rem 1rem 0.25rem 1rem" }
-                      : { background: "rgba(20,27,46,0.9)", color: "#CBD5E1", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem 1rem 1rem 0.25rem" }),
+                      ? { backgroundColor: "#111111", color: "#FFFFFF" }
+                      : { backgroundColor: "#FFFFFF", color: "#111111", border: "1px solid #E5E5E5" }),
                     whiteSpace: "pre-wrap",
                   }}
                 >
                   {msg.content}
                 </div>
+
+                {msg.role === "user" && (
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border border-neutral-200 bg-white">
+                    <User size={15} className="text-neutral-655" />
+                  </div>
+                )}
               </motion.div>
               
               {msg.role === "assistant" && msg.bookings && msg.bookings.length > 0 && (
-                <div className="pl-11 pr-4 mt-2">
+                <div className="pl-12 pr-4 mt-2 space-y-2">
                   {msg.bookings.map(booking => (
-                    <div key={booking.id} className="p-4 rounded-xl border border-slate-700 bg-slate-800/50 mb-2">
-                      <p className="text-white font-semibold">{booking.eventName} <span className="text-sm font-normal text-slate-400">by {booking.organizerName}</span></p>
-                      <p className="text-xs text-slate-400 mt-1">Date: {booking.date} | Price: ₹{booking.price}</p>
+                    <div key={booking.id} className="p-4 rounded-lg border border-neutral-200 bg-white shadow-xs">
+                      <p className="text-sm font-semibold text-neutral-900">{booking.eventName} <span className="text-xs font-normal text-neutral-500">by {booking.organizerName}</span></p>
+                      <p className="text-xs text-neutral-450 mt-1">Date: {booking.date} | Price: ₹{booking.price?.toLocaleString()}</p>
                     </div>
                   ))}
                 </div>
@@ -171,9 +160,9 @@ export default function ArtistAIManagerPage() {
           ))}
 
           {loading && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "rgba(20,27,46,0.9)" }}>
-                <Loader2 size={16} className="animate-spin text-emerald-500" />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3.5">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center border border-neutral-200 bg-white">
+                <Loader2 size={14} className="animate-spin text-neutral-900" />
               </div>
             </motion.div>
           )}
@@ -183,7 +172,7 @@ export default function ArtistAIManagerPage() {
       </div>
 
       {/* ── INPUT BAR ── */}
-      <div className="relative z-50 border-t px-4 py-4" style={{ borderColor: "rgba(255,255,255,0.06)", background: "rgba(2,8,23,0.9)", backdropFilter: "blur(16px)" }}>
+      <div className="relative z-50 border-t border-neutral-200 px-6 py-4 bg-white/80 backdrop-blur-md">
         <div className="max-w-3xl mx-auto flex items-end gap-3">
           <div className="flex-1 relative">
             <textarea
@@ -193,19 +182,26 @@ export default function ArtistAIManagerPage() {
               onKeyDown={handleKeyDown}
               placeholder="Ask your manager..."
               disabled={loading}
-              className="w-full resize-none p-3 rounded-xl bg-slate-800 text-white border border-slate-700 outline-none"
-              style={{ minHeight: "52px", maxHeight: "140px" }}
+              className="w-full resize-none studio-input pr-12 py-3.5 scrollbar-hide text-sm rounded-md"
+              style={{ minHeight: "48px", maxHeight: "140px" }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = "auto";
+                target.style.height = Math.min(target.scrollHeight, 140) + "px";
+              }}
             />
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={() => sendMessage()}
             disabled={loading || !input.trim()}
-            className="w-12 h-12 rounded-xl flex items-center justify-center transition-all bg-emerald-500 text-slate-900"
+            className={`w-11 h-11 rounded-md flex items-center justify-center flex-shrink-0 transition-all ${
+              input.trim()
+                ? "bg-neutral-900 hover:bg-neutral-800 text-white cursor-pointer"
+                : "bg-neutral-100 text-neutral-400 border border-neutral-200 cursor-not-allowed"
+            }`}
           >
-            <Send size={18} />
-          </motion.button>
+            <Send size={15} />
+          </button>
         </div>
       </div>
     </div>

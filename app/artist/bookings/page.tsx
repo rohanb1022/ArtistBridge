@@ -84,41 +84,41 @@ const Bookings = () => {
   const activeBookings = bookings[activeTab];
 
   return (
-    <div className="min-h-screen relative" style={{ backgroundColor: "#020817" }}>
+    <div className="min-h-screen relative" style={{ backgroundColor: "#FFFFFF" }}>
       <ToastContainer />
 
       <div className="ambient-blob w-[600px] h-[600px] top-[-100px] right-[-150px]"
-        style={{ background: "radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)" }} />
+        style={{ background: "none" }} />
       <div className="ambient-blob w-[500px] h-[500px] bottom-0 left-[-100px]"
-        style={{ background: "radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)", animationDelay: "5s" }} />
+        style={{ background: "none", animationDelay: "5s" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4 uppercase tracking-widest"
-            style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", color: "#F59E0B" }}>
+            style={{ background: "#F8F8F8", border: "1px solid #E5E5E5", color: "#666666" }}>
             <Calendar size={12} />
             My Bookings
           </div>
-          <h1 className="text-4xl font-bold text-white" style={{ fontFamily: "var(--font-sora)" }}>Booking Dashboard</h1>
-          <p className="text-slate-400 mt-2">Manage all your incoming performance requests and confirmed bookings.</p>
+          <h1 className="text-4xl font-medium text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>Booking Dashboard</h1>
+          <p className="text-neutral-550 mt-2">Manage all your incoming performance requests and confirmed bookings.</p>
         </motion.div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-8 p-1 rounded-xl w-fit"
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          style={{ background: "#F8F8F8", border: "1px solid #E5E5E5" }}>
           {tabs.map((tab) => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)}
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
               style={
                 activeTab === tab.key
-                  ? { background: `${tab.color}18`, color: tab.color, border: `1px solid ${tab.color}30` }
-                  : { color: "#64748B", background: "transparent", border: "1px solid transparent" }
+                  ? { background: "#FFFFFF", color: "#111111", border: "1px solid #E5E5E5", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }
+                  : { color: "#666666", background: "transparent", border: "1px solid transparent" }
               }>
               {tab.icon}
               {tab.label}
               <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs"
-                style={{ background: activeTab === tab.key ? `${tab.color}20` : "rgba(255,255,255,0.05)", color: activeTab === tab.key ? tab.color : "#64748B" }}>
+                style={{ background: activeTab === tab.key ? "#111111" : "#E5E5E5", color: activeTab === tab.key ? "#FFFFFF" : "#666666" }}>
                 {tab.count}
               </span>
             </button>
@@ -128,8 +128,8 @@ const Bookings = () => {
         {/* Loading */}
         {loading && (
           <div className="flex items-center justify-center py-24 gap-3">
-            <Loader2 size={28} className="animate-spin" style={{ color: activeColor }} />
-            <span className="text-slate-400">Loading...</span>
+            <Loader2 size={28} className="animate-spin text-neutral-800" />
+            <span className="text-neutral-550">Loading...</span>
           </div>
         )}
 
@@ -137,11 +137,11 @@ const Bookings = () => {
         {!loading && activeBookings.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-              style={{ background: `${activeColor}10`, border: `1px solid ${activeColor}20` }}>
+              style={{ background: "#F8F8F8", border: "1px solid #E5E5E5" }}>
               {tabs.find((t) => t.key === activeTab)?.icon}
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>No {activeTab} bookings</h3>
-            <p className="text-slate-500 text-sm">Bookings will appear here once organizers send requests.</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2" style={{ fontFamily: "var(--font-heading)" }}>No {activeTab} bookings</h3>
+            <p className="text-neutral-500 text-sm">Bookings will appear here once organizers send requests.</p>
           </motion.div>
         )}
 
@@ -150,20 +150,21 @@ const Bookings = () => {
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {activeBookings.map((booking) => (
               <motion.div key={String(booking.id)} variants={itemVariants}>
-                <div className="glass-card p-6 h-full"
+                <div className="glass-card p-6 h-full bg-white border border-neutral-200 rounded-xl"
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = `${activeColor}30`;
+                    (e.currentTarget as HTMLElement).style.borderColor = "#111111";
                     (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "#E5E5E5";
                     (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                  }}>
+                  }}
+                  style={{ transition: "all 0.2s ease" }}>
 
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="font-semibold text-white" style={{ fontFamily: "var(--font-sora)" }}>{booking.eventName}</h3>
-                      <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                      <h3 className="font-semibold text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>{booking.eventName}</h3>
+                      <div className="flex items-center gap-1 text-xs text-neutral-500 mt-0.5">
                         <User size={11} />
                         {booking.organizerName}
                       </div>
@@ -173,29 +174,35 @@ const Bookings = () => {
                     </span>
                   </div>
 
-                  <div className="space-y-2 text-sm text-slate-400">
-                    <div className="flex items-center gap-2"><Calendar size={13} style={{ color: activeColor }} />{booking.date}</div>
-                    <div className="flex items-center gap-2"><Clock3 size={13} style={{ color: activeColor }} />{booking.time}</div>
-                    <div className="flex items-center gap-2"><MapPin size={13} style={{ color: activeColor }} />{booking.city}</div>
+                  <div className="space-y-2 text-sm text-neutral-550">
+                    <div className="flex items-center gap-2"><Calendar size={13} className="text-neutral-500" />{booking.date}</div>
+                    <div className="flex items-center gap-2"><Clock3 size={13} className="text-neutral-500" />{booking.time}</div>
+                    <div className="flex items-center gap-2"><MapPin size={13} className="text-neutral-500" />{booking.city}</div>
                   </div>
 
                   {activeTab === "pending" && (
                     <div className="flex gap-2 mt-5">
                       <button
                         onClick={() => handleAccept(booking.id)}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
-                        style={{ background: "rgba(16,185,129,0.12)", color: "#34D399", border: "1px solid rgba(16,185,129,0.25)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(16,185,129,0.2)")}
-                        onMouseLeave={e => (e.currentTarget.style.background = "rgba(16,185,129,0.12)")}
+                        className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all"
+                        style={{ background: "#111111", color: "#FFFFFF", border: "1px solid #111111" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#222222")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "#111111")}
                       >
                         ✓ Accept
                       </button>
                       <button
                         onClick={() => handleReject(booking.id)}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
-                        style={{ background: "rgba(239,68,68,0.1)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }}
-                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(239,68,68,0.18)")}
-                        onMouseLeave={e => (e.currentTarget.style.background = "rgba(239,68,68,0.1)")}
+                        className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all"
+                        style={{ background: "transparent", color: "#666666", border: "1px solid #E5E5E5" }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.background = "#F8F8F8";
+                          e.currentTarget.style.color = "#111111";
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.background = "transparent";
+                          e.currentTarget.style.color = "#666666";
+                        }}
                       >
                         ✕ Reject
                       </button>
@@ -205,10 +212,10 @@ const Bookings = () => {
                   {activeTab === "confirmed" && (
                     <button
                       onClick={() => router.push(`/artist/chat/${booking.id}`)}
-                      className="mt-5 w-full py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
-                      style={{ background: "rgba(124,58,237,0.12)", color: "#A78BFA", border: "1px solid rgba(124,58,237,0.25)" }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(124,58,237,0.22)")}
-                      onMouseLeave={e => (e.currentTarget.style.background = "rgba(124,58,237,0.12)")}
+                      className="mt-5 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all"
+                      style={{ background: "#111111", color: "#FFFFFF", border: "1px solid #111111" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "#222222")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "#111111")}
                     >
                       <MessageCircle size={15} />
                       Open Chat

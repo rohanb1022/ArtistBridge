@@ -45,57 +45,52 @@ export default function OrganizerArtistProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#020817]">
-        <Loader2 className="w-12 h-12 animate-spin text-[#F59E0B]" />
+      <div className="min-h-screen flex items-center justify-center bg-white text-neutral-800">
+        <Loader2 className="w-8 h-8 animate-spin text-neutral-500" />
       </div>
     );
   }
 
   if (error || !artist) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#020817] text-red-500 text-xl font-medium">
+      <div className="min-h-screen flex items-center justify-center bg-white text-red-500 text-lg font-medium">
         {error || "Artist not found."}
       </div>
     );
   }
 
   return (
-    <section className="relative min-h-screen bg-[#020817] text-white overflow-hidden pb-20">
-      {/* Background Studio Noir Glows */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#7C3AED]/20 to-transparent pointer-events-none" />
-      <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] bg-[#F59E0B]/10 blur-[150px] rounded-full pointer-events-none animate-pulse" />
-      <div className="absolute top-[40%] -left-[10%] w-[500px] h-[500px] bg-[#0EA5E9]/10 blur-[120px] rounded-full pointer-events-none" />
-
-      {/* Hero Header Section */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto pt-24 px-6 mb-12">
+    <section className="relative min-h-screen bg-white text-neutral-900 pb-20">
+      {/* Header Container */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto pt-20 px-6 mb-12">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="flex flex-col md:flex-row items-center md:items-start gap-8"
         >
-          {/* Avatar / Initial Badge */}
-          <div className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#0EA5E9] p-1 shadow-[0_0_40px_rgba(124,58,237,0.3)]">
-            <div className="w-full h-full rounded-full bg-[#0F172A] flex items-center justify-center text-5xl font-black tracking-tighter text-white">
+          {/* Avatar frame */}
+          <div className="w-28 h-28 md:w-32 md:h-32 shrink-0 rounded-full border border-neutral-200 p-1 bg-white flex items-center justify-center">
+            <div className="w-full h-full rounded-full bg-neutral-100 flex items-center justify-center text-4xl font-heading font-medium tracking-tighter text-neutral-700">
               {artist.name.charAt(0).toUpperCase()}
             </div>
           </div>
 
-          <div className="flex-1 text-center md:text-left space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1E293B]/80 border border-[#334155] text-sm text-[#0EA5E9] font-medium backdrop-blur-md">
-              <Star className="w-4 h-4 fill-[#F59E0B] text-[#F59E0B]" /> Featured Artist
+          <div className="flex-1 text-center md:text-left space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-neutral-200 bg-neutral-50 text-xs text-neutral-600 font-medium">
+              <Star className="w-3 h-3 fill-neutral-500 text-neutral-500" /> Featured Artist
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-heading font-bold tracking-tight text-neutral-950">
               {artist.name}
             </h1>
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-zinc-400 font-medium">
-              <span className="flex items-center gap-1.5 bg-[#0F172A] px-3 py-1.5 rounded-lg border border-white/5">
-                <User className="w-4 h-4 text-[#F59E0B]" />
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-neutral-500 font-medium text-xs">
+              <span className="flex items-center gap-1 bg-neutral-50 px-2.5 py-1 rounded-md border border-neutral-200 uppercase tracking-wider">
+                <User className="w-3.5 h-3.5" />
                 {artist.category.join(" • ")}
               </span>
               {artist.city && (
-                <span className="flex items-center gap-1.5 bg-[#0F172A] px-3 py-1.5 rounded-lg border border-white/5">
-                  <MapPin className="w-4 h-4 text-[#7C3AED]" />
+                <span className="flex items-center gap-1 bg-neutral-50 px-2.5 py-1 rounded-md border border-neutral-200 uppercase tracking-wider">
+                  <MapPin className="w-3.5 h-3.5" />
                   {artist.city}
                 </span>
               )}
@@ -110,18 +105,16 @@ export default function OrganizerArtistProfilePage() {
         <div className="lg:col-span-2 space-y-8">
           {artist.bio && (
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="group rounded-3xl border border-white/5 bg-[rgba(20,27,46,0.7)] backdrop-blur-xl p-8 shadow-2xl hover:border-[#7C3AED]/30 transition-all duration-500"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="rounded-lg border border-neutral-200 bg-white p-8 shadow-xs hover:border-neutral-400 transition-colors"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-lg bg-[#7C3AED]/20 flex items-center justify-center text-[#7C3AED]">
-                  ✦
-                </span>
+              <h2 className="text-xl font-heading font-medium text-neutral-900 mb-4 flex items-center gap-2">
+                <span className="font-serif italic font-normal text-neutral-500">✦</span>
                 About the Artist
               </h2>
-              <p className="text-zinc-300 leading-relaxed text-lg">
+              <p className="text-neutral-600 leading-relaxed text-base">
                 {artist.bio}
               </p>
             </motion.div>
@@ -129,18 +122,16 @@ export default function OrganizerArtistProfilePage() {
 
           {artist.bestEvent && (
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="group rounded-3xl border border-white/5 bg-[rgba(20,27,46,0.7)] backdrop-blur-xl p-8 shadow-2xl hover:border-[#F59E0B]/30 transition-all duration-500"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="rounded-lg border border-neutral-200 bg-white p-8 shadow-xs hover:border-neutral-400 transition-colors"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-lg bg-[#F59E0B]/20 flex items-center justify-center text-[#F59E0B]">
-                  ★
-                </span>
+              <h2 className="text-xl font-heading font-medium text-neutral-900 mb-4 flex items-center gap-2">
+                <span className="font-serif italic font-normal text-neutral-500">★</span>
                 Highlight Performance
               </h2>
-              <p className="text-zinc-300 text-lg">
+              <p className="text-neutral-600 text-base italic">
                 "{artist.bestEvent}"
               </p>
             </motion.div>
@@ -151,52 +142,49 @@ export default function OrganizerArtistProfilePage() {
         <div className="space-y-8">
           {artist.price && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="relative rounded-3xl bg-gradient-to-b from-[#F59E0B]/20 to-transparent p-[1px] shadow-[0_0_30px_rgba(245,158,11,0.1)]"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="rounded-lg border border-neutral-200 bg-neutral-50 p-8 text-center"
             >
-              <div className="bg-[rgba(15,23,42,0.95)] backdrop-blur-xl rounded-3xl p-8 text-center border border-white/5">
-                <p className="text-zinc-400 font-medium mb-2 tracking-wide uppercase text-sm">Starting Price</p>
-                <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400">
-                  ₹{artist.price}
-                </p>
-              </div>
+              <p className="text-neutral-500 font-medium mb-1 uppercase tracking-wider text-xs">Starting Price</p>
+              <p className="text-4xl font-heading font-medium text-neutral-950">
+                ₹{artist.price.toLocaleString()}
+              </p>
             </motion.div>
           )}
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
           >
             <Link
               href={`/organizer/bookArtist/${artist.id}`}
-              className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-[#F59E0B] to-[#D97706] py-5 font-bold text-white shadow-[0_0_40px_rgba(245,158,11,0.3)] transition-all hover:scale-[1.02] hover:shadow-[0_0_60px_rgba(245,158,11,0.5)] active:scale-[0.98]"
+              className="flex w-full items-center justify-center rounded-md bg-neutral-900 py-4 font-medium text-white shadow-xs hover:bg-neutral-800 transition-all text-base tracking-wide"
             >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-              <span className="relative text-lg tracking-wide">Request Booking</span>
+              Request Booking
             </Link>
           </motion.div>
 
           {/* SOCIALS */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="rounded-3xl border border-white/5 bg-[rgba(20,27,46,0.7)] backdrop-blur-xl p-6 shadow-2xl space-y-4"
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="rounded-lg border border-neutral-200 bg-white p-6 shadow-xs space-y-3"
           >
-            <h3 className="text-lg font-bold text-white text-center mb-4">
+            <h3 className="text-sm font-semibold text-neutral-850 text-center mb-3">
               Media Portfolio
             </h3>
-            <button className="w-full flex items-center justify-center gap-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 py-3.5 font-semibold transition-all">
-              <Youtube className="w-5 h-5" /> YouTube Channel
+            <button className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-700 py-3 text-sm font-medium transition-all">
+              <Youtube className="w-4 h-4 text-red-600" /> YouTube Channel
             </button>
-            <button className="w-full flex items-center justify-center gap-3 rounded-xl bg-pink-500/10 hover:bg-pink-500/20 text-pink-500 border border-pink-500/20 py-3.5 font-semibold transition-all">
-              <Instagram className="w-5 h-5" /> Instagram
+            <button className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-700 py-3 text-sm font-medium transition-all">
+              <Instagram className="w-4 h-4 text-pink-600" /> Instagram
             </button>
-            <button className="w-full flex items-center justify-center gap-3 rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/10 py-3.5 font-semibold transition-all">
-              <Video className="w-5 h-5" /> Live Performances
+            <button className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-700 py-3 text-sm font-medium transition-all">
+              <Video className="w-4 h-4 text-neutral-500" /> Live Performances
             </button>
           </motion.div>
         </div>

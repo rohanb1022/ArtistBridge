@@ -62,32 +62,32 @@ const OrganizerRequests = () => {
   useEffect(() => { fetchRequests(); }, []);
 
   return (
-    <div className="min-h-screen relative" style={{ backgroundColor: "#020817" }}>
+    <div className="min-h-screen relative" style={{ backgroundColor: "#FFFFFF" }}>
       <ToastContainer />
 
       <div className="ambient-blob w-[600px] h-[600px] top-[-100px] right-[-150px]"
-        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.10) 0%, transparent 70%)" }} />
+        style={{ background: "none" }} />
       <div className="ambient-blob w-[500px] h-[500px] bottom-0 left-[-100px]"
-        style={{ background: "radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)", animationDelay: "4s" }} />
+        style={{ background: "none", animationDelay: "4s" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4 uppercase tracking-widest"
-            style={{ background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)", color: "#A78BFA" }}>
+            style={{ background: "#F8F8F8", border: "1px solid #E5E5E5", color: "#666666" }}>
             <Inbox size={12} />
             Open Requests
           </div>
-          <h1 className="text-4xl font-bold text-white" style={{ fontFamily: "var(--font-sora)" }}>Organizer Requests</h1>
-          <p className="text-slate-400 mt-2">Browse and accept open event requests from organizers that match your profile.</p>
+          <h1 className="text-4xl font-medium text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>Organizer Requests</h1>
+          <p className="text-neutral-550 mt-2">Browse and accept open event requests from organizers that match your profile.</p>
         </motion.div>
 
         {/* Loading */}
         {loading && (
           <div className="flex items-center justify-center py-24 gap-3">
-            <Loader2 size={28} className="animate-spin text-violet-400" />
-            <span className="text-slate-400">Fetching requests...</span>
+            <Loader2 size={28} className="animate-spin text-neutral-800" />
+            <span className="text-neutral-550">Fetching requests...</span>
           </div>
         )}
 
@@ -95,11 +95,11 @@ const OrganizerRequests = () => {
         {!loading && requests.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-              style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.2)" }}>
-              <Inbox size={24} className="text-violet-400" />
+              style={{ background: "#F8F8F8", border: "1px solid #E5E5E5" }}>
+              <Inbox size={24} className="text-neutral-600" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>No Open Requests</h3>
-            <p className="text-slate-500 text-sm">When organizers post requests matching your category, they will appear here.</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2" style={{ fontFamily: "var(--font-heading)" }}>No Open Requests</h3>
+            <p className="text-neutral-500 text-sm">When organizers post requests matching your category, they will appear here.</p>
           </motion.div>
         )}
 
@@ -108,33 +108,33 @@ const OrganizerRequests = () => {
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {requests.map((req) => {
               const isMatched = req.status === "MATCHED";
-              const accentColor = isMatched ? "#10B981" : "#7C3AED";
-              const accentBg = isMatched ? "rgba(16,185,129,0.08)" : "rgba(124,58,237,0.08)";
-              const accentBorder = isMatched ? "rgba(16,185,129,0.2)" : "rgba(124,58,237,0.2)";
+              const accentColor = isMatched ? "#16A34A" : "#666666";
+              const accentBorder = isMatched ? "#DCFCE7" : "#E5E5E5";
 
               return (
                 <motion.div key={String(req.id)} variants={itemVariants}>
-                  <div className="glass-card p-6 h-full flex flex-col"
+                  <div className="glass-card p-6 h-full flex flex-col bg-white border border-neutral-200 rounded-xl"
                     onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = accentBorder;
+                      (e.currentTarget as HTMLElement).style.borderColor = isMatched ? "#16A34A" : "#111111";
                       (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
+                      (e.currentTarget as HTMLElement).style.borderColor = "#E5E5E5";
                       (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                    }}>
+                    }}
+                    style={{ transition: "all 0.2s ease" }}>
 
                     <div className="flex items-start justify-between mb-5">
                       <div>
-                        <h3 className="text-lg font-semibold text-white" style={{ fontFamily: "var(--font-sora)" }}>{req.name}</h3>
-                        <p className="text-xs text-slate-500 mt-0.5">{req.email}</p>
+                        <h3 className="text-lg font-semibold text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>{req.name}</h3>
+                        <p className="text-xs text-neutral-500 mt-0.5">{req.email}</p>
                       </div>
-                      <span className={isMatched ? "badge-confirmed" : "badge-matched"} style={isMatched ? { color: "#34D399" } : {}}>
+                      <span className={isMatched ? "badge-confirmed" : "badge-matched"} style={isMatched ? { color: "#16A34A" } : {}}>
                         {req.status}
                       </span>
                     </div>
 
-                    <div className="space-y-2.5 text-sm text-slate-400 flex-1">
+                    <div className="space-y-2.5 text-sm text-neutral-550 flex-1">
                       <div className="flex items-center gap-2.5">
                         <Tag size={14} style={{ color: accentColor }} />
                         <span>{req.category}</span>
@@ -152,8 +152,8 @@ const OrganizerRequests = () => {
                         <span>{req.timing}</span>
                       </div>
                       <div className="flex items-center gap-2.5">
-                        <IndianRupee size={14} style={{ color: "#F59E0B" }} />
-                        <span className="font-semibold" style={{ color: "#F59E0B" }}>
+                        <IndianRupee size={14} style={{ color: "#D97706" }} />
+                        <span className="font-semibold" style={{ color: "#D97706" }}>
                           {req.maxBudget.toLocaleString()} max budget
                         </span>
                       </div>
@@ -163,10 +163,10 @@ const OrganizerRequests = () => {
                       <button
                         onClick={() => handleAccept(req.id)}
                         disabled={accepting === req.id}
-                        className="mt-5 w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
-                        style={{ background: accentBg, color: accentColor, border: `1px solid ${accentBorder}` }}
-                        onMouseEnter={e => (e.currentTarget.style.background = "rgba(124,58,237,0.18)")}
-                        onMouseLeave={e => (e.currentTarget.style.background = accentBg)}
+                        className="mt-5 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all"
+                        style={{ background: "#111111", color: "#FFFFFF", border: "1px solid #111111" }}
+                        onMouseEnter={e => (e.currentTarget.style.background = "#222222")}
+                        onMouseLeave={e => (e.currentTarget.style.background = "#111111")}
                       >
                         {accepting === req.id ? (
                           <><Loader2 size={16} className="animate-spin" /> Accepting...</>
@@ -177,8 +177,8 @@ const OrganizerRequests = () => {
                     )}
 
                     {isMatched && (
-                      <div className="mt-5 w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2"
-                        style={{ background: "rgba(16,185,129,0.08)", color: "#34D399", border: "1px solid rgba(16,185,129,0.2)" }}>
+                      <div className="mt-5 w-full py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2"
+                        style={{ background: "#F0FDF4", color: "#16A34A", border: "1px solid #DCFCE7" }}>
                         <CheckCircle size={16} />
                         Request Accepted
                       </div>

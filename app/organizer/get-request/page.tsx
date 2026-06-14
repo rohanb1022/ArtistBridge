@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import { Loader2, Calendar, Clock, DollarSign, MapPin, Tag } from "lucide-react";
 
 // Request Type
 type Request = {
@@ -41,69 +41,96 @@ const OrganizerSentRequests = () => {
   const pendingRequests = requests.filter((req) => req.status === "PENDING");
   const matchedRequests = requests.filter((req) => req.status === "MATCHED");
 
-  const renderRequestCard = (req: Request, color: string) => (
+  const renderRequestCard = (req: Request) => (
     <motion.div
       key={req.id}
-      className={`bg-gradient-to-br from-${color}-100/30 to-${color}-200/40 border border-${color}-400/50 p-5 rounded-xl shadow-lg backdrop-blur-md`}
-      whileHover={{ scale: 1.03 }}
+      className="bg-white border border-neutral-200 p-6 rounded-lg shadow-xs hover:border-neutral-900 transition-all duration-200 flex flex-col justify-between"
+      whileHover={{ y: -2 }}
     >
-      <h3 className="text-lg font-bold text-white mb-1">{req.name}</h3>
-      <p className="text-sm text-gray-300">Email: {req.email}</p>
-      <p className="text-sm text-gray-300">City: {req.city}</p>
-      <p className="text-sm text-gray-300">Category: {req.category}</p>
-      <p className="text-sm text-gray-300">Date: {req.date}</p>
-      <p className="text-sm text-gray-300">Timing: {req.timing}</p>
-      <p className="text-sm text-gray-300">Budget: ₹{req.maxBudget}</p>
-      <p className={`text-sm font-semibold mt-2 text-${color}-500`}>Status: {req.status}</p>
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold text-neutral-900 leading-tight">{req.name}</h3>
+          <span className={req.status === "PENDING" ? "badge-pending" : "badge-matched"}>
+            {req.status}
+          </span>
+        </div>
+
+        <div className="space-y-2 text-xs text-neutral-500 font-sans">
+          <div className="flex items-center gap-1.5">
+            <Tag size={13} className="text-neutral-400" />
+            <span>Category: {req.category}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <MapPin size={13} className="text-neutral-400" />
+            <span>City: {req.city}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Calendar size={13} className="text-neutral-400" />
+            <span>Date: {req.date}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Clock size={13} className="text-neutral-400" />
+            <span>Time: {req.timing}</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-medium text-neutral-800">
+            <DollarSign size={13} className="text-neutral-400" />
+            <span>Budget: ₹{req.maxBudget.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div className="border-t border-neutral-100 pt-3 mt-4 text-[11px] text-neutral-400 font-sans">
+        Organizer: {req.email}
+      </div>
     </motion.div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white px-6 py-10">
+    <div className="min-h-screen bg-white text-neutral-900 px-6 py-12">
       <motion.div
         className="max-w-6xl mx-auto"
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-bold text-center text-pink-500 mb-10">
+        <h1 className="text-4xl font-heading font-medium text-center text-neutral-950 mb-12">
           Your Sent Requests
         </h1>
 
         {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+          <div className="flex justify-center items-center h-48">
+            <Loader2 className="h-8 w-8 animate-spin text-neutral-900" />
           </div>
         ) : (
-          <>
+          <div className="space-y-12">
             {/* Pending Requests */}
-            <section className="mb-12">
-              <h2 className="text-2xl font-semibold text-pink-400 mb-4 border-b border-pink-500 pb-2">
+            <section>
+              <h2 className="text-xl font-heading font-medium text-neutral-900 mb-6 pb-2 border-b border-neutral-200">
                 Pending Requests
               </h2>
               {pendingRequests.length === 0 ? (
-                <p className="text-gray-400">No pending requests.</p>
+                <p className="text-sm text-neutral-450 font-sans">No pending requests found.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {pendingRequests.map((req) => renderRequestCard(req, "pink"))}
+                  {pendingRequests.map(renderRequestCard)}
                 </div>
               )}
             </section>
 
             {/* Matched Requests */}
             <section>
-              <h2 className="text-2xl font-semibold text-green-400 mb-4 border-b border-green-500 pb-2">
+              <h2 className="text-xl font-heading font-medium text-neutral-900 mb-6 pb-2 border-b border-neutral-200">
                 Matched Requests
               </h2>
               {matchedRequests.length === 0 ? (
-                <p className="text-gray-400">No matched requests yet.</p>
+                <p className="text-sm text-neutral-450 font-sans">No matched requests yet.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {matchedRequests.map((req) => renderRequestCard(req, "green"))}
+                  {matchedRequests.map(renderRequestCard)}
                 </div>
               )}
             </section>
-          </>
+          </div>
         )}
       </motion.div>
     </div>

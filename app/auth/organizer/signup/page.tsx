@@ -23,128 +23,126 @@ const Signup = () => {
     setIsLoading(true);
     try {
       await api.post("/auth/organizer/signup", formData);
-      toast.success("Account created! Welcome aboard.", { theme: "dark", transition: Bounce, position: "top-center" });
+      toast.success("Account created! Welcome aboard.", { transition: Bounce, position: "top-center" });
       router.push("/organizer/home");
     } catch (err: any) {
       const msg = err.response?.data || "Something went wrong";
-      toast.error(msg, { theme: "dark", position: "top-right", autoClose: 3000 });
+      toast.error(msg, { position: "top-right", autoClose: 3000 });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen flex" style={{ backgroundColor: "#020817" }}>
+    <main className="min-h-screen flex bg-white text-neutral-900">
       <ToastContainer />
 
       {/* Left Branding */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 p-12 relative overflow-hidden"
-        style={{ background: "linear-gradient(145deg, #0F172A 0%, #141B2E 100%)" }}>
-        <div className="ambient-blob w-[500px] h-[500px] top-[-100px] left-[-100px]"
-          style={{ background: "radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%)" }} />
-
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #0284C7, #0EA5E9)" }}>
-            <Calendar size={18} className="text-white" />
+      <div className="hidden lg:flex flex-col justify-between w-1/2 p-12 bg-neutral-50 border-r border-neutral-200">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-neutral-900 flex items-center justify-center">
+            <Calendar size={16} className="text-neutral-900" />
           </div>
-          <span className="text-xl font-bold" style={{ fontFamily: "var(--font-sora)" }}>
-            Artist<span style={{ color: "#0EA5E9" }}>Bridge</span>
+          <span className="text-lg font-medium tracking-tight">
+            Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
           </span>
         </div>
 
-        <div className="relative z-10">
-          <h2 className="text-5xl font-bold leading-tight mb-6 text-white" style={{ fontFamily: "var(--font-sora)" }}>
-            Create events<br />people love.
+        <div>
+          <h2 className="text-5xl font-heading font-medium leading-tight mb-6 text-neutral-900">
+            Create events <br /><span className="font-serif italic text-neutral-700">people love.</span>
           </h2>
-          <p className="text-slate-400 text-lg max-w-sm leading-relaxed">
+          <p className="text-neutral-500 text-base max-w-sm leading-relaxed mb-8">
             Sign up as an organizer and gain access to thousands of verified artists ready to perform at your next event.
           </p>
-          <div className="mt-10 p-6 rounded-2xl" style={{ background: "rgba(14,165,233,0.06)", border: "1px solid rgba(14,165,233,0.15)" }}>
-            <p className="text-sky-400 font-semibold mb-3">Why choose ArtistBridge?</p>
+          <div className="p-6 rounded-md bg-white border border-neutral-200 max-w-sm">
+            <p className="text-xs text-neutral-450 font-semibold mb-3 uppercase tracking-wider">Why choose ArtistBridge?</p>
             {["AI-powered artist recommendations", "Real-time booking management", "Verified artist profiles", "Transparent pricing"].map((item) => (
-              <div key={item} className="flex items-center gap-3 py-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-sky-400" />
-                <span className="text-sm text-slate-400">{item}</span>
+              <div key={item} className="flex items-center gap-3 py-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-neutral-400" />
+                <span className="text-sm text-neutral-650">{item}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="relative z-10 text-slate-600 text-sm">© 2026 ArtistBridge. All rights reserved.</p>
+        <p className="text-neutral-400 text-xs">© 2026 ArtistBridge. All rights reserved.</p>
       </div>
 
       {/* Form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>
+          <div className="flex items-center gap-2 mb-8 lg:hidden">
+            <div className="w-8 h-8 rounded-lg bg-neutral-900 flex items-center justify-center">
+              <Calendar size={16} className="text-neutral-900" />
+            </div>
+            <span className="text-lg font-medium tracking-tight">
+              Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
+            </span>
+          </div>
+
+          <h1 className="text-3xl font-heading font-medium text-neutral-950 mb-2">
             Create Organizer Account
           </h1>
-          <p className="text-slate-400 mb-8">Start booking world-class artists today</p>
+          <p className="text-sm text-neutral-500 mb-8">Start booking world-class artists today</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-2">Full Name</label>
               <div className="relative">
-                <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                <User size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-450" />
                 <input type="text" name="name" placeholder="Your Name" required onChange={handleChange} className="studio-input pl-11" />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-2">Email Address</label>
               <div className="relative">
-                <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-450" />
                 <input type="email" name="email" placeholder="you@company.com" required onChange={handleChange} className="studio-input pl-11" />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-2">Password</label>
               <div className="relative">
-                <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-450" />
                 <input type="password" name="password" placeholder="Create a strong password" required onChange={handleChange} className="studio-input pl-11" />
               </div>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
+            <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 rounded-xl flex items-center justify-center gap-2 mt-2 font-bold text-white"
-              style={{ background: "linear-gradient(135deg, #0284C7, #0EA5E9)", boxShadow: "0 4px 24px rgba(14,165,233,0.25)" }}
+              className="w-full btn-gold py-3.5 rounded-md flex items-center justify-center gap-2 mt-2 font-medium"
             >
               {isLoading ? (
-                <><Loader2 size={18} className="animate-spin" /> Creating Account...</>
+                <><Loader2 size={16} className="animate-spin" /> Creating Account...</>
               ) : (
-                <>Create Account <ArrowRight size={18} /></>
+                <>Create Account <ArrowRight size={16} /></>
               )}
-            </motion.button>
+            </button>
           </form>
 
           <div className="mt-6 space-y-3">
             <div className="relative flex items-center gap-4">
-              <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.07)" }} />
-              <span className="text-xs text-slate-600">or</span>
-              <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.07)" }} />
+              <div className="flex-1 h-px bg-neutral-200" />
+              <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider">or</span>
+              <div className="flex-1 h-px bg-neutral-200" />
             </div>
             <Link href="/auth/artist/signup">
-              <button className="w-full py-3.5 rounded-xl text-sm font-medium transition-all duration-200"
-                style={{ border: "1px solid rgba(255,255,255,0.08)", color: "#94A3B8", background: "transparent" }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(245,158,11,0.35)")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}>
+              <button className="w-full py-3.5 rounded-md border border-neutral-200 text-sm font-medium text-neutral-600 hover:bg-neutral-50 transition-colors">
                 Sign up as Artist instead
               </button>
             </Link>
           </div>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
+          <p className="text-center text-sm text-neutral-500 mt-6">
             Already have an account?{" "}
-            <Link href="/auth/organizer/login" className="font-semibold" style={{ color: "#0EA5E9" }}>
+            <Link href="/auth/organizer/login" className="font-semibold text-neutral-850 hover:underline">
               Sign In →
             </Link>
           </p>

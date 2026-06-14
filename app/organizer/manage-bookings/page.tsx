@@ -26,12 +26,12 @@ type BookingsState = {
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.07 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.05 } },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
 const ManageBookings = () => {
@@ -52,7 +52,7 @@ const ManageBookings = () => {
         setBookings(response.data.data);
       } catch (error) {
         console.error(error);
-        toast.error("Failed to load bookings.", { theme: "dark" });
+        toast.error("Failed to load bookings.");
       } finally {
         setLoading(false);
       }
@@ -63,49 +63,46 @@ const ManageBookings = () => {
   const handleCancelBooking = async (bookingId: string) => {
     try {
       await api.put("/booking/bookingRejection", { requestId: bookingId, updatedStatus: "CANCELLED" });
-      toast.success("Booking cancelled.", { theme: "dark", transition: Bounce });
+      toast.success("Booking cancelled.", { transition: Bounce });
       setBookings((prev) => ({
         ...prev,
         confirmed: prev.confirmed.filter((b) => b.id !== bookingId),
         cancelled: [...prev.cancelled, { ...prev.confirmed.find((b) => b.id === bookingId)!, status: "CANCELLED" }],
       }));
     } catch {
-      toast.error("Failed to cancel booking.", { theme: "dark" });
+      toast.error("Failed to cancel booking.");
     }
   };
 
   const tabs = [
-    { key: "pending" as const, label: "Pending", icon: <Clock size={14} />, color: "#F59E0B", count: bookings.pending.length },
-    { key: "confirmed" as const, label: "Confirmed", icon: <CheckCircle2 size={14} />, color: "#10B981", count: bookings.confirmed.length },
-    { key: "cancelled" as const, label: "Cancelled", icon: <XCircle size={14} />, color: "#F87171", count: bookings.cancelled.length },
+    { key: "pending" as const, label: "Pending", icon: <Clock size={13} />, color: "#B45309", count: bookings.pending.length },
+    { key: "confirmed" as const, label: "Confirmed", icon: <CheckCircle2 size={13} />, color: "#15803D", count: bookings.confirmed.length },
+    { key: "cancelled" as const, label: "Cancelled", icon: <XCircle size={13} />, color: "#B91C1C", count: bookings.cancelled.length },
   ];
 
-  const activeColor = tabs.find((t) => t.key === activeTab)?.color || "#F59E0B";
+  const activeColor = tabs.find((t) => t.key === activeTab)?.color || "#111111";
   const activeBookings = bookings[activeTab];
 
   return (
-    <div className="min-h-screen relative" style={{ backgroundColor: "#020817" }}>
+    <div className="min-h-screen bg-white text-neutral-900 relative">
       <ToastContainer />
-
-      <div className="ambient-blob w-[600px] h-[600px] top-[-100px] left-[-150px]"
-        style={{ background: "radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="mb-10"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4 uppercase tracking-widest"
-            style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", color: "#F59E0B" }}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-neutral-200 bg-neutral-50 text-xs font-medium text-neutral-600 mb-4"
+          >
             <LayoutDashboard size={12} />
             Booking Manager
           </div>
-          <h1 className="text-4xl font-bold text-white" style={{ fontFamily: "var(--font-sora)" }}>Manage Bookings</h1>
-          <p className="text-slate-400 mt-2">Track and manage all your artist bookings in one place.</p>
+          <h1 className="text-4xl font-heading font-medium text-neutral-950" style={{ fontFamily: "var(--font-heading)" }}>Manage Bookings</h1>
+          <p className="text-sm text-neutral-500 mt-2 font-sans">Track and manage all your artist bookings in one place.</p>
         </motion.div>
 
         {/* Tabs */}
@@ -113,24 +110,22 @@ const ManageBookings = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="flex gap-2 mb-8 p-1 rounded-xl w-fit"
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+          className="flex flex-wrap gap-2 mb-8 p-1 bg-neutral-50 border border-neutral-200 rounded-md w-fit"
         >
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-semibold uppercase tracking-wider transition-all duration-200"
               style={
                 activeTab === tab.key
-                  ? { background: `${tab.color}18`, color: tab.color, border: `1px solid ${tab.color}30` }
-                  : { color: "#64748B", background: "transparent", border: "1px solid transparent" }
+                  ? { background: "#FFFFFF", color: "#111111", border: "1px solid #E5E5E5", boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)" }
+                  : { color: "#666666", background: "transparent", border: "1px solid transparent" }
               }
             >
               {tab.icon}
               {tab.label}
-              <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs"
-                style={{ background: activeTab === tab.key ? `${tab.color}20` : "rgba(255,255,255,0.05)", color: activeTab === tab.key ? tab.color : "#64748B" }}>
+              <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] bg-neutral-100 border border-neutral-200 text-neutral-500">
                 {tab.count}
               </span>
             </button>
@@ -140,8 +135,8 @@ const ManageBookings = () => {
         {/* Loading */}
         {loading && (
           <div className="flex items-center justify-center py-24 gap-3">
-            <Loader2 size={28} className="animate-spin" style={{ color: activeColor }} />
-            <span className="text-slate-400">Loading bookings...</span>
+            <Loader2 size={24} className="animate-spin text-neutral-900" />
+            <span className="text-sm text-neutral-450 font-sans">Loading bookings...</span>
           </div>
         )}
 
@@ -152,14 +147,13 @@ const ManageBookings = () => {
             animate={{ opacity: 1 }}
             className="text-center py-24"
           >
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-              style={{ background: `${activeColor}10`, border: `1px solid ${activeColor}20` }}>
+            <div className="w-12 h-12 rounded-full border border-neutral-200 bg-white flex items-center justify-center mx-auto mb-4 text-neutral-500">
               {tabs.find((t) => t.key === activeTab)?.icon}
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: "var(--font-sora)" }}>
+            <h3 className="text-lg font-heading font-medium text-neutral-900 mb-2">
               No {activeTab} bookings
             </h3>
-            <p className="text-slate-500 text-sm">Your {activeTab} bookings will appear here.</p>
+            <p className="text-neutral-500 text-sm font-sans">Your {activeTab} bookings will appear here.</p>
           </motion.div>
         )}
 
@@ -169,64 +163,55 @@ const ManageBookings = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {activeBookings.map((booking) => (
               <motion.div key={booking.id} variants={itemVariants}>
-                <div className="glass-card p-6 h-full"
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = `${activeColor}30`;
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                  }}>
+                <div className="bg-white border border-neutral-200 rounded-lg p-6 h-full hover:border-neutral-900 hover:shadow-xs transition-all duration-200 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="font-semibold text-neutral-900 text-sm leading-tight">{booking.eventName}</h3>
+                        <p className="text-xs text-neutral-500 mt-1 font-sans">Artist: {booking.artistName}</p>
+                      </div>
+                      <span className={
+                        booking.status === "CONFIRMED" ? "badge-confirmed" :
+                        booking.status === "PENDING" ? "badge-pending" : "badge-cancelled"
+                      }>
+                        {booking.status}
+                      </span>
+                    </div>
 
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="font-semibold text-white" style={{ fontFamily: "var(--font-sora)" }}>{booking.eventName}</h3>
-                      <p className="text-sm text-slate-400 mt-0.5">Artist: {booking.artistName}</p>
-                    </div>
-                    <span className={`badge-${booking.status.toLowerCase()}`}>
-                      {booking.status}
-                    </span>
-                  </div>
-
-                  <div className="space-y-2 text-sm text-slate-400">
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-600">📅</span> {booking.date}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-600">⏰</span> {booking.time}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-600">📍</span> {booking.city}
+                    <div className="space-y-2 text-xs text-neutral-500 font-sans mt-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-neutral-400">📅</span> {booking.date}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-neutral-400">⏰</span> {booking.time}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-neutral-400">📍</span> {booking.city}
+                      </div>
                     </div>
                   </div>
 
                   {activeTab === "confirmed" && (
-                    <div className="flex gap-2 mt-5">
+                    <div className="flex gap-2 mt-6 pt-4 border-t border-neutral-100">
                       <button
                         onClick={() => router.push(`/organizer/chat/${booking.id}`)}
-                        className="flex-1 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all"
-                        style={{ background: "rgba(245,158,11,0.12)", color: "#F59E0B", border: "1px solid rgba(245,158,11,0.25)" }}
-                        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(245,158,11,0.22)")}
-                        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "rgba(245,158,11,0.12)")}
+                        className="flex-1 py-2 rounded-md text-xs font-semibold border border-neutral-200 hover:border-neutral-900 bg-white hover:bg-neutral-50 text-neutral-700 hover:text-neutral-900 flex items-center justify-center gap-1.5 transition-all"
                       >
-                        <MessageCircle size={14} />
+                        <MessageCircle size={13} />
                         Chat
                       </button>
-                      <Button
-                        className="flex-1 flex items-center justify-center gap-2 text-sm font-medium py-2.5"
-                        style={{ background: "rgba(239,68,68,0.1)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }}
+                      <button
+                        className="flex-1 py-2 rounded-md text-xs font-semibold border border-red-100 hover:bg-red-50 text-red-650 hover:text-red-755 flex items-center justify-center gap-1.5 transition-all"
                         onClick={() => handleCancelBooking(booking.id)}
-                        onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.18)")}
-                        onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "rgba(239,68,68,0.1)")}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={13} />
                         Cancel
-                      </Button>
+                      </button>
                     </div>
                   )}
                 </div>

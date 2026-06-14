@@ -6,10 +6,10 @@ const FamousArtist = () => {
     <section className="relative py-24 px-4 bg-gradient-to-b from-gray-950 via-black to-gray-950">
       {/* Section heading */}
       <div className="max-w-6xl mx-auto mb-14 text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-medium text-neutral-900 tracking-tight">
           Discover Artists Already Onboard
         </h2>
-        <p className="mt-4 text-gray-400 text-sm md:text-base">
+        <p className="mt-4 text-neutral-550 text-sm md:text-base">
           Explore talented creators across multiple genres
         </p>
       </div>
@@ -31,7 +31,7 @@ const FamousArtist = () => {
               group-hover:-translate-y-1 group-hover:shadow-pink-500/20"
             >
               {/* Artist name */}
-              <h4 className="text-lg font-semibold text-white group-hover:text-pink-400 transition-colors">
+              <h4 className="text-lg font-semibold text-neutral-900 group-hover:text-pink-400 transition-colors">
                 {artist.name}
               </h4>
 

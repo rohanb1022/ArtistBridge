@@ -80,7 +80,6 @@ export default function BookingPage() {
       }
 
       setMessage({ type: "success", text: "Request published successfully! Artists will be notified." });
-
       setTimeout(() => router.push("/organizer/home"), 2000);
     } catch (error: any) {
       setMessage({ type: "error", text: error.message });
@@ -90,49 +89,43 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#020817] text-white flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Studio Noir Background Glows */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#0EA5E9]/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#7C3AED]/10 rounded-full blur-[120px] pointer-events-none" />
-
+    <div className="min-h-screen w-full bg-neutral-50 text-neutral-900 flex items-center justify-center p-6 relative overflow-hidden font-sans">
       <motion.div
-        className="w-full max-w-3xl bg-[rgba(15,23,42,0.6)] border border-white/5 rounded-3xl p-8 md:p-10 shadow-2xl backdrop-blur-xl relative z-10"
-        initial={{ opacity: 0, y: 30 }}
+        className="w-full max-w-2xl bg-white border border-neutral-200 rounded-lg p-8 md:p-10 shadow-xs relative z-10"
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">
-              Publish Open Request
-            </span>
+          <h1 className="text-3xl md:text-4xl font-heading font-medium mb-3 tracking-tight text-neutral-950">
+            Publish Open <span className="font-serif italic text-neutral-750">Request</span>
           </h1>
-          <p className="text-zinc-400 text-lg">
+          <p className="text-neutral-500 text-sm">
             Broadcast your event details. Interested artists will accept your invitation!
           </p>
         </div>
 
         {message && (
           <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`mb-8 p-4 rounded-xl text-sm font-medium border ${
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className={`mb-8 p-3 rounded-md text-sm border ${
               message.type === "success"
-                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                : "bg-red-500/10 border-red-500/20 text-red-400"
+                ? "bg-green-50 border-green-200 text-green-700"
+                : "bg-red-50 border-red-200 text-red-700"
             }`}
           >
             {message.text}
           </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Row 1 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">Event Name</label>
-              <div className="relative group">
-                <Ticket className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Event Name</label>
+              <div className="relative">
+                <Ticket className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
                 <input
                   name="name"
                   value={formData.name}
@@ -140,39 +133,39 @@ export default function BookingPage() {
                   required
                   type="text"
                   placeholder="e.g. Corporate Gala 2026"
-                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                  className="studio-input pl-11"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">Required Category</label>
-              <div className="relative group">
-                <Layers className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors z-10" />
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Required Category</label>
+              <div className="relative">
+                <Layers className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450 z-10" />
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
                   required
-                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-10 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all appearance-none cursor-pointer shadow-inner"
+                  className="studio-input pl-11 pr-10 appearance-none cursor-pointer bg-white"
                 >
-                  <option value="" disabled className="text-zinc-500 bg-[#0F172A]">Select Category</option>
+                  <option value="" disabled className="text-neutral-400 bg-white">Select Category</option>
                   {ARTIST_CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat} className="bg-[#0F172A] text-white">
+                    <option key={cat} value={cat} className="bg-white text-neutral-900">
                       {cat.charAt(0) + cat.slice(1).toLowerCase()}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-3.5 w-5 h-5 text-zinc-500 pointer-events-none group-focus-within:text-[#0EA5E9] transition-colors" />
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450 pointer-events-none" />
               </div>
             </div>
           </div>
 
           {/* Row 2 */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-zinc-300 ml-1">Organizer Email</label>
-            <div className="relative group">
-              <Mail className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
+          <div className="space-y-2 text-left">
+            <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Organizer Email</label>
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
               <input
                 name="email"
                 value={formData.email}
@@ -180,17 +173,17 @@ export default function BookingPage() {
                 required
                 type="email"
                 placeholder="you@company.com"
-                className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                className="studio-input pl-11"
               />
             </div>
           </div>
 
           {/* Row 3 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">City / Location</label>
-              <div className="relative group">
-                <MapPin className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">City / Location</label>
+              <div className="relative">
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
                 <input
                   name="city"
                   value={formData.city}
@@ -198,15 +191,15 @@ export default function BookingPage() {
                   required
                   type="text"
                   placeholder="Mumbai, India"
-                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                  className="studio-input pl-11"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">Maximum Budget (₹)</label>
-              <div className="relative group">
-                <IndianRupee className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Maximum Budget (₹)</label>
+              <div className="relative">
+                <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
                 <input
                   name="maxBudget"
                   value={formData.maxBudget}
@@ -215,18 +208,18 @@ export default function BookingPage() {
                   type="number"
                   min="1"
                   placeholder="50000"
-                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all placeholder:text-zinc-600 shadow-inner"
+                  className="studio-input pl-11"
                 />
               </div>
             </div>
           </div>
 
           {/* Row 4 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">Event Date</label>
-              <div className="relative group">
-                <Calendar className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Event Date</label>
+              <div className="relative">
+                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
                 <input
                   name="date"
                   value={formData.date}
@@ -234,37 +227,35 @@ export default function BookingPage() {
                   required
                   type="date"
                   min={minDate}
-                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all [color-scheme:dark] shadow-inner cursor-pointer"
+                  className="studio-input pl-11"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300 ml-1">Start Time</label>
-              <div className="relative group">
-                <Clock className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-[#0EA5E9] transition-colors" />
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Start Time</label>
+              <div className="relative">
+                <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
                 <input
                   name="timing"
                   value={formData.timing}
                   onChange={handleChange}
                   required
                   type="time"
-                  className="w-full bg-[#0F172A] border border-white/10 text-white pl-12 pr-4 py-4 rounded-xl focus:outline-none focus:border-[#0EA5E9]/50 focus:ring-1 focus:ring-[#0EA5E9]/50 transition-all [color-scheme:dark] shadow-inner cursor-pointer"
+                  className="studio-input pl-11"
                 />
               </div>
             </div>
           </div>
 
           {/* Submit */}
-          <motion.button
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
+          <button
             type="submit"
             disabled={loading}
-            className="w-full mt-8 bg-gradient-to-r from-[#0EA5E9] to-[#7C3AED] hover:from-[#0284C7] hover:to-[#6D28D9] text-white font-bold py-4 rounded-xl shadow-[0_0_40px_rgba(14,165,233,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg flex items-center justify-center gap-2"
+            className="w-full btn-gold py-3.5 rounded-md flex items-center justify-center gap-2 font-medium mt-4 text-sm"
           >
-            {loading ? <Loader2 className="animate-spin" size={24} /> : "Publish Open Request"}
-          </motion.button>
+            {loading ? <Loader2 className="animate-spin" size={16} /> : "Publish Open Request"}
+          </button>
         </form>
       </motion.div>
     </div>

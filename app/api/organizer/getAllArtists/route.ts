@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 
 export async function GET(req : Request){
-    const org = withAuth(req);
+    const org = await withAuth(req);
     if (!org) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

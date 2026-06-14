@@ -9,7 +9,7 @@ export async function withAuth(req: Request): Promise<DecodedUser | null> {
     const token = cookieStore.get("token")?.value;
     if (!token) return null;
 
-    const decoded = verifyToken(token) as unknown as DecodedUser;
+    const decoded = (await verifyToken(token)) as unknown as DecodedUser;
     return decoded;
   } catch (err) {
     console.error("Authentication error:", err);

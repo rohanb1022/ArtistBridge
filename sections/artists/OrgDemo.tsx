@@ -9,10 +9,10 @@ const OrgDemo = () => {
       {/* Content */}
       <div className="relative z-10">
         <div className="max-w-6xl mx-auto mb-14 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
+          <h2 className="text-4xl md:text-5xl font-medium text-neutral-900">
             Explore Top Organizers
           </h2>
-          <p className="mt-4 text-gray-400 text-sm md:text-base">
+          <p className="mt-4 text-neutral-550 text-sm md:text-base">
             Trusted organizers hosting large-scale concerts and premium events
           </p>
         </div>
@@ -31,16 +31,16 @@ const OrgDemo = () => {
                 transform transition-all duration-300
                 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-pink-500/20"
               >
-                <h3 className="text-xl font-semibold text-white group-hover:text-pink-400 transition-colors">
+                <h3 className="text-xl font-semibold text-neutral-900 group-hover:text-pink-400 transition-colors">
                   {org.name}
                 </h3>
 
-                <p className="mt-3 text-sm text-gray-300 leading-relaxed">
+                <p className="mt-3 text-sm text-neutral-700 leading-relaxed">
                   {org.description ||
                     "Leading organizer for large-scale concerts and premium music events."}
                 </p>
 
-                <div className="mt-5 space-y-2 text-sm text-gray-400">
+                <div className="mt-5 space-y-2 text-sm text-neutral-550">
                   <p>
                     <span className="text-gray-500">City:</span> {org.city}
                   </p>
@@ -59,7 +59,7 @@ const OrgDemo = () => {
           <Link href="/artist/requests">
             <Button
               className="relative overflow-hidden bg-transparent border border-pink-500
-              text-white px-8 py-6 rounded-xl text-sm font-medium
+              text-neutral-900 px-8 py-6 rounded-xl text-sm font-medium
               hover:bg-pink-500/10 hover:scale-105 transition-all"
             >
               View Requests You Received

@@ -76,10 +76,10 @@ const Bookings = () => {
   };
 
   return (
-    <main className="p-6 min-h-screen bg-black text-white space-y-12">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold text-pink-500">Pending Bookings</h1>
-        {loading && <Loader2 className="animate-spin mx-auto mt-4 text-pink-400 h-6 w-6" />}
+    <main className="p-6 min-h-screen bg-white text-neutral-900 space-y-12">
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-heading font-medium text-neutral-950">Pending Bookings</h1>
+        {loading && <Loader2 className="animate-spin mx-auto mt-4 text-neutral-500 h-5 w-5" />}
       </div>
       <motion.section
         variants={containerVariants}
@@ -87,30 +87,38 @@ const Bookings = () => {
         animate="visible"
       >
         {pendingBookings.length === 0 ? (
-          <p className="text-gray-400 italic text-sm mb-6 text-center">No pending requests.</p>
+          <p className="text-neutral-450 italic text-sm text-center">No pending requests.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
             {pendingBookings.map((booking) => (
               <motion.div
                 key={booking.id}
                 variants={cardVariants}
-                whileHover={{ scale: 1.03 }}
-                className="bg-gray-800/20 text-white border border-gray-500/30 rounded-2xl shadow-xl p-5 backdrop-blur-sm"
+                whileHover={{ y: -2 }}
+                className="bg-white border border-neutral-200 rounded-lg p-6 shadow-xs flex flex-col justify-between"
               >
-                <h3 className="text-lg font-semibold">{booking.orgName}</h3>
-                <h4 className="text-lg font-bold">{booking.eventName}</h4>
-                <p className="text-sm">{booking.date}</p>
-                <p className="text-sm">City: {booking.city}</p>
-                <p className="text-sm mt-1">Status: {booking.status}</p>
-                <div className="flex gap-2 mt-4">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-base font-semibold text-neutral-900 leading-tight">{booking.orgName}</h3>
+                    <span className="badge-pending">
+                      {booking.status}
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-medium text-neutral-700 mb-2">{booking.eventName}</h4>
+                  <p className="text-xs text-neutral-500 mb-1">Date: {booking.date}</p>
+                  <p className="text-xs text-neutral-500">City: {booking.city}</p>
+                </div>
+                
+                <div className="flex gap-2 mt-6">
                   <Button
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl shadow transition"
+                    className="flex-1 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-medium py-2 rounded-md shadow-xs transition"
                     onClick={() => handleAccept(booking.id)}
                   >
                     Accept
                   </Button>
                   <Button
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl shadow transition"
+                    variant="outline"
+                    className="flex-1 border border-neutral-200 hover:bg-neutral-50 hover:text-red-650 text-neutral-700 text-xs font-medium py-2 rounded-md transition"
                     onClick={() => handleReject(booking.id)}
                   >
                     Reject

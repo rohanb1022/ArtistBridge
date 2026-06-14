@@ -72,76 +72,37 @@ const ArtistDetailsForm = () => {
   if (!mounted) return null;
 
   return (
-    <main className="relative min-h-screen bg-black text-white flex items-center justify-center overflow-hidden py-20 px-4 font-sans">
-      {/* 🌟 Dynamic Continuously Changing Background */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
-        <motion.div
-          animate={{
-            rotate: [0, 360],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-1/4 -left-1/4 w-[150%] h-[150%] opacity-40 blur-[120px] pointer-events-none"
-          style={{
-            background:
-              "conic-gradient(from 90deg at 50% 50%, #ff0080, #7928ca, #ff0080)",
-          }}
-        />
-        <motion.div
-          animate={{
-            x: [0, 100, -100, 0],
-            y: [0, -100, 100, 0],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-500/30 rounded-full blur-[100px] pointer-events-none mix-blend-screen"
-        />
-        <motion.div
-          animate={{
-            x: [0, -150, 150, 0],
-            y: [0, 150, -150, 0],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-orange-500/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
-        />
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[50px] z-0" />
-      </div>
-
+    <main className="relative min-h-screen bg-neutral-50 text-neutral-900 flex items-center justify-center overflow-hidden py-16 px-4 font-sans">
       <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
         {/* Title & Subtitle */}
         <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: -30 }}
+          className="text-center mb-10"
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.5 }}
         >
-          <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400">
-              Welcome, Artist
-            </span>
+          <h2 className="text-4xl md:text-5xl font-heading font-medium tracking-tight mb-3 text-neutral-950">
+            Welcome, <span className="font-serif italic text-neutral-700">Artist</span>
           </h2>
-          <p className="text-zinc-400 text-lg md:text-xl font-light max-w-2xl mx-auto">
-            Let's build your creative portfolio. Stand out and connect with
-            organizers who are looking for exactly what you do.
+          <p className="text-neutral-500 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+            Let's build your creative profile to stand out and connect with event organizers.
           </p>
         </motion.div>
 
-        {/* The Glassmorphism Form */}
+        {/* The Form */}
         <motion.form
           onSubmit={handleSubmit}
-          className="w-full bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden"
-          initial={{ opacity: 0, y: 40 }}
+          className="w-full bg-white border border-neutral-200 rounded-lg p-8 md:p-10 shadow-xs"
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {/* Subtle inner glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] to-transparent pointer-events-none" />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Left Column: Basic Info */}
             <div className="space-y-6">
               <div>
-                <h3 className="text-2xl font-semibold mb-6 flex items-center gap-2 text-white/90">
-                  <span className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-sm shadow-lg shadow-pink-500/20">
+                <h3 className="text-lg font-heading font-medium flex items-center gap-2 text-neutral-900 border-b border-neutral-100 pb-3">
+                  <span className="w-6 h-6 rounded-full bg-neutral-900 flex items-center justify-center text-xs text-white">
                     1
                   </span>
                   Your Expertise
@@ -149,19 +110,19 @@ const ArtistDetailsForm = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400 font-medium ml-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
                   Primary Category
                 </label>
                 <Select onValueChange={handleCategory}>
-                  <SelectTrigger className="w-full h-12 bg-white/5 border-white/10 hover:border-pink-500/50 transition-colors rounded-xl text-white focus:ring-pink-500/50">
+                  <SelectTrigger className="w-full h-11 bg-white border border-neutral-200 hover:border-neutral-950 transition-colors rounded-md text-neutral-900 focus:ring-0 focus:ring-offset-0 focus:border-neutral-950">
                     <SelectValue placeholder="What kind of artist are you?" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-white/10 text-white rounded-xl shadow-2xl">
+                  <SelectContent className="bg-white border border-neutral-200 text-neutral-900 rounded-md shadow-md">
                     {artistCategories.map((item) => (
                       <SelectItem
                         key={item}
                         value={item}
-                        className="hover:bg-white/10 cursor-pointer focus:bg-pink-500/20 rounded-lg m-1"
+                        className="hover:bg-neutral-50 cursor-pointer focus:bg-neutral-50 rounded-md m-1"
                       >
                         {item}
                       </SelectItem>
@@ -169,11 +130,11 @@ const ArtistDetailsForm = () => {
                   </SelectContent>
                 </Select>
                 {formData.category.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3">
+                  <div className="flex flex-wrap gap-1.5 mt-2">
                     {formData.category.map((cat) => (
                       <span
                         key={cat}
-                        className="px-3 py-1 bg-pink-500/20 border border-pink-500/30 text-pink-300 rounded-full text-xs font-medium"
+                        className="px-2.5 py-0.5 bg-neutral-100 border border-neutral-200 text-neutral-600 rounded-full text-xs font-medium"
                       >
                         {cat}
                       </span>
@@ -183,7 +144,7 @@ const ArtistDetailsForm = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400 font-medium ml-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
                   Base Price (₹)
                 </label>
                 <Input
@@ -191,20 +152,20 @@ const ArtistDetailsForm = () => {
                   name="price"
                   value={formData.price || ""}
                   onChange={handleInputChange}
-                  className="h-12 bg-white/5 border-white/10 hover:border-pink-500/50 transition-colors rounded-xl text-white focus:ring-pink-500/50"
+                  className="h-11 bg-white border border-neutral-200 hover:border-neutral-950 transition-colors rounded-md text-neutral-900 focus:border-neutral-950"
                   placeholder="E.g. 5000"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400 font-medium ml-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
                   Artist Bio
                 </label>
                 <Textarea
                   name="bio"
                   value={formData.bio}
                   onChange={handleInputChange}
-                  className="bg-white/5 border-white/10 hover:border-pink-500/50 transition-colors rounded-xl text-white focus:ring-pink-500/50 min-h-[120px] resize-none"
+                  className="bg-white border border-neutral-200 hover:border-neutral-950 transition-colors rounded-md text-neutral-900 focus:border-neutral-950 min-h-[110px] resize-none text-sm leading-relaxed"
                   placeholder="Tell your story. What makes your art unique?"
                 />
               </div>
@@ -213,8 +174,8 @@ const ArtistDetailsForm = () => {
             {/* Right Column: Media & Experience */}
             <div className="space-y-6">
               <div>
-                <h3 className="text-2xl font-semibold mb-6 flex items-center gap-2 text-white/90">
-                  <span className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-sm shadow-lg shadow-cyan-500/20">
+                <h3 className="text-lg font-heading font-medium flex items-center gap-2 text-neutral-900 border-b border-neutral-100 pb-3">
+                  <span className="w-6 h-6 rounded-full bg-neutral-900 flex items-center justify-center text-xs text-white">
                     2
                   </span>
                   Portfolio & Media
@@ -222,21 +183,21 @@ const ArtistDetailsForm = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-400 font-medium ml-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
                   Best Performance / Event
                 </label>
                 <Textarea
                   name="bestEvent"
                   value={formData.bestEvent}
                   onChange={handleInputChange}
-                  className="bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors rounded-xl text-white focus:ring-cyan-500/50 min-h-[100px] resize-none"
+                  className="bg-white border border-neutral-200 hover:border-neutral-950 transition-colors rounded-md text-neutral-900 focus:border-neutral-950 min-h-[90px] resize-none text-sm leading-relaxed"
                   placeholder="Describe your most memorable gig..."
                 />
               </div>
 
-              <div className="space-y-4 pt-2">
-                <div className="space-y-2">
-                  <label className="text-sm text-zinc-400 font-medium ml-1">
+              <div className="space-y-3.5">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
                     Instagram URL
                   </label>
                   <Input
@@ -244,12 +205,12 @@ const ArtistDetailsForm = () => {
                     value={formData.instagramUrl}
                     onChange={handleInputChange}
                     placeholder="https://instagram.com/yourhandle"
-                    className="h-12 bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors rounded-xl text-white focus:ring-cyan-500/50"
+                    className="h-11 bg-white border border-neutral-200 hover:border-neutral-950 transition-colors rounded-md text-neutral-900 focus:border-neutral-950"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm text-zinc-400 font-medium ml-1">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
                     YouTube Channel
                   </label>
                   <Input
@@ -257,12 +218,12 @@ const ArtistDetailsForm = () => {
                     value={formData.youtubeUrl}
                     onChange={handleInputChange}
                     placeholder="https://youtube.com/c/yourchannel"
-                    className="h-12 bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors rounded-xl text-white focus:ring-cyan-500/50"
+                    className="h-11 bg-white border border-neutral-200 hover:border-neutral-950 transition-colors rounded-md text-neutral-900 focus:border-neutral-950"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm text-zinc-400 font-medium ml-1">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
                     Intro Video Link
                   </label>
                   <Input
@@ -270,7 +231,7 @@ const ArtistDetailsForm = () => {
                     value={formData.introVideoUrl}
                     onChange={handleInputChange}
                     placeholder="Link to a short video of your work"
-                    className="h-12 bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors rounded-xl text-white focus:ring-cyan-500/50"
+                    className="h-11 bg-white border border-neutral-200 hover:border-neutral-950 transition-colors rounded-md text-neutral-900 focus:border-neutral-950"
                   />
                 </div>
               </div>
@@ -282,53 +243,21 @@ const ArtistDetailsForm = () => {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="mt-6 text-red-400 text-center font-medium bg-red-400/10 py-3 rounded-lg border border-red-400/20"
+              className="mt-6 text-red-650 text-center font-medium bg-red-50 py-2.5 rounded-md border border-red-200 text-sm"
             >
               {error}
             </motion.div>
           )}
 
           {/* Submit Button */}
-          <div className="mt-10 flex justify-center relative z-10">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full md:w-auto"
+          <div className="mt-8 flex justify-center border-t border-neutral-100 pt-6">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full md:w-[280px] h-12 bg-neutral-900 text-white hover:bg-neutral-850 font-medium text-sm rounded-md shadow-xs transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full md:w-[300px] h-14 bg-white text-black hover:bg-zinc-200 font-bold text-lg rounded-2xl shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Saving Profile...
-                  </>
-                ) : (
-                  "Launch Profile"
-                )}
-              </Button>
-            </motion.div>
+              {loading ? "Saving Profile..." : "Launch Profile"}
+            </button>
           </div>
         </motion.form>
       </div>
@@ -337,4 +266,3 @@ const ArtistDetailsForm = () => {
 };
 
 export default ArtistDetailsForm;
-

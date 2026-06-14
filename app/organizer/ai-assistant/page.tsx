@@ -68,79 +68,54 @@ export default function AIAssistantPage() {
   const isFirstMessage = messages.length === 1;
 
   return (
-    <div className="min-h-screen flex flex-col relative" style={{ backgroundColor: "#020817" }}>
-
-      {/* Ambient blobs */}
-      <div className="ambient-blob w-[600px] h-[600px] top-[-150px] left-[-150px]"
-        style={{ background: "radial-gradient(circle, rgba(245,158,11,0.10) 0%, transparent 70%)" }} />
-      <div className="ambient-blob w-[500px] h-[500px] bottom-0 right-[-100px]"
-        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.10) 0%, transparent 70%)", animationDelay: "4s" }} />
-
-      {/* Grid Overlay */}
-      <div className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          backgroundImage: "linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }} />
-
+    <div className="min-h-screen flex flex-col bg-white text-neutral-900 relative">
+      
       {/* ── TOP NAV ── */}
-      <nav className="relative z-50 flex items-center justify-between px-6 py-4 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.06)", background: "rgba(2,8,23,0.8)", backdropFilter: "blur(16px)" }}>
+      <nav className="relative z-50 flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-white/80 backdrop-blur-md">
         <div className="flex items-center gap-4">
           <Link href="/organizer/home">
-            <button className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
-              <ArrowLeft size={16} />
+            <button className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+              <ArrowLeft size={15} />
               Back
             </button>
           </Link>
-          <div className="w-px h-5" style={{ background: "rgba(255,255,255,0.08)" }} />
+          <div className="w-px h-4 bg-neutral-200" />
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #D97706, #F59E0B)" }}>
-              <Sparkles size={14} className="text-black" />
+            <div className="w-7 h-7 rounded bg-neutral-900 flex items-center justify-center">
+              <Sparkles size={13} className="text-white" />
             </div>
-            <span className="font-semibold text-white" style={{ fontFamily: "var(--font-sora)" }}>
+            <span className="font-heading font-medium text-neutral-950">
               AI Event Assistant
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full"
-          style={{ background: "rgba(16,185,129,0.1)", color: "#34D399", border: "1px solid rgba(16,185,129,0.2)" }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-neutral-100 text-neutral-600 border border-neutral-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse" />
           Llama 3 · Pinecone RAG
         </div>
       </nav>
 
       {/* ── MAIN CHAT AREA ── */}
-      <div className="relative z-10 flex-1 overflow-y-auto px-4 py-8 scrollbar-hide">
+      <div className="relative z-10 flex-1 overflow-y-auto px-6 py-8 scrollbar-hide bg-neutral-50/30">
         <div className="max-w-3xl mx-auto space-y-6">
 
           {/* Suggested Prompts (shown only on first load) */}
           <AnimatePresence>
             {isFirstMessage && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -8 }}
                 className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4"
               >
                 {suggestedPrompts.map((prompt) => (
                   <button
                     key={prompt}
                     onClick={() => sendMessage(prompt)}
-                    className="text-left px-4 py-3 rounded-xl text-sm transition-all duration-200"
-                    style={{ background: "rgba(245,158,11,0.05)", border: "1px solid rgba(245,158,11,0.15)", color: "#94A3B8" }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.background = "rgba(245,158,11,0.1)";
-                      e.currentTarget.style.color = "#F8FAFC";
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.background = "rgba(245,158,11,0.05)";
-                      e.currentTarget.style.color = "#94A3B8";
-                    }}
+                    className="text-left px-4 py-3.5 rounded-md text-xs font-medium bg-white border border-neutral-200 text-neutral-600 hover:border-neutral-900 hover:text-neutral-900 hover:shadow-xs transition-all duration-200"
                   >
-                    <Zap size={12} className="inline mr-2" style={{ color: "#F59E0B" }} />
+                    <Zap size={11} className="inline mr-1.5 text-neutral-900" />
                     {prompt}
                   </button>
                 ))}
@@ -151,69 +126,69 @@ export default function AIAssistantPage() {
           {/* Messages */}
           {messages.map((msg, index) => (
             <React.Fragment key={index}>
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-            >
-              {msg.role === "assistant" && (
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-1"
-                  style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.15), rgba(124,58,237,0.15))", border: "1px solid rgba(245,158,11,0.2)" }}>
-                  <Bot size={16} style={{ color: "#F59E0B" }} />
-                </div>
-              )}
-
-              <div
-                className="max-w-[78%] px-5 py-3.5 rounded-2xl text-sm leading-relaxed"
-                style={{
-                  ...(msg.role === "user"
-                    ? { background: "linear-gradient(135deg, #D97706, #F59E0B)", color: "#020817", fontWeight: 500, borderRadius: "1rem 1rem 0.25rem 1rem" }
-                    : { background: "rgba(20,27,46,0.9)", color: "#CBD5E1", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem 1rem 1rem 0.25rem" }),
-                  whiteSpace: "pre-wrap",
-                }}
-              >
-                {msg.content}
-              </div>
-
-              {msg.role === "user" && (
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-1"
-                  style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.25)" }}>
-                  <User size={16} style={{ color: "#A78BFA" }} />
-                </div>
-              )}
-            </motion.div>
-
-            {/* Artist Cards */}
-            {msg.role === "assistant" && msg.artists && msg.artists.length > 0 && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4 pl-11 pr-4 mt-2 mb-6"
+                transition={{ duration: 0.4 }}
+                className={`flex gap-3.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
-                {msg.artists.map((artist) => (
-                  <div key={artist.id} className="glass-card p-4 hover:scale-[1.02] transition-transform duration-200">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-white" style={{ fontFamily: "var(--font-sora)" }}>{artist.name}</h3>
-                      <div className="flex items-center gap-1 text-xs text-slate-400">
-                         {artist.city}
-                      </div>
-                    </div>
-                    <div className="flex gap-2 text-xs mb-4 text-slate-400 flex-wrap">
-                      <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20">{artist.category}</span>
-                      <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">₹{artist.price}</span>
-                    </div>
-                    <Link href={`/organizer/artist-profile/${artist.id}`}>
-                      <button className="w-full text-xs font-medium py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition-colors">
-                        View Profile
-                      </button>
-                    </Link>
+                {msg.role === "assistant" && (
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border border-neutral-200 bg-white">
+                    <Bot size={15} className="text-neutral-650" />
                   </div>
-                ))}
+                )}
+
+                <div
+                  className="max-w-[80%] px-5 py-3 rounded-lg text-sm leading-relaxed font-sans"
+                  style={{
+                    ...(msg.role === "user"
+                      ? { backgroundColor: "#111111", color: "#FFFFFF" }
+                      : { backgroundColor: "#FFFFFF", color: "#111111", border: "1px solid #E5E5E5" }),
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  {msg.content}
+                </div>
+
+                {msg.role === "user" && (
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border border-neutral-200 bg-white">
+                    <User size={15} className="text-neutral-650" />
+                  </div>
+                )}
               </motion.div>
-            )}
-          </React.Fragment>
+
+              {/* Artist Cards */}
+              {msg.role === "assistant" && msg.artists && msg.artists.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.05 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4 pl-12 pr-4 mt-2 mb-6"
+                >
+                  {msg.artists.map((artist) => (
+                    <div key={artist.id} className="bg-white border border-neutral-200 rounded-lg p-5 flex flex-col justify-between hover:border-neutral-900 hover:shadow-sm transition-all duration-200">
+                      <div>
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="font-bold text-neutral-900 text-sm leading-tight">{artist.name}</h3>
+                          <div className="text-[10px] text-neutral-450 uppercase tracking-wider font-semibold">
+                            {artist.city}
+                          </div>
+                        </div>
+                        <div className="flex gap-1.5 text-[10px] mb-4 text-neutral-550 flex-wrap">
+                          <span className="px-2 py-0.5 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-600">{artist.category}</span>
+                          <span className="px-2 py-0.5 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-800 font-semibold">₹{artist.price.toLocaleString()}</span>
+                        </div>
+                      </div>
+                      <Link href={`/organizer/artist-profile/${artist.id}`}>
+                        <button className="w-full text-xs font-semibold py-2 rounded-md bg-neutral-900 hover:bg-neutral-800 text-white transition-colors">
+                          View Profile
+                        </button>
+                      </Link>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </React.Fragment>
           ))}
 
           {/* Loading indicator */}
@@ -223,16 +198,14 @@ export default function AIAssistantPage() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="flex gap-3"
+                className="flex gap-3.5"
               >
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.15), rgba(124,58,237,0.15))", border: "1px solid rgba(245,158,11,0.2)" }}>
-                  <Bot size={16} style={{ color: "#F59E0B" }} />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border border-neutral-200 bg-white">
+                  <Bot size={15} className="text-neutral-600" />
                 </div>
-                <div className="px-5 py-3.5 rounded-2xl flex items-center gap-3"
-                  style={{ background: "rgba(20,27,46,0.9)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem 1rem 1rem 0.25rem" }}>
-                  <Loader2 size={16} className="animate-spin" style={{ color: "#F59E0B" }} />
-                  <span className="text-sm text-slate-400">Searching artist database...</span>
+                <div className="px-5 py-3 rounded-lg flex items-center gap-3 bg-white border border-neutral-200">
+                  <Loader2 size={14} className="animate-spin text-neutral-900" />
+                  <span className="text-sm text-neutral-500 font-sans">Searching artist database...</span>
                 </div>
               </motion.div>
             )}
@@ -243,8 +216,7 @@ export default function AIAssistantPage() {
       </div>
 
       {/* ── INPUT BAR ── */}
-      <div className="relative z-50 border-t px-4 py-4"
-        style={{ borderColor: "rgba(255,255,255,0.06)", background: "rgba(2,8,23,0.9)", backdropFilter: "blur(16px)" }}>
+      <div className="relative z-50 border-t border-neutral-200 px-6 py-4 bg-white/80 backdrop-blur-md">
         <div className="max-w-3xl mx-auto flex items-end gap-3">
           <div className="flex-1 relative">
             <textarea
@@ -254,8 +226,8 @@ export default function AIAssistantPage() {
               onKeyDown={handleKeyDown}
               placeholder="Describe your event, city, budget... (Press Enter to send)"
               disabled={loading}
-              className="w-full resize-none studio-input pr-14 py-3.5 scrollbar-hide"
-              style={{ minHeight: "52px", maxHeight: "140px" }}
+              className="w-full resize-none studio-input pr-12 py-3.5 scrollbar-hide text-sm rounded-md"
+              style={{ minHeight: "48px", maxHeight: "140px" }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
                 target.style.height = "auto";
@@ -263,23 +235,20 @@ export default function AIAssistantPage() {
               }}
             />
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={() => sendMessage()}
             disabled={loading || !input.trim()}
-            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all"
-            style={{
-              background: input.trim() ? "linear-gradient(135deg, #D97706, #F59E0B)" : "rgba(255,255,255,0.05)",
-              color: input.trim() ? "#020817" : "#475569",
-              cursor: !input.trim() ? "not-allowed" : "pointer",
-            }}
+            className={`w-11 h-11 rounded-md flex items-center justify-center flex-shrink-0 transition-all ${
+              input.trim()
+                ? "bg-neutral-900 hover:bg-neutral-800 text-white cursor-pointer"
+                : "bg-neutral-100 text-neutral-400 border border-neutral-200 cursor-not-allowed"
+            }`}
           >
-            <Send size={18} />
-          </motion.button>
+            <Send size={15} />
+          </button>
         </div>
-        <p className="text-center text-xs text-slate-600 mt-2">
-          Powered by Pinecone RAG · Groq Llama 3 · HuggingFace Embeddings
+        <p className="text-center text-[10px] text-neutral-400 font-medium tracking-wider uppercase mt-2">
+          Powered by Pinecone RAG · Llama 3
         </p>
       </div>
     </div>

@@ -47,7 +47,7 @@ const Hero = () => {
           className="flex items-center gap-2"
         >
           <div className="w-8 h-8 rounded-lg bg-neutral-900 flex items-center justify-center">
-            <Calendar size={16} className="text-neutral-900" />
+            <Calendar size={16} className="text-white" />
           </div>
           <span className="text-lg font-medium tracking-tight">
             Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
@@ -66,7 +66,7 @@ const Hero = () => {
               <button
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
                   link.highlight
-                    ? "bg-neutral-900 text-neutral-900 hover:bg-neutral-800"
+                    ? "bg-neutral-900 text-white hover:bg-neutral-800"
                     : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"
                 }`}
               >
@@ -157,7 +157,7 @@ const Hero = () => {
           className="flex flex-col sm:flex-row gap-4"
         >
           <Link href="/organizer/ai-assistant">
-            <button className="w-full sm:w-auto px-6 py-3.5 rounded-md bg-neutral-900 text-neutral-900 font-medium hover:bg-neutral-850 transition-all flex items-center justify-center gap-2 text-sm">
+            <button className="w-full sm:w-auto px-6 py-3.5 rounded-md bg-neutral-900 text-white font-medium hover:bg-neutral-850 transition-all flex items-center justify-center gap-2 text-sm">
               <Sparkles size={16} />
               Try AI Assistant
             </button>
@@ -203,7 +203,7 @@ const Hero = () => {
         >
           <div className="flex items-center gap-4 text-left">
             <div className="w-10 h-10 rounded-md flex items-center justify-center flex-shrink-0 bg-neutral-900">
-              <Sparkles size={18} className="text-neutral-900" />
+              <Sparkles size={18} className="text-white" />
             </div>
             <div>
               <h3 className="text-base font-semibold text-neutral-900 mb-1">
@@ -213,7 +213,7 @@ const Hero = () => {
             </div>
           </div>
           <Link href="/organizer/ai-assistant">
-            <button className="px-5 py-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 text-neutral-900 font-medium text-sm whitespace-nowrap flex items-center gap-2">
+            <button className="px-5 py-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 text-white font-medium text-sm whitespace-nowrap flex items-center gap-2">
               Chat with AI <Mic2 size={15} />
             </button>
           </Link>

@@ -1,12 +1,14 @@
 import jwt from "jsonwebtoken";
 import { jwtVerify } from "jose";
 
+const JWT_SECRET = process.env.JWT_SECRET || "rohanbhangale101022";
+
 export function generateToken(payload: { id: string; role: string }) {
-  return jwt.sign(payload, "rohanbhangale101022" , { expiresIn: "7d" });
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 }
 
 // Shared secret
-const secret = new TextEncoder().encode("rohanbhangale101022");
+const secret = new TextEncoder().encode(JWT_SECRET);
 
 // Replace this ONLY for verification in middleware
 export async function verifyToken(token: string) {

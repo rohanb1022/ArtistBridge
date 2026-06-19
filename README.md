@@ -25,7 +25,8 @@
 
 ---
 
-![ArtistBridge Hero](https://github.com/user-attachments/assets/67dc881e-d994-4beb-93c8-37c4b3bdd5a8)
+<img width="1885" height="857" alt="image" src="https://github.com/user-attachments/assets/004b1734-27d7-4bcd-90c2-6a0f588fc799" />
+
 
 ---
 

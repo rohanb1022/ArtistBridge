@@ -698,17 +698,16 @@ The UI follows a **minimalist light aesthetic** inspired by **Stripe**, **Linear
 
 ## 📸 Screenshots
 
-### Landing Page
-![Landing Page](https://github.com/user-attachments/assets/67dc881e-d994-4beb-93c8-37c4b3bdd5a8)
-
 ### Artist Home Dashboard
-![Artist Home](https://github.com/user-attachments/assets/14ffaebf-fb62-4b84-9632-ca6d87fed632)
+<img width="1902" height="1062" alt="image" src="https://github.com/user-attachments/assets/f9112db9-47fd-4c23-8b0b-05d875217359" />
 
-### Booking Management
-![Bookings](https://github.com/user-attachments/assets/4366f89e-b050-42d9-a1c0-2ecffe172d86)
 
-### Pending Requests
-![Pending Requests](https://github.com/user-attachments/assets/917b0be3-9030-411c-a14e-f7cabd705739)
+### Organizer Home Dashboard
+<img width="1876" height="861" alt="image" src="https://github.com/user-attachments/assets/e1a843c0-4c03-44e8-ae70-2965ca2737aa" />
+
+
+### Features
+<img width="1890" height="1058" alt="image" src="https://github.com/user-attachments/assets/ace506e3-f3ad-4f28-a042-9af70ae7a8f4" />
 
 ---
 

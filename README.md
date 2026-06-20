@@ -77,6 +77,7 @@ The platform supports **15 artist categories** — Singers, Dancers, DJs, Magici
 | **Profile Management** | Complete profile with bio, categories (multi-select), city, base pricing, and best event highlight |
 | **Personal Landing Page** | Auto-generated public profile page with DiceBear avatar, social links, bio, and a contact form |
 | **Booking Dashboard** | View all confirmed bookings with event details (name, date, time, city, organizer) |
+| **Interactive Schedule & Calendar** | View daily timelines of confirmed performances and check upcoming show dates on an interactive monthly calendar |
 | **Pending Request Management** | Accept or reject incoming booking requests from organizers with real-time status updates |
 | **Open Request Discovery** | Browse public artist requests posted by organizers and accept matching opportunities |
 | **Booking-Scoped Chat** | Real-time messaging with organizers for confirmed bookings (polling-based, 3s interval) |
@@ -102,10 +103,11 @@ The platform supports **15 artist categories** — Singers, Dancers, DJs, Magici
 |---------|-------------|
 | **Role-Based Middleware** | Next.js Edge Middleware prevents cross-role access (artists can't access organizer routes and vice versa) |
 | **Cookie-Based JWT Sessions** | httpOnly, secure, sameSite-strict cookies with automatic redirect for authenticated users on auth pages |
+| **Date-based Availability** | Dynamic checks automatically filter out busy artists from search, agent recommendations, and requests for dates with confirmed bookings |
 | **AI Content Moderation** | All chat messages pass through a HuggingFace toxic comment classifier before persistence |
 | **Responsive Design** | Fully optimized for mobile, tablet, and desktop with responsive navigation (hamburger menu on mobile) |
 | **Smooth Scrolling** | Lenis smooth-scroll integration for buttery page transitions |
-| **Animated UI** | Framer Motion animations throughout — hero reveals, staggered card grids, marquee categories, and chat transitions |
+| **Animated UI & Loaders** | Custom high-fidelity route loading screens (SVG dancing stick-figure) and post-auth cinematic transitions |
 | **SEO Optimized** | Open Graph metadata, semantic HTML, and proper heading hierarchy |
 | **Toast Notifications** | react-toastify integration for booking actions, errors, and logout confirmations |
 

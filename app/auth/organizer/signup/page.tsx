@@ -13,6 +13,7 @@ const Signup = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "", name: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -23,15 +24,41 @@ const Signup = () => {
     setIsLoading(true);
     try {
       await api.post("/auth/organizer/signup", formData);
-      toast.success("Account created! Welcome aboard.", { transition: Bounce, position: "top-center" });
+      setIsRedirecting(true);
       router.push("/organizer/home");
     } catch (err: any) {
       const msg = err.response?.data || "Something went wrong";
       toast.error(msg, { position: "top-right", autoClose: 3000 });
-    } finally {
       setIsLoading(false);
     }
   };
+
+  if (isRedirecting) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative w-16 h-16 flex items-center justify-center">
+            <motion.div
+              className="absolute inset-0 border-2 border-neutral-100 rounded-full"
+            />
+            <motion.div
+              className="absolute inset-0 border-2 border-t-neutral-900 border-r-transparent border-b-transparent border-l-transparent rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-medium tracking-tight">
+              Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
+            </span>
+          </div>
+          <p className="text-xs text-neutral-450 font-sans tracking-wide animate-pulse">
+            Curating the finest matches...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen flex bg-white text-neutral-900">

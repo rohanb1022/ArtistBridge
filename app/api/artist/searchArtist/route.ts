@@ -9,6 +9,7 @@ export async function GET(req: Request) {
 
   const city = searchParams.get("city");
   const category = searchParams.get("category");
+  const date = searchParams.get("date");
 
   if (!city || !category) {
     return Response.json(
@@ -23,7 +24,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    console.log("city:", city, "category:", category.toUpperCase());
+    console.log("city:", city, "category:", category.toUpperCase(), "date:", date);
     const artists = await prisma.artist.findMany({
       where: {
         city: {
@@ -34,9 +35,16 @@ export async function GET(req: Request) {
           has: category.toUpperCase() as ArtistCategory,
         },
       },
+      include: {
+        bookings: true,
+      },
     });
-    console.log(artists)
-    return Response.json({ data: artists }, { status: 200 });
+
+    const availableArtists = date
+      ? artists.filter((artist) => !artist.bookings.some((b) => b.status === "CONFIRMED" && b.date === date))
+      : artists;
+
+    return Response.json({ data: availableArtists }, { status: 200 });
 
   } catch (error) {
     console.error("Error fetching artists:", error);

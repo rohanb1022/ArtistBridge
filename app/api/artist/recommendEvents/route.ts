@@ -14,19 +14,30 @@ export async function GET(req: Request) {
     // 1. Fetch artist details
     const artist = await prisma.artist.findUnique({
       where: { id: user.id },
+      include: {
+        bookings: true,
+      },
     });
 
     if (!artist) {
       return NextResponse.json({ message: "Artist profile not found" }, { status: 404 });
     }
 
-    // 2. Fetch all pending artist requests that match the artist's category list
+    // Get dates where artist is already confirmed
+    const confirmedDates = artist.bookings
+      .filter((b) => b.status === "CONFIRMED")
+      .map((b) => b.date);
+
+    // 2. Fetch all pending artist requests that match the artist's category list and exclude busy dates
     const pendingRequests = await prisma.artistRequest.findMany({
       where: {
         category: {
           in: artist.category,
         },
         status: "PENDING",
+        date: {
+          notIn: confirmedDates,
+        },
       },
     });
 

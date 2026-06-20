@@ -12,7 +12,7 @@ const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
 // Tool 1: Semantic artist search
 export const searchArtistsTool = tool(
-  async ({ query, category, city, maxPrice }) => {
+  async ({ query, category, city, maxPrice, date }) => {
     try {
       // 1. Embed query if provided
       let embedding: number[] = [];
@@ -66,27 +66,41 @@ export const searchArtistsTool = tool(
           price: true,
           bio: true,
           bestEvent: true,
+          bookings: {
+            where: {
+              status: "CONFIRMED",
+            },
+          },
         },
-        take: 5,
+        take: 10,
       });
 
-      if (artists.length === 0) {
+      // Filter by date if provided
+      const filteredArtists = date
+        ? artists.filter((artist) => !artist.bookings.some((b) => b.date === date))
+        : artists;
+
+      // Slice the result to top 5 and strip the bookings array
+      const finalArtists = filteredArtists.slice(0, 5).map(({ bookings, ...rest }) => rest);
+
+      if (finalArtists.length === 0) {
         return JSON.stringify({ message: "No artists found matching criteria." });
       }
 
-      return JSON.stringify(artists);
+      return JSON.stringify(finalArtists);
     } catch (e) {
       return JSON.stringify({ error: String(e) });
     }
   },
   {
     name: "search_artists",
-    description: "Search for artists in the database. Use query for descriptions like 'traditional punjabi folk singer', category for fixed types ('SINGER', 'DANCER', 'DJ', etc.), city for location, and maxPrice for budget constraint.",
+    description: "Search for artists in the database. Use query for descriptions like 'traditional punjabi folk singer', category for fixed types ('SINGER', 'DANCER', 'DJ', etc.), city for location, maxPrice for budget constraint, and date to check availability.",
     schema: z.object({
       query: z.string().optional().describe("Semantic description of the desired performance or artist"),
       category: z.string().optional().describe("Artist category exactly matched (e.g., 'SINGER', 'DJ')"),
       city: z.string().optional().describe("City name"),
       maxPrice: z.number().optional().describe("Maximum budget/price filter in INR"),
+      date: z.string().optional().describe("Date of the event to filter out already booked artists (format YYYY-MM-DD)"),
     }),
   }
 );

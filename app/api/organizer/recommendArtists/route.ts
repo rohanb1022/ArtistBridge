@@ -39,8 +39,16 @@ export async function GET(req: Request) {
       },
     });
 
+    // Filter out artists who are already CONFIRMED on the requested date
+    const availableArtists = matchingArtists.filter((artist) => {
+      const isBooked = artist.bookings.some(
+        (b) => b.status === "CONFIRMED" && b.date === eventRequest.date
+      );
+      return !isBooked;
+    });
+
     // 3. Score each artist based on matching heuristics
-    const recommendations = matchingArtists.map((artist) => {
+    const recommendations = availableArtists.map((artist) => {
       let score = 100; // Base score for matching category
       const tags: string[] = [];
 

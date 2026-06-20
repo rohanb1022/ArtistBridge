@@ -12,6 +12,7 @@ const Signup = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({ name: "", email: "", password: "", city: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -22,7 +23,7 @@ const Signup = () => {
     setIsLoading(true);
     try {
       await api.post("/auth/artist/signup", formData);
-      toast.success("Welcome to ArtistBridge! Complete your profile.", { transition: Bounce, position: "top-center" });
+      setIsRedirecting(true);
       router.push("/artist/artistdetails");
     } catch (err) {
       let msg = "Something went wrong. Please try again.";
@@ -31,10 +32,114 @@ const Signup = () => {
         msg = err.response?.data || msg;
       }
       toast.error(msg, { position: "top-right", autoClose: 3000 });
-    } finally {
       setIsLoading(false);
     }
   };
+
+  if (isRedirecting) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
+        <div className="flex flex-col items-center gap-6">
+          <motion.div
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
+            className="relative w-28 h-28 flex items-center justify-center text-neutral-900"
+          >
+            <svg width="100%" height="100%" viewBox="0 0 100 100">
+              <motion.circle
+                cx="50"
+                cy="25"
+                r="7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3.5"
+                animate={{ rotate: [-10, 10, -10] }}
+                transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
+                style={{ transformOrigin: "50px 25px" }}
+              />
+              <line
+                x1="50"
+                y1="32"
+                x2="50"
+                y2="65"
+                stroke="currentColor"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+              <motion.g
+                style={{ transformOrigin: "50px 40px" }}
+                animate={{ rotate: [-60, 30, -60] }}
+                transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <line
+                  x1="50"
+                  y1="40"
+                  x2="28"
+                  y2="28"
+                  stroke="currentColor"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </motion.g>
+              <motion.g
+                style={{ transformOrigin: "50px 40px" }}
+                animate={{ rotate: [30, -60, 30] }}
+                transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <line
+                  x1="50"
+                  y1="40"
+                  x2="72"
+                  y2="28"
+                  stroke="currentColor"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </motion.g>
+              <motion.g
+                style={{ transformOrigin: "50px 65px" }}
+                animate={{ rotate: [-25, 20, -25] }}
+                transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <line
+                  x1="50"
+                  y1="65"
+                  x2="35"
+                  y2="90"
+                  stroke="currentColor"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </motion.g>
+              <motion.g
+                style={{ transformOrigin: "50px 65px" }}
+                animate={{ rotate: [20, -25, 20] }}
+                transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <line
+                  x1="50"
+                  y1="65"
+                  x2="65"
+                  y2="90"
+                  stroke="currentColor"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </motion.g>
+            </svg>
+          </motion.div>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-md font-medium tracking-tight">
+              Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
+            </span>
+          </div>
+          <p className="text-xs text-neutral-450 font-sans tracking-wide animate-pulse">
+            Creating your stage...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const fields = [
     { name: "name", label: "Full Name", type: "text", placeholder: "Rohan Bhangale", icon: <User size={15} /> },

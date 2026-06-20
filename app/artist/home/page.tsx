@@ -20,6 +20,12 @@ const ctaCards = [
     href: "/artist/bookings",
   },
   {
+    icon: <Calendar size={18} />,
+    title: "My Schedule",
+    desc: "Check today's schedule and view your performance calendar.",
+    href: "/artist/schedule",
+  },
+  {
     icon: <Briefcase size={18} />,
     title: "Open Requests",
     desc: "Browse public event requests matching your profile.",
@@ -114,7 +120,7 @@ export default function ArtistHomePage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
         >
           {ctaCards.map((card) => (
             <motion.div key={card.title} variants={itemVariants}>

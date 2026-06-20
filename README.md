@@ -15,7 +15,7 @@
 > **India's Premium AI-Powered Talent Marketplace** — Discover, book, and manage world-class artists for events, powered by RAG-based AI matching, LangGraph agents, and real-time messaging.
 
 <p align="center">
-  <a href="https://artist-bridge-6gyb3azqj-rohanb1022s-projects.vercel.app/">🌐 Live Demo</a> ·
+  <a href="https://artist-bridge.vercel.app/">🌐 Live Demo</a> ·
   <a href="#-features">Features</a> ·
   <a href="#-ai--rag-architecture">AI Architecture</a> ·
   <a href="#%EF%B8%8F-tech-stack">Tech Stack</a> ·

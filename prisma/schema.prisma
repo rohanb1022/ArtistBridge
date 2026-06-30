@@ -18,7 +18,9 @@ model Artist {
   price          Int?
   bio            String?
 
-  // Social & Media Links REMOVED
+  instagramUrl   String?
+  youtubeUrl     String?
+  introVideoUrl  String?
 
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt

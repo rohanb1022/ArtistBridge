@@ -20,7 +20,7 @@ export async function PUT(req : Request) {
     if (!user || user.role !== "artist") return Response.json({message : "Unauthorized"} , {status : 401})
 
     const data = await req.json();
-    const { category , bio , price ,bestEvent } = data;
+    const { category , bio , price ,bestEvent, instagramUrl, youtubeUrl, introVideoUrl } = data;
 
     if ( !category || !bio || !price || !bestEvent){ 
         return Response.json({message : "Please provide all the fields once"} , {status : 400})
@@ -47,6 +47,9 @@ export async function PUT(req : Request) {
                 bio,
                 price,
                 bestEvent,
+                instagramUrl,
+                youtubeUrl,
+                introVideoUrl,
             },
         });
 

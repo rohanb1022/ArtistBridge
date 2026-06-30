@@ -25,6 +25,9 @@ export async function GET(req: NextRequest) {
         bio: true,
         price: true,
         bestEvent: true,
+        instagramUrl: true,
+        youtubeUrl: true,
+        introVideoUrl: true,
         created_at: true,
       },
     });

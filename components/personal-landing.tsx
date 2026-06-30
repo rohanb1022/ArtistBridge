@@ -12,6 +12,9 @@ interface Artist {
   bio?: string;
   price?: number;
   bestEvent?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+  introVideoUrl?: string;
 }
 
 /* ---------------- HERO ---------------- */
@@ -38,28 +41,52 @@ const HeroSection = ({ artist }: { artist: Artist }) => {
 };
 
 /* ---------------- SOCIALS ---------------- */
-const SocialsBlock = () => (
+const SocialsBlock = ({ artist }: { artist: Artist }) => (
   <div className="flex flex-wrap justify-center gap-3 w-full max-w-lg">
-    <a
-      href="#"
-      className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-all duration-200"
-    >
-      <Youtube size={16} className="text-red-600" /> YouTube
-    </a>
+    {artist.youtubeUrl ? (
+      <a
+        href={artist.youtubeUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 hover:border-neutral-900 transition-all duration-200"
+      >
+        <Youtube size={16} className="text-red-600" /> YouTube
+      </a>
+    ) : (
+      <span className="inline-flex items-center gap-2 rounded-md border border-neutral-100 bg-neutral-50/50 px-5 py-2.5 text-sm font-medium text-neutral-400 cursor-not-allowed opacity-70">
+        <Youtube size={16} className="text-neutral-350" /> YouTube (N/A)
+      </span>
+    )}
 
-    <a
-      href="#"
-      className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-all duration-200"
-    >
-      <Instagram size={16} className="text-pink-600" /> Instagram
-    </a>
+    {artist.instagramUrl ? (
+      <a
+        href={artist.instagramUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 hover:border-neutral-900 transition-all duration-200"
+      >
+        <Instagram size={16} className="text-pink-600" /> Instagram
+      </a>
+    ) : (
+      <span className="inline-flex items-center gap-2 rounded-md border border-neutral-100 bg-neutral-50/50 px-5 py-2.5 text-sm font-medium text-neutral-400 cursor-not-allowed opacity-70">
+        <Instagram size={16} className="text-neutral-350" /> Instagram (N/A)
+      </span>
+    )}
 
-    <a
-      href="#"
-      className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-all duration-200"
-    >
-      <Video size={16} className="text-neutral-500" /> Self Intro
-    </a>
+    {artist.introVideoUrl ? (
+      <a
+        href={artist.introVideoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 hover:border-neutral-900 transition-all duration-200"
+      >
+        <Video size={16} className="text-neutral-500" /> Intro Video
+      </a>
+    ) : (
+      <span className="inline-flex items-center gap-2 rounded-md border border-neutral-100 bg-neutral-50/50 px-5 py-2.5 text-sm font-medium text-neutral-400 cursor-not-allowed opacity-70">
+        <Video size={16} className="text-neutral-350" /> Intro (N/A)
+      </span>
+    )}
   </div>
 );
 
@@ -150,7 +177,7 @@ export default function ArtistProfilePage() {
       <div className="w-full max-w-xl flex flex-col items-center gap-10 z-10">
         <HeroSection artist={artist} />
         <AboutBlock bio={artist.bio} />
-        <SocialsBlock />
+        <SocialsBlock artist={artist} />
         <ConnectSection />
       </div>
     </div>

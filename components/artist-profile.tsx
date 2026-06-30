@@ -16,6 +16,9 @@ interface Artist {
   bio?: string;
   price?: number;
   bestEvent?: string;
+  instagramUrl?: string;
+  youtubeUrl?: string;
+  introVideoUrl?: string;
 }
 
 export default function OrganizerArtistProfilePage() {
@@ -177,15 +180,59 @@ export default function OrganizerArtistProfilePage() {
             <h3 className="text-sm font-semibold text-neutral-850 text-center mb-3">
               Media Portfolio
             </h3>
-            <button className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-700 py-3 text-sm font-medium transition-all">
-              <Youtube className="w-4 h-4 text-red-600" /> YouTube Channel
-            </button>
-            <button className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-700 py-3 text-sm font-medium transition-all">
-              <Instagram className="w-4 h-4 text-pink-600" /> Instagram
-            </button>
-            <button className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-700 py-3 text-sm font-medium transition-all">
-              <Video className="w-4 h-4 text-neutral-500" /> Live Performances
-            </button>
+            {artist.youtubeUrl ? (
+              <a
+                href={artist.youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-900 text-neutral-700 py-3 text-sm font-medium transition-all"
+              >
+                <Youtube className="w-4 h-4 text-red-600" /> YouTube Channel
+              </a>
+            ) : (
+              <button
+                disabled
+                className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-100 bg-neutral-50/50 text-neutral-400 py-3 text-sm font-medium cursor-not-allowed opacity-70"
+              >
+                <Youtube className="w-4 h-4 text-neutral-350" /> YouTube (Not Provided)
+              </button>
+            )}
+
+            {artist.instagramUrl ? (
+              <a
+                href={artist.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-900 text-neutral-700 py-3 text-sm font-medium transition-all"
+              >
+                <Instagram className="w-4 h-4 text-pink-600" /> Instagram Profile
+              </a>
+            ) : (
+              <button
+                disabled
+                className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-100 bg-neutral-50/50 text-neutral-400 py-3 text-sm font-medium cursor-not-allowed opacity-70"
+              >
+                <Instagram className="w-4 h-4 text-neutral-350" /> Instagram (Not Provided)
+              </button>
+            )}
+
+            {artist.introVideoUrl ? (
+              <a
+                href={artist.introVideoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-900 text-neutral-700 py-3 text-sm font-medium transition-all"
+              >
+                <Video className="w-4 h-4 text-neutral-500" /> Live Performance Video
+              </a>
+            ) : (
+              <button
+                disabled
+                className="w-full flex items-center justify-center gap-2 rounded-md border border-neutral-100 bg-neutral-50/50 text-neutral-400 py-3 text-sm font-medium cursor-not-allowed opacity-70"
+              >
+                <Video className="w-4 h-4 text-neutral-350" /> Live Video (Not Provided)
+              </button>
+            )}
           </motion.div>
         </div>
       </div>

@@ -138,7 +138,7 @@ ArtistBridge implements a sophisticated **multi-agent AI system** combining RAG 
 │  ├─ check_availability│      │                               │
 │  └─ create_booking    │      │  Capabilities:                │
 │                       │      │  ├─ Review pending requests   │
-│  Model: Llama 3.1 8B  │      │  ├─ Draft replies             │
+│  Model: Llama 3.3 70B │      │  ├─ Draft replies             │
 │  via Groq             │      │  └─ Scheduling advice         │
 └───────────┬───────────┘      └───────────────────────────────┘
             │
@@ -168,13 +168,13 @@ ArtistBridge implements a sophisticated **multi-agent AI system** combining RAG 
 - Embeds the user's natural language query
 - Queries Pinecone for top-3 semantically similar artist profiles
 - Constructs a grounded prompt with retrieved context
-- Generates a response via Groq (Llama 3.1 8B) with strict hallucination prevention
+- Generates a response via Groq (Llama 3.3 70B) with strict hallucination prevention
 - Returns both the AI text response and structured artist data for UI card rendering
 
 #### 3. Organizer Agent (LangGraph — `/api/ai/agent`)
 - **StateGraph** architecture with `agent` → `tools` → `agent` loop
 - Three bound tools:
-  - `search_artists` — Semantic + filtered database search (category, city, maxPrice)
+  - `search_artists` — Semantic, name-based, and filtered database search (name, category, city, maxPrice, date)
   - `check_artist_availability` — Queries booking conflicts for a given artist + date
   - `create_booking_request` — Creates a booking (requires explicit user confirmation)
 - Automatic **database fallback** on Groq rate limits / API failures — parses natural language for categories, cities, and prices, then queries MongoDB directly
@@ -212,7 +212,7 @@ ArtistBridge implements a sophisticated **multi-agent AI system** combining RAG 
 | Technology | Purpose |
 |------------|---------|
 | [LangChain](https://js.langchain.com/) + [LangGraph](https://langchain-ai.github.io/langgraphjs/) | Multi-step AI agent orchestration with tool binding |
-| [Groq](https://groq.com/) (Llama 3.1 8B Instant) | Ultra-fast LLM inference for agent responses |
+| [Groq](https://groq.com/) (Llama 3.3 70B Versatile) | Ultra-fast LLM inference for agent responses |
 | [Pinecone](https://www.pinecone.io/) | Serverless vector database for semantic artist search |
 | [HuggingFace Inference](https://huggingface.co/inference-api) | `all-MiniLM-L6-v2` embeddings (384-dim) + `toxic-comment-model` moderation |
 

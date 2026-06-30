@@ -12,11 +12,11 @@ const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
 // Tool 1: Semantic artist search
 export const searchArtistsTool = tool(
-  async ({ query, category, city, maxPrice, date }) => {
+  async ({ query, name, category, city, maxPrice, date }) => {
     try {
-      // 1. Embed query if provided
+      // 1. Embed query if provided (skip embedding if searching by name directly)
       let embedding: number[] = [];
-      if (query) {
+      if (query && !name) {
         const response = await hf.featureExtraction({
           model: "sentence-transformers/all-MiniLM-L6-v2",
           inputs: query,
@@ -24,7 +24,7 @@ export const searchArtistsTool = tool(
         embedding = Array.isArray(response) ? (response as number[]) : [];
       }
 
-      // 2. Query Pinecone
+      // 2. Query Pinecone (only for semantic searches, not name lookups)
       const index = pinecone.index(process.env.PINECONE_INDEX_NAME || "artistbridge");
       let artistIds: string[] = [];
       
@@ -43,6 +43,9 @@ export const searchArtistsTool = tool(
       const whereClause: any = {};
       if (artistIds.length > 0) {
         whereClause.id = { in: artistIds };
+      }
+      if (name) {
+        whereClause.name = { contains: name, mode: 'insensitive' };
       }
       if (category) {
         // Simple regex or exact match (the current schema uses an array of strings, so has/hasSome depending on prisma version)
@@ -94,9 +97,10 @@ export const searchArtistsTool = tool(
   },
   {
     name: "search_artists",
-    description: "Search for artists in the database. Use query for descriptions like 'traditional punjabi folk singer', category for fixed types ('SINGER', 'DANCER', 'DJ', etc.), city for location, maxPrice for budget constraint, and date to check availability.",
+    description: "Search for artists in the database. Use 'name' to find a specific artist by name (e.g., 'Dan'). Use query for descriptions like 'traditional punjabi folk singer', category for fixed types ('SINGER', 'DANCER', 'DJ', etc.), city for location, maxPrice for budget constraint, and date to check availability.",
     schema: z.object({
       query: z.string().optional().describe("Semantic description of the desired performance or artist"),
+      name: z.string().optional().describe("Artist's name or partial name to search for (e.g., 'Dan', 'Priya')"),
       category: z.string().optional().describe("Artist category exactly matched (e.g., 'SINGER', 'DJ')"),
       city: z.string().optional().describe("City name"),
       maxPrice: z.number().optional().describe("Maximum budget/price filter in INR"),

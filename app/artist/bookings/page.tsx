@@ -5,7 +5,7 @@ import { useState, useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { CheckCircle2, Clock, XCircle, MapPin, Calendar, Clock3, User, Loader2, MessageCircle } from "lucide-react";
+import { CheckCircle2, Clock, XCircle, MapPin, Calendar, Clock3, User, Loader2, MessageCircle, IndianRupee } from "lucide-react";
 
 type Booking = {
   [x: string]: ReactNode;
@@ -16,6 +16,7 @@ type Booking = {
   city: string;
   time: string;
   organizerName: string;
+  price: number;
 };
 
 type BookingsState = {
@@ -178,6 +179,10 @@ const Bookings = () => {
                     <div className="flex items-center gap-2"><Calendar size={13} className="text-neutral-500" />{booking.date}</div>
                     <div className="flex items-center gap-2"><Clock3 size={13} className="text-neutral-500" />{booking.time}</div>
                     <div className="flex items-center gap-2"><MapPin size={13} className="text-neutral-500" />{booking.city}</div>
+                    <div className="flex items-center gap-2 text-neutral-900 font-semibold pt-2 border-t border-neutral-100 mt-2">
+                      <IndianRupee size={13} className="text-neutral-600" />
+                      <span>₹{booking.price?.toLocaleString() || "N/A"}</span>
+                    </div>
                   </div>
 
                   {activeTab === "pending" && (

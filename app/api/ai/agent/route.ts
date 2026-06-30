@@ -107,22 +107,27 @@ export async function POST(req: Request) {
     }
 
     // Convert raw JSON messages to LangChain message classes
-    const langchainMessages = rawMessages.map((m: any) => {
-      if (m.role === "user") {
-        return new HumanMessage(m.content);
-      } else if (m.role === "assistant") {
-        return new AIMessage(m.content);
-      } else if (m.role === "system") {
-        return new SystemMessage(m.content);
-      }
-      return new HumanMessage(m.content);
-    });
+    const langchainMessages: any[] = [];
 
+    // Inject organizer context and current date as the first system message
+    const currentDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const contextParts: string[] = [`SYSTEM CONTEXT: Today's date is ${currentDate}.`];
     if (organizerId) {
-      langchainMessages.push(new SystemMessage(`
-        SYSTEM CONTEXT: The user is an organizer with ID: ${organizerId}. 
-        You MUST use this ID when invoking the create_booking_request tool.
-      `));
+      contextParts.push(`The user is an organizer with ID: ${organizerId}. You MUST use this ID when invoking the create_booking_request tool.`);
+    }
+    langchainMessages.push(new SystemMessage(contextParts.join(" ")));
+
+    // Add the conversation messages
+    for (const m of rawMessages) {
+      if (m.role === "user") {
+        langchainMessages.push(new HumanMessage(m.content));
+      } else if (m.role === "assistant") {
+        langchainMessages.push(new AIMessage(m.content));
+      } else if (m.role === "system") {
+        langchainMessages.push(new SystemMessage(m.content));
+      } else {
+        langchainMessages.push(new HumanMessage(m.content));
+      }
     }
 
     // Run the LangGraph agent

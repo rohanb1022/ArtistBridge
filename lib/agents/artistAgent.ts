@@ -7,8 +7,8 @@ import { SystemMessage, AIMessage, HumanMessage } from "@langchain/core/messages
 // 1. Initialize Model
 const model = new ChatGroq({
   apiKey: process.env.GROQ_API_KEY,
-  modelName: "llama-3.1-8b-instant",
-  temperature: 0.7,
+  model: "llama-3.3-70b-versatile",
+  temperature: 0,
   maxTokens: 1024,
 });
 

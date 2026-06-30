@@ -4,7 +4,7 @@ import api from '@/lib/axios';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+import { Loader2, IndianRupee } from 'lucide-react';
 
 type Booking = {
   id: string | number;
@@ -13,6 +13,7 @@ type Booking = {
   status: string;
   city: string;
   orgName: string;
+  price: number;
 };
 
 const Bookings = () => {
@@ -106,7 +107,11 @@ const Bookings = () => {
                   </div>
                   <h4 className="text-sm font-medium text-neutral-700 mb-2">{booking.eventName}</h4>
                   <p className="text-xs text-neutral-500 mb-1">Date: {booking.date}</p>
-                  <p className="text-xs text-neutral-500">City: {booking.city}</p>
+                  <p className="text-xs text-neutral-500 mb-2">City: {booking.city}</p>
+                  <div className="flex items-center gap-1.5 text-neutral-900 font-semibold text-sm pt-2 border-t border-neutral-100 mt-2">
+                    <IndianRupee size={12} className="text-neutral-600" />
+                    <span>₹{booking.price?.toLocaleString() || "N/A"}</span>
+                  </div>
                 </div>
                 
                 <div className="flex gap-2 mt-6">

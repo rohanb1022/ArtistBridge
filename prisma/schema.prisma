@@ -46,6 +46,7 @@ model Booking {
   eventName     String
   date          String
   time          String
+  expiryDate    String?
   status        BookingStatus @default(PENDING)
   city          String
   price         Int
@@ -77,6 +78,7 @@ model ArtistRequest {
   maxBudget   Int
   date        String
   timing      String
+  expiryDate  String?
   status      RequestStatus @default(PENDING)
   createdAt   DateTime      @default(now())
   organizer   Organizer     @relation(fields: [organizerId], references: [id])
@@ -87,6 +89,7 @@ enum BookingStatus {
   CONFIRMED
   CANCELLED
   REJECTED
+  EXPIRED
 }
 
 enum RequestStatus {

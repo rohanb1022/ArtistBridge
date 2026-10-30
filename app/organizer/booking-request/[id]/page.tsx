@@ -2,9 +2,9 @@
 "use client";
 
 import api from '@/lib/axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, MapPin, IndianRupee, Mail, User, Music, Loader2 } from 'lucide-react';
+import { Calendar, Clock, MapPin, IndianRupee, Mail, User, Music, Loader2, Hourglass } from 'lucide-react';
 
 const RequestForm = () => {
   const [form, setForm] = useState({
@@ -15,10 +15,18 @@ const RequestForm = () => {
     maxBudget: "",
     date: "",
     timing: "",
+    expiryDate: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  const [minDate, setMinDate] = useState("");
+  useEffect(() => {
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    setMinDate(today);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,6 +34,30 @@ const RequestForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side date & time validation
+    const eventDateTime = new Date(`${form.date}T${form.timing}`);
+    if (eventDateTime < new Date()) {
+      setMessage("Error: Event date and time must be in the future.");
+      return;
+    }
+
+    // Validate Expiry Date (must be in between today's date and event date)
+    if (!form.expiryDate) {
+      setMessage("Error: Please specify a request expiry date.");
+      return;
+    }
+
+    if (minDate && form.expiryDate < minDate) {
+      setMessage(`Error: Expiry date cannot be in the past. It must be between today (${minDate}) and the event date (${form.date}).`);
+      return;
+    }
+
+    if (form.date && form.expiryDate > form.date) {
+      setMessage(`Error: Expiry date cannot be after the event date. It must be between today (${minDate}) and the event date (${form.date}).`);
+      return;
+    }
+
     setLoading(true);
     setMessage("");
 
@@ -33,6 +65,7 @@ const RequestForm = () => {
       const res = await api.post("/organizer/sendRequest", {
         ...form,
         maxBudget: parseInt(form.maxBudget),
+        expiryDate: form.expiryDate,
       });
       setMessage("Request sent successfully!");
       setForm({
@@ -43,6 +76,7 @@ const RequestForm = () => {
         maxBudget: "",
         date: "",
         timing: "",
+        expiryDate: "",
       });
     } catch (error) {
       console.error("Failed to send request:", error);
@@ -65,7 +99,7 @@ const RequestForm = () => {
             Book <span className="font-serif italic text-neutral-750">Artist</span>
           </h2>
           <p className="text-neutral-500 text-sm">
-            Fill in the details below to send a booking request.
+            Fill in the details below to send a booking request with an acceptance deadline.
           </p>
         </div>
 
@@ -124,15 +158,16 @@ const RequestForm = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Max Budget (₹)</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Budget (₹)</label>
               <div className="relative">
                 <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
                 <input
                   type="number"
                   name="maxBudget"
-                  placeholder="10000"
+                  placeholder="30000"
                   value={form.maxBudget}
                   onChange={handleChange}
+                  min="1"
                   className="studio-input pl-11"
                   required
                 />
@@ -166,6 +201,7 @@ const RequestForm = () => {
                 <input
                   type="date"
                   name="date"
+                  min={minDate}
                   value={form.date}
                   onChange={handleChange}
                   className="studio-input pl-11"
@@ -188,6 +224,34 @@ const RequestForm = () => {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Row 5: Request Expiry Date (Between Today and Event Date) */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
+                Request Expiry Date (Acceptance Deadline)
+              </label>
+              <span className="text-[11px] text-neutral-500 font-normal">
+                Must be between today and event date
+              </span>
+            </div>
+            <div className="relative">
+              <Hourglass className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
+              <input
+                type="date"
+                name="expiryDate"
+                min={minDate}
+                max={form.date || undefined}
+                value={form.expiryDate}
+                onChange={handleChange}
+                className="studio-input pl-11"
+                required
+              />
+            </div>
+            <p className="text-xs text-neutral-500">
+              The artist must accept before this date. It must be between today and the event date. If expired, you can book another artist without waiting.
+            </p>
           </div>
 
           <button

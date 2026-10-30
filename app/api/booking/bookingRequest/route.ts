@@ -3,11 +3,10 @@ import prisma from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
-
 export async function POST(req: Request) {
   const client = await withAuth(req);
 
-  //Check if user is authenticated and has correct role
+  // Check if user is authenticated and has correct role
   if (!client || client.role !== "organizer") {
     return Response.json(
       { message: "User not found, please try to login" },
@@ -15,11 +14,11 @@ export async function POST(req: Request) {
     );
   }
 
-  //  Get data from body
+  // Get data from body
   const data = await req.json();
-  const { artistId, city, price, date, time , eventName } = data;
+  const { artistId, city, price, date, time, eventName, expiryDate } = data;
 
-  //  Check all required fields
+  // Check all required fields
   if (!artistId || !city || !price || !date || !time || !eventName) {
     return Response.json(
       { message: "All fields are required" },
@@ -36,7 +35,27 @@ export async function POST(req: Request) {
     );
   }
 
-  //  Validate artistId
+  // Validate Expiry Date: must be in between today's date and event date
+  if (expiryDate) {
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+    if (String(expiryDate) < todayStr) {
+      return Response.json(
+        { message: `Expiry date (${expiryDate}) cannot be in the past. It must be between today (${todayStr}) and the event date (${date}).` },
+        { status: 400 }
+      );
+    }
+
+    if (String(expiryDate) > String(date)) {
+      return Response.json(
+        { message: `Expiry date (${expiryDate}) cannot be after the event date (${date}). It must be on or before the event date.` },
+        { status: 400 }
+      );
+    }
+  }
+
+  // Validate artistId
   const parsedArtistId = artistId as string;
   if (!parsedArtistId) {
     return Response.json(
@@ -46,7 +65,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    //  Get organizer info from DB
+    // Get organizer info from DB
     const org = await prisma.organizer.findUnique({
       where: { id: client.id },
     });
@@ -55,7 +74,7 @@ export async function POST(req: Request) {
       return Response.json({ message: "Organizer not found" }, { status: 401 });
     }
 
-    //  Find artist by ID
+    // Find artist by ID
     const artist = await prisma.artist.findUnique({
       where: { id: parsedArtistId },
     });
@@ -75,6 +94,7 @@ export async function POST(req: Request) {
         price,
         date,
         time,
+        expiryDate: expiryDate ? String(expiryDate) : null,
         category: Array.isArray(artist.category)
           ? artist.category.join(", ")
           : String(artist.category),

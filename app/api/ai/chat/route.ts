@@ -5,13 +5,6 @@ import Groq from "groq-sdk";
 
 export const runtime = "nodejs";
 
-const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY || "",
-});
-
-const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
@@ -20,38 +13,58 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Message is required" }, { status: 400 });
     }
 
-    // 1. Embed the user's query
-    const embeddingResponse = await hf.featureExtraction({
-      model: "sentence-transformers/all-MiniLM-L6-v2",
-      inputs: message,
-    });
-    const queryEmbedding = Array.isArray(embeddingResponse) ? embeddingResponse as number[] : [];
+    if (!process.env.GROQ_API_KEY) {
+      return NextResponse.json({
+        reply: "AI Assistant is currently unavailable because GROQ_API_KEY is not configured.",
+        artists: [],
+      });
+    }
 
-    // 2. Query Pinecone for the top 3 closest matching artists
-    const index = pinecone.index(process.env.PINECONE_INDEX_NAME || "artistbridge");
     let contextArtists = "";
     let matchedArtists: any[] = [];
-    
-    if (queryEmbedding.length > 0) {
-      const queryResult = await index.query({
-        vector: queryEmbedding,
-        topK: 3,
-        includeMetadata: true,
-      });
 
-      if (queryResult.matches && queryResult.matches.length > 0) {
-        matchedArtists = queryResult.matches.map((match) => ({
-          id: match.id,
-          name: match.metadata?.name,
-          city: match.metadata?.city,
-          category: match.metadata?.category,
-          price: match.metadata?.price,
-        }));
-        contextArtists = queryResult.matches
-          .map((match) => match.metadata?.text)
-          .join("\n\n---\n\n");
+    // Query Pinecone if API keys are configured
+    if (process.env.PINECONE_API_KEY && process.env.HUGGINGFACE_API_KEY) {
+      try {
+        const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
+        const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+
+        // 1. Embed the user's query
+        const embeddingResponse = await hf.featureExtraction({
+          model: "sentence-transformers/all-MiniLM-L6-v2",
+          inputs: message,
+        });
+        const queryEmbedding = Array.isArray(embeddingResponse) ? embeddingResponse as number[] : [];
+
+        // 2. Query Pinecone for the top 3 closest matching artists
+        const index = pinecone.index(process.env.PINECONE_INDEX_NAME || "artistbridge");
+        
+        if (queryEmbedding.length > 0) {
+          const queryResult = await index.query({
+            vector: queryEmbedding,
+            topK: 3,
+            includeMetadata: true,
+          });
+
+          if (queryResult.matches && queryResult.matches.length > 0) {
+            matchedArtists = queryResult.matches.map((match) => ({
+              id: match.id,
+              name: match.metadata?.name,
+              city: match.metadata?.city,
+              category: match.metadata?.category,
+              price: match.metadata?.price,
+            }));
+            contextArtists = queryResult.matches
+              .map((match) => match.metadata?.text)
+              .join("\n\n---\n\n");
+          }
+        }
+      } catch (err) {
+        console.warn("Pinecone retrieval failed or skipped:", err);
       }
     }
+
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
     // 3. Generate response using Groq (Llama 3)
     const prompt = `

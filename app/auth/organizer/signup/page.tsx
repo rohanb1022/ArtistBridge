@@ -1,19 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import api from "@/lib/axios";
 import { Calendar, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
 
 const Signup = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "", name: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get("error");
+      if (err) {
+        toast.error(decodeURIComponent(err), { position: "top-right", autoClose: 5000 });
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -116,7 +127,17 @@ const Signup = () => {
           <h1 className="text-3xl font-heading font-medium text-neutral-950 mb-2">
             Create Organizer Account
           </h1>
-          <p className="text-sm text-neutral-500 mb-8">Start booking world-class artists today</p>
+          <p className="text-sm text-neutral-500 mb-6">Start booking world-class artists today</p>
+
+          {/* Google Sign Up */}
+          <div className="mb-6">
+            <GoogleAuthButton role="organizer" label="Sign up with Google" />
+            <div className="relative flex items-center gap-4 my-6">
+              <div className="flex-1 h-px bg-neutral-200" />
+              <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider">or sign up with email</span>
+              <div className="flex-1 h-px bg-neutral-200" />
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>

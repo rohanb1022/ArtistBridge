@@ -25,6 +25,6 @@ export enum Role {
 
 
 export interface DecodedUser {
-  id: number;
+  id: string;
   role: "artist" | "organizer";
 }

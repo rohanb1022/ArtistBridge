@@ -4,38 +4,41 @@ import prisma from "@/lib/prisma";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { HfInference } from "@huggingface/inference";
 
-const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY || "",
-});
-
-const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
-
 // Tool 1: Semantic artist search
 export const searchArtistsTool = tool(
   async ({ query, name, category, city, maxPrice, date }) => {
     try {
       // 1. Embed query if provided (skip embedding if searching by name directly)
       let embedding: number[] = [];
-      if (query && !name) {
-        const response = await hf.featureExtraction({
-          model: "sentence-transformers/all-MiniLM-L6-v2",
-          inputs: query,
-        });
-        embedding = Array.isArray(response) ? (response as number[]) : [];
+      if (query && !name && process.env.HUGGINGFACE_API_KEY) {
+        try {
+          const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
+          const response = await hf.featureExtraction({
+            model: "sentence-transformers/all-MiniLM-L6-v2",
+            inputs: query,
+          });
+          embedding = Array.isArray(response) ? (response as number[]) : [];
+        } catch (err) {
+          console.warn("HuggingFace feature extraction skipped/failed:", err);
+        }
       }
 
       // 2. Query Pinecone (only for semantic searches, not name lookups)
-      const index = pinecone.index(process.env.PINECONE_INDEX_NAME || "artistbridge");
       let artistIds: string[] = [];
-      
-      if (embedding.length > 0) {
-        const queryResult = await index.query({
-          vector: embedding,
-          topK: 10,
-          includeMetadata: true,
-        });
-        if (queryResult.matches) {
-          artistIds = queryResult.matches.map((m) => m.id);
+      if (embedding.length > 0 && process.env.PINECONE_API_KEY) {
+        try {
+          const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+          const index = pinecone.index(process.env.PINECONE_INDEX_NAME || "artistbridge");
+          const queryResult = await index.query({
+            vector: embedding,
+            topK: 10,
+            includeMetadata: true,
+          });
+          if (queryResult.matches) {
+            artistIds = queryResult.matches.map((m) => m.id);
+          }
+        } catch (err) {
+          console.warn("Pinecone query skipped/failed:", err);
         }
       }
 

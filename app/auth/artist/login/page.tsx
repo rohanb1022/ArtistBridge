@@ -1,19 +1,30 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import api from "@/lib/axios";
 import { Mic2, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get("error");
+      if (err) {
+        toast.error(decodeURIComponent(err), { position: "top-right", autoClose: 5000 });
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -99,43 +110,41 @@ const Login = () => {
               </motion.g>
               <motion.g
                 style={{ transformOrigin: "50px 65px" }}
-                animate={{ rotate: [-25, 20, -25] }}
+                animate={{ rotate: [-20, 40, -20] }}
                 transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <line
-                  x1="50"
-                  y1="65"
-                  x2="35"
-                  y2="90"
+                <path
+                  d="M 50 65 L 40 85 L 35 95"
+                  fill="none"
                   stroke="currentColor"
                   strokeWidth="3.5"
                   strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </motion.g>
               <motion.g
                 style={{ transformOrigin: "50px 65px" }}
-                animate={{ rotate: [20, -25, 20] }}
+                animate={{ rotate: [40, -20, 40] }}
                 transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <line
-                  x1="50"
-                  y1="65"
-                  x2="65"
-                  y2="90"
+                <path
+                  d="M 50 65 L 60 85 L 65 95"
+                  fill="none"
                   stroke="currentColor"
                   strokeWidth="3.5"
                   strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </motion.g>
             </svg>
           </motion.div>
-          <div className="flex items-center gap-2 mt-2">
-            <span className="text-md font-medium tracking-tight">
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-medium tracking-tight">
               Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
             </span>
           </div>
-          <p className="text-xs text-neutral-450 font-sans tracking-wide animate-pulse">
-            Tuning the stage for your arrival...
+          <p className="text-xs text-neutral-450 font-sans tracking-wide">
+            Taking the stage...
           </p>
         </div>
       </div>
@@ -146,7 +155,7 @@ const Login = () => {
     <main className="min-h-screen flex bg-white text-neutral-900">
       <ToastContainer />
 
-      {/* Left Panel — Branding */}
+      {/* Left Branding Panel */}
       <div className="hidden lg:flex flex-col justify-between w-1/2 p-12 bg-neutral-50 border-r border-neutral-200">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-neutral-900 flex items-center justify-center">
@@ -159,23 +168,21 @@ const Login = () => {
 
         <div>
           <h2 className="text-5xl font-heading font-medium leading-tight mb-6 text-neutral-900">
-            Your stage <br /><span className="font-serif italic text-neutral-700">awaits you.</span>
+            Welcome back <br /><span className="font-serif italic text-neutral-700">to the spotlight.</span>
           </h2>
-          <p className="text-neutral-500 text-base leading-relaxed max-w-sm">
-            Sign in to manage your bookings, connect with organizers, and grow your career.
+          <p className="text-neutral-500 text-base max-w-sm leading-relaxed mb-8">
+            Access your bookings, messages, and performance analytics from organizers across India.
           </p>
 
-          <div className="mt-10 flex flex-col gap-4">
+          <div className="space-y-3">
             {[
-              "Manage all your bookings in one place",
-              "Respond to organizer requests instantly",
-              "Build your profile and attract gigs",
-            ].map((item) => (
-              <div key={item} className="flex items-center gap-3">
-                <div className="w-4 h-4 rounded-full border border-neutral-300 flex items-center justify-center flex-shrink-0 bg-white">
-                  <div className="w-1.5 h-1.5 rounded-full bg-neutral-600" />
-                </div>
-                <span className="text-sm text-neutral-500">{item}</span>
+              "Manage upcoming gigs in real-time",
+              "Direct messaging with event planners",
+              "Guaranteed payments and clear contracts",
+            ].map((text, i) => (
+              <div key={i} className="flex items-center gap-3 text-sm text-neutral-600">
+                <div className="w-1.5 h-1.5 rounded-full bg-neutral-900" />
+                {text}
               </div>
             ))}
           </div>
@@ -205,7 +212,17 @@ const Login = () => {
           <h1 className="text-3xl font-heading font-medium text-neutral-950 mb-2">
             Welcome back
           </h1>
-          <p className="text-sm text-neutral-500 mb-8">Sign in to your artist account</p>
+          <p className="text-sm text-neutral-500 mb-6">Sign in to your artist account</p>
+
+          {/* Google Sign In */}
+          <div className="mb-6">
+            <GoogleAuthButton role="artist" label="Sign in with Google" />
+            <div className="relative flex items-center gap-4 my-6">
+              <div className="flex-1 h-px bg-neutral-200" />
+              <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider">or sign in with email</span>
+              <div className="flex-1 h-px bg-neutral-200" />
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>

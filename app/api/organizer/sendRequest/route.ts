@@ -3,7 +3,6 @@ import { withAuth } from "@/lib/middleware"; // Ensures only logged-in users can
 
 export const runtime = "nodejs";
 
-
 export async function POST(req: Request) {
   const user = await withAuth(req);
   
@@ -20,6 +19,7 @@ export async function POST(req: Request) {
       maxBudget,
       date,
       timing,
+      expiryDate,
     } = await req.json();
 
     // Validate all required fields
@@ -36,7 +36,27 @@ export async function POST(req: Request) {
       );
     }
 
-    //  Check if the organizer with this email exists
+    // Validate Expiry Date: must be in between today's date and event date
+    if (expiryDate) {
+      const now = new Date();
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      if (String(expiryDate) < todayStr) {
+        return Response.json(
+          { message: `Expiry date (${expiryDate}) cannot be in the past. It must be between today (${todayStr}) and the event date (${date}).` },
+          { status: 400 }
+        );
+      }
+
+      if (String(expiryDate) > String(date)) {
+        return Response.json(
+          { message: `Expiry date (${expiryDate}) cannot be after the event date (${date}). It must be on or before the event date.` },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Check if the organizer with this email exists
     const existingOrganizer = await prisma.organizer.findUnique({
       where: { email },
     });
@@ -48,7 +68,7 @@ export async function POST(req: Request) {
       );
     }
 
-    //  Proceed to create the request
+    // Proceed to create the request
     const request = await prisma.artistRequest.create({
       data: {
         organizerId: user.id,
@@ -59,6 +79,7 @@ export async function POST(req: Request) {
         maxBudget,
         date,
         timing,
+        expiryDate: expiryDate ? String(expiryDate) : null,
       },
     });
 

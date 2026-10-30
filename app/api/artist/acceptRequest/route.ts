@@ -29,6 +29,34 @@ export async function PUT(req: Request) {
       return Response.json({ message: "Request is not pending" }, { status: 400 });
     }
 
+    const now = new Date();
+
+    // Check if expiry date has passed
+    if (request.expiryDate) {
+      const expDate = new Date(request.expiryDate);
+      if (!isNaN(expDate.getTime())) {
+        expDate.setHours(23, 59, 59, 999);
+        if (expDate < now) {
+          return Response.json(
+            { message: `This request expired on ${request.expiryDate} and can no longer be accepted.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
+    // Check if event date has passed
+    const eventDate = new Date(request.date);
+    if (!isNaN(eventDate.getTime())) {
+      eventDate.setHours(23, 59, 59, 999);
+      if (eventDate < now) {
+        return Response.json(
+          { message: "The event date has already passed. This request can no longer be accepted." },
+          { status: 400 }
+        );
+      }
+    }
+
     // Get organizer using email
     const organizer = await prisma.organizer.findUnique({
       where: { email: request.email },
@@ -62,13 +90,14 @@ export async function PUT(req: Request) {
         organizerId: organizer.id,
         city: request.city,
         date: request.date,
+        expiryDate: request.expiryDate,
         status: "CONFIRMED",
         category: Array.isArray(artist.category) ? artist.category.join(", ") : artist.category,
         eventName: request.name,
         artistName: artist.name,
         organizerName: organizer.name,
-        time: request.timing ?? "", // Provide a default or get from request
-        price: request.maxBudget ?? 0, // Use maxBudget from request as price
+        time: request.timing ?? "",
+        price: request.maxBudget ?? 0,
       },
     });
 

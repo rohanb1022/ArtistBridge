@@ -5,14 +5,18 @@ import prisma from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
-const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY || "",
-});
-
-const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
-
 export async function POST(req: Request) {
   try {
+    if (!process.env.PINECONE_API_KEY || !process.env.HUGGINGFACE_API_KEY) {
+      return NextResponse.json(
+        { message: "PINECONE_API_KEY and HUGGINGFACE_API_KEY are required for syncing." },
+        { status: 400 }
+      );
+    }
+
+    const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
+    const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
+
     // 1. Fetch all completed profiles
     const artists = await prisma.artist.findMany({
       where: {

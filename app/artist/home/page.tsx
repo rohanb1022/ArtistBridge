@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mic2, Calendar, Clock, Briefcase, Star, ArrowRight, LogOut } from "lucide-react";
+import { Mic2, Calendar, Clock, Briefcase, Star, ArrowRight, LogOut, History } from "lucide-react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
 
@@ -10,13 +10,19 @@ const ctaCards = [
   {
     icon: <Calendar size={18} />,
     title: "My Bookings",
-    desc: "View all confirmed shows and upcoming performances.",
+    desc: "View all confirmed shows and active incoming requests.",
     href: "/artist/bookings",
+  },
+  {
+    icon: <History size={18} />,
+    title: "Event History",
+    desc: "View completed shows performed and missed or expired requests.",
+    href: "/artist/history",
   },
   {
     icon: <Clock size={18} />,
     title: "Pending Requests",
-    desc: "Organizers are waiting — respond to new requests.",
+    desc: "Organizers are waiting — respond to new requests before deadline.",
     href: "/artist/bookings",
   },
   {
@@ -80,6 +86,11 @@ export default function ArtistHomePage() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-4">
+          <Link href="/artist/history">
+            <button className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors flex items-center gap-1.5">
+              <History size={15} /> Event History
+            </button>
+          </Link>
           <Link href="/artist/artistdetails">
             <button className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Update Profile</button>
           </Link>
@@ -109,7 +120,7 @@ export default function ArtistHomePage() {
             Welcome Back, <span className="font-serif italic text-neutral-700">Artist</span>
           </h1>
           <p className="text-neutral-500 text-sm md:text-base max-w-xl font-sans leading-relaxed">
-            Manage your bookings, respond to organizer requests, and grow your presence across India.
+            Manage your bookings, respond to organizer requests before deadlines, and track your performance history across India.
           </p>
         </motion.div>
       </section>
@@ -120,7 +131,7 @@ export default function ArtistHomePage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
         >
           {ctaCards.map((card) => (
             <motion.div key={card.title} variants={itemVariants}>
@@ -154,7 +165,7 @@ export default function ArtistHomePage() {
         >
           <div className="text-left">
             <h3 className="text-lg font-heading font-medium text-neutral-900 mb-1">
-              💡 Not getting enough bookings?
+              💡 Keep your profile and calendar up to date
             </h3>
             <p className="text-neutral-500 text-sm font-sans leading-relaxed">A complete profile with your bio, pricing, and category gets 5x more requests.</p>
           </div>

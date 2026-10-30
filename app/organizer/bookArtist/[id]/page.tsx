@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/axios";
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin, IndianRupee, Ticket, Loader2, ArrowLeft } from "lucide-react";
+import { Calendar, Clock, MapPin, IndianRupee, Ticket, Loader2, ArrowLeft, Hourglass } from "lucide-react";
 import Link from "next/link";
 
 export default function BookSpecificArtistPage() {
@@ -21,6 +22,7 @@ export default function BookSpecificArtistPage() {
     price: "",
     date: "",
     time: "",
+    expiryDate: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,9 @@ export default function BookSpecificArtistPage() {
 
   const [minDate, setMinDate] = useState("");
   useEffect(() => {
-    setMinDate(new Date().toISOString().split("T")[0]);
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    setMinDate(today);
   }, []);
 
   useEffect(() => {
@@ -65,6 +69,28 @@ export default function BookSpecificArtistPage() {
       return;
     }
 
+    // Validate Expiry Date (must be in between today's date and event date)
+    if (!form.expiryDate) {
+      setMessage({ text: "Error: Please specify a request expiry date.", type: "error" });
+      return;
+    }
+
+    if (minDate && form.expiryDate < minDate) {
+      setMessage({
+        text: `Error: Expiry date cannot be in the past. It must be between today (${minDate}) and the event date (${form.date}).`,
+        type: "error",
+      });
+      return;
+    }
+
+    if (form.date && form.expiryDate > form.date) {
+      setMessage({
+        text: `Error: Expiry date cannot be after the event date. It must be between today (${minDate}) and the event date (${form.date}).`,
+        type: "error",
+      });
+      return;
+    }
+
     setLoading(true);
     setMessage({ text: "", type: "" });
 
@@ -75,7 +101,8 @@ export default function BookSpecificArtistPage() {
         city: form.city,
         price: parseInt(form.price),
         date: form.date,
-        time: form.time
+        time: form.time,
+        expiryDate: form.expiryDate,
       };
 
       await api.post(`/booking/bookingRequest`, payload);
@@ -87,9 +114,10 @@ export default function BookSpecificArtistPage() {
         price: "",
         date: "",
         time: "",
+        expiryDate: "",
       });
       
-      setTimeout(() => router.push('/organizer/home'), 2000);
+      setTimeout(() => router.push('/organizer/manage-bookings'), 2000);
       
     } catch (error: any) {
       console.error("Failed to book artist:", error);
@@ -128,7 +156,7 @@ export default function BookSpecificArtistPage() {
             Book <span className="font-serif italic text-neutral-750">{artistName}</span>
           </h2>
           <p className="text-neutral-500 text-sm">
-            Fill out the details below to send a direct booking request.
+            Fill out the details below to send a direct booking request with an acceptance deadline.
           </p>
         </div>
 
@@ -218,6 +246,34 @@ export default function BookSpecificArtistPage() {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Row 4: Acceptance Expiry Date (Between Today and Event Date) */}
+          <div className="space-y-2 text-left">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
+                Request Expiry Date
+              </label>
+              <span className="text-[11px] text-neutral-500 font-normal">
+                Must be between today and event date
+              </span>
+            </div>
+            <div className="relative">
+              <Hourglass className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
+              <input
+                type="date"
+                name="expiryDate"
+                min={minDate}
+                max={form.date || undefined}
+                value={form.expiryDate}
+                onChange={handleChange}
+                className="studio-input pl-11"
+                required
+              />
+            </div>
+            <p className="text-xs text-neutral-500">
+              The artist must accept this offer on or before this date. If expired, the request is closed so you can look for other artists without waiting.
+            </p>
           </div>
 
           {/* Submit Button */}

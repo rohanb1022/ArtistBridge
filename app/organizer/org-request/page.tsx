@@ -11,7 +11,8 @@ import {
   Mail,
   Layers,
   Loader2,
-  ChevronDown
+  ChevronDown,
+  Hourglass
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -32,6 +33,7 @@ export default function BookingPage() {
     maxBudget: "",
     date: "",
     timing: "",
+    expiryDate: "",
   });
 
   const ARTIST_CATEGORIES = [
@@ -42,7 +44,9 @@ export default function BookingPage() {
 
   const [minDate, setMinDate] = useState("");
   useEffect(() => {
-    setMinDate(new Date().toISOString().split("T")[0]);
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    setMinDate(today);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -60,6 +64,28 @@ export default function BookingPage() {
       return;
     }
 
+    // Validate Expiry Date (must be in between today's date and event date)
+    if (!formData.expiryDate) {
+      setMessage({ type: "error", text: "Please specify a request expiry date." });
+      return;
+    }
+
+    if (minDate && formData.expiryDate < minDate) {
+      setMessage({
+        type: "error",
+        text: `Expiry date cannot be in the past. It must be between today (${minDate}) and the event date (${formData.date}).`,
+      });
+      return;
+    }
+
+    if (formData.date && formData.expiryDate > formData.date) {
+      setMessage({
+        type: "error",
+        text: `Expiry date cannot be after the event date. It must be between today (${minDate}) and the event date (${formData.date}).`,
+      });
+      return;
+    }
+
     setLoading(true);
     setMessage(null);
 
@@ -70,6 +96,7 @@ export default function BookingPage() {
         body: JSON.stringify({
           ...formData,
           maxBudget: Number(formData.maxBudget),
+          expiryDate: formData.expiryDate,
         }),
       });
 
@@ -101,7 +128,7 @@ export default function BookingPage() {
             Publish Open <span className="font-serif italic text-neutral-750">Request</span>
           </h1>
           <p className="text-neutral-500 text-sm">
-            Broadcast your event details. Interested artists will accept your invitation!
+            Broadcast your event details with an acceptance deadline. Interested artists will accept your invitation!
           </p>
         </div>
 
@@ -214,7 +241,7 @@ export default function BookingPage() {
             </div>
           </div>
 
-          {/* Row 4 */}
+          {/* Row 4: Event Date & Time */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">Event Date</label>
@@ -246,6 +273,34 @@ export default function BookingPage() {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Row 5: Request Expiry Date (Between Today and Event Date) */}
+          <div className="space-y-2 text-left">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
+                Request Expiry Date (Acceptance Deadline)
+              </label>
+              <span className="text-[11px] text-neutral-500 font-normal">
+                Must be between today and event date
+              </span>
+            </div>
+            <div className="relative">
+              <Hourglass className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-450" />
+              <input
+                name="expiryDate"
+                value={formData.expiryDate}
+                onChange={handleChange}
+                required
+                type="date"
+                min={minDate}
+                max={formData.date || undefined}
+                className="studio-input pl-11"
+              />
+            </div>
+            <p className="text-xs text-neutral-500">
+              Set the deadline for artists to accept this request. It must be between today and the event date. Once the expiry date passes, the request is closed automatically.
+            </p>
           </div>
 
           {/* Submit */}

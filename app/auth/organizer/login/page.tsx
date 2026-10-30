@@ -1,19 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import api from "@/lib/axios";
 import { Calendar, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get("error");
+      if (err) {
+        toast.error(decodeURIComponent(err), { position: "top-right", autoClose: 5000 });
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -53,7 +64,7 @@ const Login = () => {
             </span>
           </div>
           <p className="text-xs text-neutral-450 font-sans tracking-wide animate-pulse">
-            Curating the finest matches...
+            Loading dashboard...
           </p>
         </div>
       </div>
@@ -76,27 +87,18 @@ const Login = () => {
         </div>
 
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-neutral-200 bg-white text-xs font-medium text-neutral-600 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse" />
-            For Event Organizers
-          </div>
           <h2 className="text-5xl font-heading font-medium leading-tight mb-6 text-neutral-900">
-            Plan events <br /><span className="font-serif italic text-neutral-700">like a pro.</span>
+            Welcome back, <br /><span className="font-serif italic text-neutral-700">Organizer.</span>
           </h2>
           <p className="text-neutral-500 text-base max-w-sm leading-relaxed mb-8">
-            Access your organizer dashboard to discover artists, manage bookings, and create spectacular events.
+            Access your events, track artist requests, and discover premier talent for your upcoming shows.
           </p>
-
-          <div className="grid grid-cols-2 gap-4 max-w-sm">
-            {[
-              { label: "Artists Available", value: "2,000+" },
-              { label: "Cities Covered", value: "50+" },
-              { label: "Bookings Made", value: "500+" },
-              { label: "Avg. Response", value: "< 24h" },
-            ].map((s) => (
-              <div key={s.label} className="p-4 rounded-md bg-white border border-neutral-200">
-                <div className="text-2xl font-heading font-medium text-neutral-900">{s.value}</div>
-                <div className="text-xs text-neutral-400 mt-0.5">{s.label}</div>
+          <div className="p-6 rounded-md bg-white border border-neutral-200 max-w-sm">
+            <p className="text-xs text-neutral-450 font-semibold mb-3 uppercase tracking-wider">Dashboard Features</p>
+            {["Real-time booking management", "Instant artist messaging", "Curated artist marketplace", "Seamless payments"].map((item) => (
+              <div key={item} className="flex items-center gap-3 py-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-neutral-400" />
+                <span className="text-sm text-neutral-650">{item}</span>
               </div>
             ))}
           </div>
@@ -125,7 +127,17 @@ const Login = () => {
           <h1 className="text-3xl font-heading font-medium text-neutral-950 mb-2">
             Organizer Sign In
           </h1>
-          <p className="text-sm text-neutral-500 mb-8">Access your event management dashboard</p>
+          <p className="text-sm text-neutral-500 mb-6">Access your event management dashboard</p>
+
+          {/* Google Sign In */}
+          <div className="mb-6">
+            <GoogleAuthButton role="organizer" label="Sign in with Google" />
+            <div className="relative flex items-center gap-4 my-6">
+              <div className="flex-1 h-px bg-neutral-200" />
+              <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider">or sign in with email</span>
+              <div className="flex-1 h-px bg-neutral-200" />
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -170,9 +182,9 @@ const Login = () => {
           </div>
 
           <p className="text-center text-sm text-neutral-500 mt-6">
-            New to ArtistBridge?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/auth/organizer/signup" className="font-semibold text-neutral-850 hover:underline">
-              Create organizer account →
+              Create an Organizer Account →
             </Link>
           </p>
         </motion.div>

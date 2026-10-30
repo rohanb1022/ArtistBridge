@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
-
 export async function GET(req: Request) {
   const client = await withAuth(req);
   if (!client || client.role !== "organizer") {
@@ -14,17 +13,79 @@ export async function GET(req: Request) {
     const organizer = await prisma.organizer.findUnique({
       where: { id: client.id },
       include: {
-        bookings: true,
+        bookings: {
+          orderBy: { date: "desc" },
+        },
       },
     });
 
     if (!organizer) {
       return Response.json({ message: "Organizer not found" }, { status: 400 });
     }
-    //  Group by status
-    const pending = organizer.bookings.filter((b: { status: string; }) => b.status === "PENDING");
-    const confirmed = organizer.bookings.filter((b: { status: string; }) => b.status === "CONFIRMED");
-    const cancelled = organizer.bookings.filter((b: { status: string; }) => b.status === "CANCELLED");
+
+    const now = new Date();
+
+    const isDatePassed = (dateStr: string, timeStr?: string) => {
+      if (!dateStr) return false;
+      try {
+        if (timeStr && timeStr.includes(":")) {
+          const dt = new Date(`${dateStr}T${timeStr}`);
+          if (!isNaN(dt.getTime())) return dt < now;
+        }
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          d.setHours(23, 59, 59, 999);
+          return d < now;
+        }
+      } catch {
+        return false;
+      }
+      return false;
+    };
+
+    const isExpired = (expiryDate?: string | null, dateStr?: string, timeStr?: string) => {
+      if (expiryDate) {
+        const exp = new Date(expiryDate);
+        if (!isNaN(exp.getTime())) {
+          exp.setHours(23, 59, 59, 999);
+          if (exp < now) return true;
+        }
+      }
+      return isDatePassed(dateStr || "", timeStr);
+    };
+
+    // Auto-update expired pending requests
+    const expiredPendingIds: string[] = [];
+    const pending = organizer.bookings.filter((b) => {
+      if (b.status !== "PENDING") return false;
+      if (isExpired(b.expiryDate, b.date, b.time)) {
+        expiredPendingIds.push(b.id);
+        return false;
+      }
+      return true;
+    });
+
+    if (expiredPendingIds.length > 0) {
+      await prisma.booking.updateMany({
+        where: { id: { in: expiredPendingIds } },
+        data: { status: "EXPIRED" },
+      });
+    }
+
+    const confirmed = organizer.bookings.filter((b) => b.status === "CONFIRMED");
+
+    // Include cancelled, rejected, and expired requests so organizer knows to book someone else
+    const cancelled = organizer.bookings
+      .filter((b) => 
+        b.status === "CANCELLED" || 
+        b.status === "REJECTED" || 
+        b.status === "EXPIRED" || 
+        (b.status === "PENDING" && isExpired(b.expiryDate, b.date, b.time))
+      )
+      .map((b) => ({
+        ...b,
+        status: b.status === "PENDING" && isExpired(b.expiryDate, b.date, b.time) ? "EXPIRED" : b.status,
+      }));
 
     const data = {
       pending,

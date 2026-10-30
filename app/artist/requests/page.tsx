@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import api from "@/lib/axios";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   Calendar, MapPin, IndianRupee, Clock, Tag, 
-  CheckCircle, Loader2, Inbox, Sparkles 
+  CheckCircle, Loader2, Inbox, Sparkles, Hourglass 
 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -19,6 +20,7 @@ type Request = {
   date: string;
   timing: string;
   status: string;
+  expiryDate?: string | null;
 };
 
 type RecommendedRequest = Request & {
@@ -33,7 +35,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
 const OrganizerRequests = () => {
@@ -77,8 +79,11 @@ const OrganizerRequests = () => {
       toast.success("Request accepted! Booking created.", { theme: "dark", position: "top-center" });
       fetchRequests();
       fetchRecommendations();
-    } catch {
-      toast.error("Failed to accept request", { theme: "dark" });
+    } catch (error: any) {
+      const msg = error.response?.data?.message || "Failed to accept request";
+      toast.error(msg, { theme: "dark" });
+      fetchRequests();
+      fetchRecommendations();
     } finally {
       setAccepting(null);
     }
@@ -111,7 +116,7 @@ const OrganizerRequests = () => {
             Open Requests
           </div>
           <h1 className="text-4xl font-medium text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>Organizer Requests</h1>
-          <p className="text-neutral-550 mt-2">Browse and accept open event requests from organizers that match your profile.</p>
+          <p className="text-neutral-550 mt-2">Browse and accept open event requests from organizers that match your profile before their deadline.</p>
         </motion.div>
 
         {/* Tabs */}
@@ -228,6 +233,15 @@ const OrganizerRequests = () => {
                         <Clock size={14} style={{ color: accentColor }} />
                         <span>{req.timing}</span>
                       </div>
+
+                      {/* Expiry Deadline info */}
+                      {req.expiryDate && (
+                        <div className="flex items-center gap-2 text-xs font-medium text-amber-800 bg-amber-50 px-2.5 py-1.5 rounded-md border border-amber-200">
+                          <Hourglass size={12} className="text-amber-600 shrink-0" />
+                          <span>Accept before: <strong>{req.expiryDate}</strong></span>
+                        </div>
+                      )}
+
                       <div className="flex items-center gap-2.5">
                         <IndianRupee size={14} style={{ color: "#D97706" }} />
                         <span className="font-semibold" style={{ color: "#D97706" }}>

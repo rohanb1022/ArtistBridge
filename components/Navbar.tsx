@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React from "react";
@@ -34,14 +33,14 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <span className="text-xl font-medium tracking-tight text-neutral-900">
+          <Link href="/artist/home" className="text-xl font-medium tracking-tight text-neutral-900">
             Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
-          </span>
+          </Link>
         </div>
 
         {/* Links & Auth */}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link href="/">
+          <Link href="/artist/bookings">
             <Button
               variant="ghost"
               className="text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 px-4 py-2"
@@ -49,8 +48,17 @@ export const Navbar = () => {
               Bookings
             </Button>
           </Link>
+
+          <Link href="/artist/history">
+            <Button
+              variant="ghost"
+              className="text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 px-4 py-2"
+            >
+              Event History
+            </Button>
+          </Link>
           
-          <Link href="/">
+          <Link href="/artist/profile">
             <Button
               variant="ghost"
               className="text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 px-4 py-2"
@@ -61,9 +69,9 @@ export const Navbar = () => {
 
           <Dropdown />
 
-          <Link href="/">
+          <Link href="/artist/artistdetails">
             <Button className="bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-800 rounded-md px-4 py-2">
-              Profile Page
+              Edit Details
             </Button>
           </Link>
 
@@ -85,9 +93,10 @@ const Dropdown = () => {
   const router = useRouter();
 
   const handleChange = (value: string) => {
-    if (value === "search") router.push("/artist");
-    if (value === "testimonials") router.push("/artist");
-    if (value === "categories") router.push("/");
+    if (value === "history") router.push("/artist/history");
+    if (value === "schedule") router.push("/artist/schedule");
+    if (value === "requests") router.push("/artist/requests");
+    if (value === "search") router.push("/organizer/explore");
   };
 
   return (
@@ -98,9 +107,10 @@ const Dropdown = () => {
         <SelectValue placeholder="Artist Menu" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="search">Search Artist</SelectItem>
-        <SelectItem value="testimonials">Testimonials</SelectItem>
-        <SelectItem value="categories">Categories</SelectItem>
+        <SelectItem value="history">Event History</SelectItem>
+        <SelectItem value="schedule">My Schedule</SelectItem>
+        <SelectItem value="requests">Open Requests</SelectItem>
+        <SelectItem value="search">Browse Artists</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -1,18 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import api from "@/lib/axios";
 import { Mic2, Mail, Lock, User, MapPin, ArrowRight, Loader2 } from "lucide-react";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
 
 const Signup = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({ name: "", email: "", password: "", city: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get("error");
+      if (err) {
+        toast.error(decodeURIComponent(err), { position: "top-right", autoClose: 5000 });
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -98,43 +109,41 @@ const Signup = () => {
               </motion.g>
               <motion.g
                 style={{ transformOrigin: "50px 65px" }}
-                animate={{ rotate: [-25, 20, -25] }}
+                animate={{ rotate: [-20, 40, -20] }}
                 transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <line
-                  x1="50"
-                  y1="65"
-                  x2="35"
-                  y2="90"
+                <path
+                  d="M 50 65 L 40 85 L 35 95"
+                  fill="none"
                   stroke="currentColor"
                   strokeWidth="3.5"
                   strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </motion.g>
               <motion.g
                 style={{ transformOrigin: "50px 65px" }}
-                animate={{ rotate: [20, -25, 20] }}
+                animate={{ rotate: [40, -20, 40] }}
                 transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <line
-                  x1="50"
-                  y1="65"
-                  x2="65"
-                  y2="90"
+                <path
+                  d="M 50 65 L 60 85 L 65 95"
+                  fill="none"
                   stroke="currentColor"
                   strokeWidth="3.5"
                   strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </motion.g>
             </svg>
           </motion.div>
-          <div className="flex items-center gap-2 mt-2">
-            <span className="text-md font-medium tracking-tight">
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-medium tracking-tight">
               Artist<span className="font-serif italic font-normal text-neutral-600">Bridge</span>
             </span>
           </div>
-          <p className="text-xs text-neutral-450 font-sans tracking-wide animate-pulse">
-            Creating your stage...
+          <p className="text-xs text-neutral-450 font-sans tracking-wide">
+            Preparing your backstage pass...
           </p>
         </div>
       </div>
@@ -142,10 +151,10 @@ const Signup = () => {
   }
 
   const fields = [
-    { name: "name", label: "Full Name", type: "text", placeholder: "Rohan Bhangale", icon: <User size={15} /> },
-    { name: "email", label: "Email Address", type: "email", placeholder: "you@example.com", icon: <Mail size={15} /> },
-    { name: "password", label: "Password", type: "password", placeholder: "Create a strong password", icon: <Lock size={15} /> },
-    { name: "city", label: "City", type: "text", placeholder: "Mumbai", icon: <MapPin size={15} /> },
+    { label: "Full Name", name: "name", type: "text", placeholder: "Your artist / stage name", icon: <User size={15} /> },
+    { label: "City", name: "city", type: "text", placeholder: "e.g. Mumbai, Delhi, Bangalore", icon: <MapPin size={15} /> },
+    { label: "Email Address", name: "email", type: "email", placeholder: "you@example.com", icon: <Mail size={15} /> },
+    { label: "Password", name: "password", type: "password", placeholder: "Create a strong password", icon: <Lock size={15} /> },
   ];
 
   return (
@@ -178,9 +187,15 @@ const Signup = () => {
           <div className="mt-10 p-6 rounded-md bg-white border border-neutral-200 max-w-sm">
             <p className="text-xs text-neutral-400 mb-1 uppercase tracking-wider font-semibold">Quick Start</p>
             <ol className="space-y-3 mt-3">
-              {["Sign up & create your account", "Complete your artist profile", "Get discovered by organizers"].map((step, i) => (
-                <li key={step} className="flex items-center gap-3 text-sm text-neutral-600">
-                  <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 bg-neutral-100 text-neutral-800 border border-neutral-200">{i + 1}</span>
+              {[
+                "Sign up with Google or Email",
+                "Complete your profile & vector match",
+                "Start receiving booking requests",
+              ].map((step, i) => (
+                <li key={i} className="flex items-center gap-3 text-sm text-neutral-600">
+                  <span className="w-5 h-5 rounded-full bg-neutral-100 border border-neutral-200 text-xs font-medium flex items-center justify-center text-neutral-700">
+                    {i + 1}
+                  </span>
                   {step}
                 </li>
               ))}
@@ -191,8 +206,8 @@ const Signup = () => {
         <p className="text-neutral-400 text-xs">© 2026 ArtistBridge. All rights reserved.</p>
       </div>
 
-      {/* Form Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 overflow-y-auto">
+      {/* Right Panel — Form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -211,7 +226,17 @@ const Signup = () => {
           <h1 className="text-3xl font-heading font-medium text-neutral-950 mb-2">
             Create your account
           </h1>
-          <p className="text-sm text-neutral-500 mb-8">Join ArtistBridge and start getting booked</p>
+          <p className="text-sm text-neutral-500 mb-6">Join ArtistBridge and start getting booked</p>
+
+          {/* Google Sign Up */}
+          <div className="mb-6">
+            <GoogleAuthButton role="artist" label="Sign up with Google" />
+            <div className="relative flex items-center gap-4 my-6">
+              <div className="flex-1 h-px bg-neutral-200" />
+              <span className="text-xs text-neutral-400 font-medium uppercase tracking-wider">or sign up with email</span>
+              <div className="flex-1 h-px bg-neutral-200" />
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {fields.map((field) => (
